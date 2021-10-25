@@ -1,8 +1,9 @@
-import winston = require("winston");
 import express = require("express");
+import { morganMiddleware } from "./middleware/httpLogging";
+import Logger from "./startup/logging";
 
 const app = express();
-
+app.use(morganMiddleware);
 // require('./startup/logging');
 // require('./startup/routes')(app);
 // require('./startup/db')();
@@ -10,4 +11,4 @@ const app = express();
 // require('./startup/validation')();
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => winston.info(`Listening on port ${port}...`));
+app.listen(port, () => Logger.info(`Listening on port ${port}...`));
