@@ -1,4 +1,4 @@
-import winston from "winston";
+import winston = require("winston");
 
 const levels = {
   error: 0,
@@ -48,11 +48,11 @@ const transports = [
   }),
 ];
 
-const Logger = winston.createLogger({
+const logger = winston.createLogger({
   level: level(),
   levels,
   format,
   transports,
 });
 
-export default Logger;
+export default logger;
