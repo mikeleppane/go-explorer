@@ -2,13 +2,17 @@ import express from "express";
 import { fallBackVersion, isValidVersion } from "../docker/versions";
 import { FormatEntry } from "../types";
 import { validateFormat } from "../validators/formatValidator";
-import tempy from "tempy";
+import { readFile, rmdir, writeFile } from "fs/promises";
 import logger from "../utils/logging";
-import fs = require("fs");
+import { run } from "../utils/processExecutor";
+import { formatCode } from "../docker/commands";
+import { createTempFile } from "../utils/tempfile";
+import path from "path";
 
 const formatRouter = express.Router();
 
-formatRouter.post("/", (req, res) => {
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+formatRouter.post("/", async (req, res) => {
   const body = req.body as FormatEntry;
   const { error } = validateFormat(body);
   if (error) {
@@ -20,15 +24,27 @@ formatRouter.post("/", (req, res) => {
       version = body.version;
     }
   }
-  console.log(version);
-  const tempFile = tempy.file({ extension: "go" });
-  fs.writeFile(tempFile, body.code, (error) => {
-    if (error) {
-      logger.error(``);
+  let tempFile = "";
+  try {
+    tempFile = await createTempFile();
+    await writeFile(tempFile, body.code, { encoding: "utf-8" });
+    logger.info(
+      `Code snippet was successfully written to the file: ${tempFile}`
+    );
+    await run(formatCode(tempFile, version));
+    const content = await readFile(tempFile);
+    logger.info("Code snippet was successfully reformatted.");
+    res.status(200).send(content);
+    await rmdir(path.dirname(tempFile), { recursive: true });
+  } catch (error) {
+    if (tempFile) {
+      await rmdir(path.dirname(tempFile), { recursive: true });
+    }
+    if (error instanceof Error) {
+      logger.error(error.message);
       return res.status(500).send(error.message);
     }
-    logger.info("The content has been saved to the file.");
-  });
+  }
 });
 
 export default formatRouter;
