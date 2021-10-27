@@ -6,7 +6,10 @@ const execProm = util.promisify(exec);
 
 export const run = async (cmd: string, timeout = 60000) => {
   try {
-    const { stdout, stderr } = await execProm(cmd, { timeout });
+    const { stdout, stderr } = await execProm(cmd, {
+      timeout,
+      maxBuffer: 1024 * 10000,
+    });
     if (stderr) {
       logger.error(`stderr: ${stderr}`);
     }

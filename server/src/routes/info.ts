@@ -14,8 +14,8 @@ infoRouter.get("/", (req, res) => {
   const envInfoQuery = getEnvInfo(version as string);
   run(envInfoQuery)
     .then((response) => {
-      if (response) {
-        res.status(200).send(response);
+      if (response && "stdout" in response) {
+        res.status(200).send(response.stdout);
       }
     })
     .catch((error) => {

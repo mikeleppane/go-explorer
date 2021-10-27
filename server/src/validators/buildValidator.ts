@@ -6,7 +6,8 @@ export function validateBuild(format: BuildEntry) {
     code: Joi.string().required(),
     goos: Joi.string().optional(),
     goarch: Joi.string().optional(),
-    gcflags: Joi.string().optional(),
+    buildOptions: Joi.object().optional(),
+    symregexp: Joi.string().optional(),
     version: Joi.string().optional(),
   });
 

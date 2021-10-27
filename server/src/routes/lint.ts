@@ -33,7 +33,9 @@ lintRouter.post("/", async (req, res) => {
     );
     const output = await run(lintCode(tempFile, version));
     logger.info("Code snippet was successfully linted.");
-    res.status(200).send(output);
+    if (output && "stdout" in output) {
+      res.status(200).send(output.stdout);
+    }
     await rmdir(path.dirname(tempFile), { recursive: true });
   } catch (error) {
     if (tempFile) {
