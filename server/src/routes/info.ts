@@ -19,7 +19,9 @@ infoRouter.get("/", (req, res) => {
       }
     })
     .catch((error) => {
-      res.status(500).send(error.message);
+      res
+        .status(500)
+        .send(error.message.trim().split("\n").slice(1).join("\n"));
     });
 });
 

@@ -1,26 +1,77 @@
 import express from "express";
-import { availableVersions } from "../docker/versions";
-import { getEnvInfo } from "../docker/commands";
+import { fallBackVersion, isValidVersion } from "../docker/versions";
+import { rmdir, writeFile } from "fs/promises";
+import logger from "../utils/logging";
 import { run } from "../utils/processExecutor";
+import { runCode } from "../docker/commands";
+import { createTempFile } from "../utils/tempfile";
+import path from "path";
+import { validateBuild } from "../validators/buildValidator";
+import { BuildEntry } from "../types";
 
 const runRouter = express.Router();
-const fallBackVersion = "1.17";
 
-runRouter.get("/", (req, res) => {
-  let version = req.query.version;
-  if (!(version && availableVersions.find((item) => item === version))) {
-    version = fallBackVersion;
+// TODO: consider refactoring
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+runRouter.post("/", async (req, res) => {
+  const body = req.body as BuildEntry;
+  const { error } = validateBuild(body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
   }
-  const envInfoQuery = getEnvInfo(version as string);
-  run(envInfoQuery)
-    .then((response) => {
-      if (response) {
-        res.status(200).send(response);
-      }
-    })
-    .catch((error) => {
-      res.status(500).send(error.message);
-    });
+  let version = fallBackVersion;
+  if (body.version) {
+    if (isValidVersion(body.version)) {
+      version = body.version;
+    }
+  }
+  let GOOS = "linux";
+  if (body.goos) {
+    GOOS = body.goos;
+  }
+  let GOARCH = "amd64";
+  if (body.goarch) {
+    GOARCH = body.goarch;
+  }
+  let buildOptions = "";
+  if (body.buildOptions && Object.keys(body.buildOptions).length > 0) {
+    for (const [key, value] of Object.entries(body.buildOptions)) {
+      let option = key[0] !== "-" ? "-" + key : key;
+      option += ` '${value}' `;
+      buildOptions += option;
+    }
+  }
+  let tempFile = "";
+  try {
+    tempFile = await createTempFile();
+    await writeFile(tempFile, body.code, { encoding: "utf-8" });
+    logger.info(
+      `Code snippet was successfully written to the file: ${tempFile}`
+    );
+    const responseObj = { output: "", executionTime: "" };
+    const output = await run(
+      runCode(GOOS, GOARCH, buildOptions, tempFile, version)
+    );
+    logger.info("Code snippet was successfully executed.");
+    if (output && output.stdout) {
+      responseObj.output = output.stdout.trim();
+    }
+    if (output && output.stderr) {
+      responseObj.executionTime = output.stderr.trim().split("\n")[0] + " s";
+    }
+    res.status(200).json(responseObj);
+    await rmdir(path.dirname(tempFile), { recursive: true });
+  } catch (error) {
+    if (tempFile) {
+      await rmdir(path.dirname(tempFile), { recursive: true });
+    }
+    if (error instanceof Error) {
+      logger.error(error.message);
+      return res
+        .status(500)
+        .send(error.message.trim().split("\n").slice(1).join("\n"));
+    }
+  }
 });
 
 export default runRouter;

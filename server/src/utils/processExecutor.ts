@@ -16,7 +16,6 @@ export const run = async (cmd: string, timeout = 60000) => {
     return { stdout, stderr };
   } catch (e) {
     if (e instanceof Error) {
-      logger.error(`${e.name}: ${e.message}`);
       throw new Error(`${e.name}: ${e.message}`);
     }
   }

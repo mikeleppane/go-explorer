@@ -6,6 +6,7 @@ import { morganMiddleware } from "../middleware/httpLogging";
 import healthRouter from "../routes/health";
 import lintRouter from "../routes/lint";
 import buildRouter from "../routes/build";
+import runRouter from "../routes/run";
 
 export const setupRoutes = (app: express.Express) => {
   app.use(cors());
@@ -15,5 +16,6 @@ export const setupRoutes = (app: express.Express) => {
   app.use("/api/format", formatRouter);
   app.use("/api/lint", lintRouter);
   app.use("/api/build", buildRouter);
+  app.use("/api/run", runRouter);
   app.use("/api/health", healthRouter);
 };

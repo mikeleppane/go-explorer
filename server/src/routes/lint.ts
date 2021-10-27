@@ -43,7 +43,9 @@ lintRouter.post("/", async (req, res) => {
     }
     if (error instanceof Error) {
       logger.error(error.message);
-      return res.status(500).send(error.message);
+      return res
+        .status(500)
+        .send(error.message.trim().split("\n").slice(1).join("\n"));
     }
   }
 });
