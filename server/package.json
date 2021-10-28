@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test jest --verbose --runInBand",
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts"
   },

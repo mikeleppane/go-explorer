@@ -1,37 +1,57 @@
 import path from "path";
 
-export const getEnvInfo = (version: string): string => {
-  return `docker run --rm golang:${version} go env`;
+const getFileName = (filePath: string): string => {
+  const file_parts = path.parse(filePath);
+  return file_parts.name + file_parts.ext;
 };
 
-export const formatCode = (fileName: string, version: string): string => {
-  const file_parts = path.parse(fileName);
-  const file = file_parts.name + file_parts.ext;
-  return `docker run --rm -v ${fileName}:/go/src/app/${file} -w /go/src/app \
-  golang:${version} gofmt -w ${file}`;
+const dockerBaseCommand = "docker run --rm";
+const dockerWorkDir = "-w /go/src/app";
+const volumeForSourceCode = (filePath: string, file: string) => {
+  return `-v ${filePath}:/go/src/app/${file}`;
+};
+const volumeForGoModules = '-v "$PWD/go-modules":/go/pkg/mod';
+const golangImage = (version: string) => {
+  return `golang:${version}`;
 };
 
-export const lintCode = (fileName: string, version: string): string => {
-  const file_parts = path.parse(fileName);
-  const file = file_parts.name + file_parts.ext;
-  return `docker run --rm -v ${fileName}:/go/src/app/${file} -w /go/src/app \
-  golang:${version} go vet ${file}`;
+export const getEnvInfo = (version: string) => {
+  return `${dockerBaseCommand} ${golangImage(version)} go env`;
+};
+
+export const formatCode = (filePath: string, version: string) => {
+  const file = getFileName(filePath);
+  return `${dockerBaseCommand} ${volumeForSourceCode(
+    filePath,
+    file
+  )} ${dockerWorkDir} ${golangImage(version)} gofmt -w ${file}`;
+};
+
+export const lintCode = (filePath: string, version: string) => {
+  const file = getFileName(filePath);
+  return `${dockerBaseCommand} ${volumeForSourceCode(
+    filePath,
+    file
+  )} ${dockerWorkDir} ${golangImage(version)} go vet ${file}`;
 };
 
 export const buildCode = (
-  goos = "linux",
-  goarch = "amd64",
-  buildOptions = "",
-  fileName: string,
+  goos: string,
+  goarch: string,
+  buildOptions: string,
+  filePath: string,
   version: string
-): string => {
-  const file_parts = path.parse(fileName);
-  const file = file_parts.name + file_parts.ext;
-  return `docker run --rm -v ${fileName}:/go/src/app/${file} -w /go/src/app \
-  -v "$PWD/go-modules":/go/pkg/mod \
-  --env GOOS=${goos} --env GOARCH=${goarch} golang:${version} \
-  bash -c "TIMEFORMAT=%R;time go build -o x.exe \
-  ${buildOptions} ${file} 2>&1;ls -sh x.exe | cut -d ' ' -f1"`;
+) => {
+  const file = getFileName(filePath);
+  const envs = `--env GOOS=${goos} --env GOARCH=${goarch}`;
+  const buildCommandWithTime = `TIMEFORMAT=%R;time go build -o x.exe ${buildOptions} ${file}`;
+  const getBinarySize = "ls -sh x.exe | cut -d ' ' -f1";
+  return `${dockerBaseCommand} ${volumeForSourceCode(
+    filePath,
+    file
+  )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
+    version
+  )} bash -c "${buildCommandWithTime} 2>&1;${getBinarySize}"`;
 };
 
 export const getObjDump = (
@@ -39,33 +59,41 @@ export const getObjDump = (
   goarch = "amd64",
   buildOptions = "",
   symregexp = "main.main",
-  fileName: string,
+  filePath: string,
   version: string
-): string => {
-  const file_parts = path.parse(fileName);
-  const file = file_parts.name + file_parts.ext;
+) => {
   if (symregexp) {
     symregexp = `-s ${symregexp}`;
   } else {
     symregexp = "";
   }
-  return `docker run --rm -v ${fileName}:/app/${file} -w /app \
-  -v "$PWD/go-modules":/go/pkg/mod --env GOOS=${goos} --env GOARCH=${goarch} \
-  golang:${version} bash -c "go build -o x.exe \
-  ${buildOptions} ${file} && go tool objdump ${symregexp} x.exe"`;
+  const file = getFileName(filePath);
+  const envs = `--env GOOS=${goos} --env GOARCH=${goarch}`;
+  const buildCommand = `go build -o x.exe ${buildOptions} ${file}`;
+  const executeObjDumpTool = `go tool objdump ${symregexp} x.exe`;
+  return `${dockerBaseCommand} ${volumeForSourceCode(
+    filePath,
+    file
+  )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
+    version
+  )} bash -c "${buildCommand} && ${executeObjDumpTool}"`;
 };
 
 export const runCode = (
   goos = "linux",
   goarch = "amd64",
   buildOptions = "",
-  fileName: string,
+  filePath: string,
   version: string
-): string => {
-  const file_parts = path.parse(fileName);
-  const file = file_parts.name + file_parts.ext;
-  return `docker run --rm -v ${fileName}:/go/src/app/${file} -w /go/src/app \
-  -v "$PWD/go-modules":/go/pkg/mod \
-  --env GOOS=${goos} --env GOARCH=${goarch} golang:${version} \
-  bash -c "TIMEFORMAT=%R; go build -o x.exe ${buildOptions} ${file} && time ./x.exe 2>&1"`;
+) => {
+  const file = getFileName(filePath);
+  const envs = `--env GOOS=${goos} --env GOARCH=${goarch}`;
+  const buildCommand = `go build -o x.exe ${buildOptions} ${file}`;
+  const executeProgramWithTime = "time ./x.exe 2>&1";
+  return `${dockerBaseCommand} ${volumeForSourceCode(
+    filePath,
+    file
+  )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
+    version
+  )} bash -c "TIMEFORMAT=%R; ${buildCommand} && ${executeProgramWithTime}"`;
 };
