@@ -16,7 +16,17 @@ export interface BuildEntry {
   version?: string;
 }
 
-export interface ProcessExecutorType {
+export interface RunEntry {
+  code: string;
+  goarch?: string;
+  goos?: string;
+  buildOptions?: buildOptionType;
+  version?: string;
+}
+
+export interface CommandExecutorType {
   stdout: string | undefined;
   stderr: string | undefined;
 }
+
+export type CommandOutput = CommandExecutorType | undefined;

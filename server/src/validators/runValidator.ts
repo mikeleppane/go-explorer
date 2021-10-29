@@ -1,13 +1,12 @@
 import Joi from "joi";
-import { BuildEntry } from "../types";
+import { RunEntry } from "../types";
 
-export function validateBuildRequest(format: BuildEntry) {
+export function validateRunRequest(format: RunEntry) {
   const schema = Joi.object({
     code: Joi.string().required(),
     goos: Joi.string().optional(),
     goarch: Joi.string().optional(),
     buildOptions: Joi.object().optional(),
-    symregexp: Joi.string().optional(),
     version: Joi.string().optional(),
   });
 

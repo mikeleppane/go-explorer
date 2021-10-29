@@ -2,7 +2,7 @@ import { exec } from "child_process";
 import logger from "./logging";
 import util = require("util");
 
-export const execProm = util.promisify(exec);
+const execProm = util.promisify(exec);
 
 export const run = async (cmd: string, timeout = 60000) => {
   try {
@@ -18,5 +18,6 @@ export const run = async (cmd: string, timeout = 60000) => {
     if (e instanceof Error) {
       throw new Error(`${e.name}: ${e.message}`);
     }
+    throw new Error("Unknown error occurred.");
   }
 };

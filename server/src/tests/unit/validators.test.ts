@@ -1,4 +1,5 @@
-import { validateBuild } from "../../validators/buildValidator";
+import { validateBuildRequest } from "../../validators/buildValidator";
+import { validateFormatRequest } from "../../validators/formatValidator";
 
 describe("buildValidator", () => {
   test("Valid build data should pass from validation", () => {
@@ -9,14 +10,14 @@ describe("buildValidator", () => {
       buildOptions: {},
       version: "1.17",
     };
-    const { error } = validateBuild(buildData);
+    const { error } = validateBuildRequest(buildData);
     expect(error).toBeUndefined();
   });
   test("Build data with only source code specified should pass from validation", () => {
     const buildData = {
       code: "some code",
     };
-    const { error } = validateBuild(buildData);
+    const { error } = validateBuildRequest(buildData);
     expect(error).toBeUndefined();
   });
   test("Invalid build data should not pass from validation", () => {
@@ -26,8 +27,39 @@ describe("buildValidator", () => {
       buildOptions: {},
       version: "1.17",
     };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const { error } = validateBuild(buildData);
+    const { error } = validateBuildRequest(buildData);
+    expect(error).not.toBeUndefined();
+  });
+  test("unspecified field in build data should not pass from validation", () => {
+    const buildData = {
+      goos: "linux",
+      goarch: "amd64",
+      buildOptions: {},
+      version: "1.17",
+      shouldnotbehere: "error",
+    };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const { error } = validateBuildRequest(buildData);
+    expect(error).not.toBeUndefined();
+  });
+  test("empty code field should not pass from validation", () => {
+    const buildData = {
+      code: "",
+    };
+    const { error } = validateBuildRequest(buildData);
+    expect(error).not.toBeUndefined();
+  });
+  test("Invalid field should not pass from validation", () => {
+    const buildData = {
+      code: "some code",
+      goos: 1,
+    };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const { error } = validateBuildRequest(buildData);
     expect(error).not.toBeUndefined();
   });
 });
@@ -38,22 +70,23 @@ describe("formatValidator", () => {
       code: "some code",
       version: "1.17",
     };
-    const { error } = validateBuild(formatData);
+    const { error } = validateFormatRequest(formatData);
     expect(error).toBeUndefined();
   });
   test("Format data with only source code specified should pass from validation", () => {
     const formatData = {
       code: "some code",
     };
-    const { error } = validateBuild(formatData);
+    const { error } = validateFormatRequest(formatData);
     expect(error).toBeUndefined();
   });
   test("Invalid format data should not pass from validation", () => {
     const formatData = {
       version: "1.17",
     };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const { error } = validateBuild(formatData);
+    const { error } = validateFormatRequest(formatData);
     expect(error).not.toBeUndefined();
   });
 });

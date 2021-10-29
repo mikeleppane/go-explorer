@@ -1,17 +1,13 @@
 import express from "express";
-import { availableVersions } from "../docker/versions";
 import { getEnvInfo } from "../docker/commands";
-import { run } from "../utils/processExecutor";
+import { run } from "../utils/commandExecutor";
+import { getVersion, validateQsVersion } from "../utils/route_helpers";
 
 const infoRouter = express.Router();
-const fallBackVersion = "1.17";
 
 infoRouter.get("/", (req, res) => {
-  let version = req.query.version;
-  if (!(version && availableVersions.find((item) => item === version))) {
-    version = fallBackVersion;
-  }
-  const envInfoQuery = getEnvInfo(version as string);
+  const version = getVersion(validateQsVersion(req.query.version));
+  const envInfoQuery = getEnvInfo(version);
   run(envInfoQuery)
     .then((response) => {
       if (response && "stdout" in response) {
