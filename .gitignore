@@ -3,7 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=react,node,dotenv,webstorm,go
 
 ### dotenv ###
-.env
+**/.env
 
 ### Go ###
 # Binaries for programs and plugins
