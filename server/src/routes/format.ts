@@ -29,7 +29,7 @@ formatRouter.post("/", async (req, res) => {
     await run(formatCode(tempFile, version));
     const content = await readFile(tempFile);
     logger.info("Code snippet was successfully reformatted.");
-    res.status(200).send(content);
+    res.status(200).send(content.toString("utf-8"));
     await rm(path.dirname(tempFile), { recursive: true, force: true });
   } catch (error) {
     if (tempFile) {

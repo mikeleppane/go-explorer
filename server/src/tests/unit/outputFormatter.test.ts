@@ -125,6 +125,7 @@ describe("handleCodeRunOutput", () => {
     const expectedResultObject = {
       output: "some output\nmoreoutput",
       executionTime: "0.755 s",
+      stderr: "",
     };
     expect(handleCodeRunOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -138,6 +139,7 @@ describe("handleCodeRunOutput", () => {
     const expectedResultObject = {
       output: "some output\nmoreoutput\neven more output",
       executionTime: "",
+      stderr: "",
     };
     expect(handleCodeRunOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -151,6 +153,21 @@ describe("handleCodeRunOutput", () => {
     const expectedResultObject = {
       output: "some output\nmoreoutput\neven more output",
       executionTime: "",
+      stderr: "",
+    };
+    expect(handleCodeRunOutput(commandOutput)).toMatchObject(
+      expectedResultObject
+    );
+  });
+  test("code run output should return correct result if stderr contains more data than execution time", () => {
+    const commandOutput = {
+      stdout: "some output\nmoreoutput\neven more output\n\n",
+      stderr: "some error\n2.444",
+    };
+    const expectedResultObject = {
+      output: "some output\nmoreoutput\neven more output",
+      executionTime: "2.444 s",
+      stderr: "some error",
     };
     expect(handleCodeRunOutput(commandOutput)).toMatchObject(
       expectedResultObject

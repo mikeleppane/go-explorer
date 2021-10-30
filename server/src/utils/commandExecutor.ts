@@ -18,6 +18,6 @@ export const run = async (cmd: string, timeout = 60000) => {
     if (e instanceof Error) {
       throw new Error(`${e.name}: ${e.message}`);
     }
-    throw new Error("Unknown error occurred.");
+    throw new Error(`Run command: Unknown error occurred ${e}`);
   }
 };

@@ -26,6 +26,6 @@ export const createTempFile = async (
       );
       throw new Error(e?.message);
     }
-    throw new Error("Unknown error occurred.");
+    throw new Error(`createTempFile: Unknown error occurred, ${e}`);
   }
 };

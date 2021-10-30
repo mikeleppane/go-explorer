@@ -37,6 +37,7 @@ buildRouter.post("/", async (req, res) => {
       `Code snippet was successfully written to the file: ${tempFile}`
     );
     let responseObj;
+    //let output = { stdout: "", stderr: "" };
     const isObjectDumpRequested = req.query.objdump === "true";
     if (isObjectDumpRequested) {
       const output = await run(

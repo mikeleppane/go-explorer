@@ -26,7 +26,8 @@ export const handleCodeBuildOutput = (output: CommandOutput) => {
     }
   }
   if (output && output.stderr) {
-    const buildTime = output.stderr.trim().split("\n")[0];
+    const stderr = output.stderr.trim().split("\n");
+    const buildTime = stderr[stderr.length - 1];
     if (buildTimeRegExp.test(buildTime)) {
       res.buildTime = buildTime + " s";
     }
@@ -35,15 +36,19 @@ export const handleCodeBuildOutput = (output: CommandOutput) => {
 };
 
 export const handleCodeRunOutput = (output: CommandOutput) => {
-  const res = { output: "", executionTime: "" };
+  const res = { output: "", executionTime: "", stderr: "" };
   const executionTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
   if (output && output.stdout) {
     res.output = output.stdout.trim();
   }
   if (output && output.stderr) {
-    const executionTime = output.stderr.trim().split("\n")[0];
+    const stderr = output.stderr.trim().split("\n");
+    const executionTime = stderr[stderr.length - 1];
     if (executionTimeRegExp.test(executionTime)) {
       res.executionTime = executionTime + " s";
+    }
+    if (stderr.length > 1) {
+      res.stderr = stderr.slice(0, stderr.length - 1).join("\n");
     }
   }
   return res;

@@ -5,6 +5,9 @@ export const validateQsVersion = (version: unknown): string => {
   if (version && isString(version)) {
     return version;
   }
+  if (!version) {
+    return "";
+  }
   throw new Error(`Incorrect version: ${version}`);
 };
 

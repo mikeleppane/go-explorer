@@ -32,9 +32,16 @@ runRouter.post("/", async (req, res) => {
     logger.info(
       `Code snippet was successfully written to the file: ${tempFile}`
     );
-    const output = await run(
-      runCode(goos, goarch, buildOptions, tempFile, version)
-    );
+    let output = { stdout: "", stderr: "" };
+    try {
+      output = await run(
+        runCode(goos, goarch, buildOptions, tempFile, version)
+      );
+    } catch (e) {
+      if (e instanceof Error) {
+        output.stderr = e.message.trim().split("\n").slice(1).join("\n");
+      }
+    }
     logger.info("Code snippet was successfully executed.");
     const responseObj = handleCodeRunOutput(output);
     res.status(200).json(responseObj);

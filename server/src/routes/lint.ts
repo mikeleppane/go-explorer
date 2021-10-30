@@ -26,10 +26,19 @@ lintRouter.post("/", async (req, res) => {
     logger.info(
       `Code snippet was successfully written to the file: ${tempFile}`
     );
-    const output = await run(lintCode(tempFile, version));
+    let output;
+    try {
+      output = await run(lintCode(tempFile, version));
+    } catch (e) {
+      if (e instanceof Error) {
+        output = e.message.trim().split("\n").slice(1).join("\n");
+      }
+    }
     logger.info("Code snippet was successfully linted.");
-    if (output && "stdout" in output) {
-      res.status(200).send(output.stdout);
+    if (output && typeof output === "string") {
+      res.status(200).send(output);
+    } else {
+      res.status(200).send("");
     }
     await rm(path.dirname(tempFile), { recursive: true, force: true });
   } catch (error) {

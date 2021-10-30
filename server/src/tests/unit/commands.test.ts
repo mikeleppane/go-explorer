@@ -72,7 +72,7 @@ describe("Commands executed inside Docker container", () => {
     const buildOptions = "";
     const command = runCode(goos, goarch, buildOptions, filePath, version);
     expect(command).toMatch(
-      `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOOS=${goos} --env GOARCH=${goarch} golang:${version} bash -c "TIMEFORMAT=%R; go build -o x.exe ${buildOptions} ${file} && time ./x.exe 2>&1"`
+      `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOOS=${goos} --env GOARCH=${goarch} golang:${version} bash -c "TIMEFORMAT=%R; go build -o x.exe ${buildOptions} ${file} && time ./x.exe"`
     );
   });
 });

@@ -89,7 +89,7 @@ export const runCode = (
   const file = getFileName(filePath);
   const envs = `--env GOOS=${goos} --env GOARCH=${goarch}`;
   const buildCommand = `go build -o x.exe ${buildOptions} ${file}`;
-  const executeProgramWithTime = "time ./x.exe 2>&1";
+  const executeProgramWithTime = "time ./x.exe";
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
     file
