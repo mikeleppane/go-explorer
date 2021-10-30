@@ -35,10 +35,15 @@ export const parseRequestEntries = (entry: RunEntry | BuildEntry) => {
   if (entry.buildOptions && Object.keys(entry.buildOptions).length > 0) {
     for (const [key, value] of Object.entries(entry.buildOptions)) {
       let option = key[0] !== "-" ? "-" + key : key;
-      option += ` '${value}' `;
+      if (value) {
+        option += ` '${value}' `;
+      } else {
+        option += " ";
+      }
       buildOptions += option;
     }
   }
+  buildOptions = buildOptions.trim();
   let symregexp = "";
   if ("symregexp" in entry && entry.symregexp) {
     symregexp = entry.symregexp;

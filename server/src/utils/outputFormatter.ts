@@ -10,6 +10,8 @@ export const handleObjectDumpOutput = (output: CommandOutput) => {
 
 export const handleCodeBuildOutput = (output: CommandOutput) => {
   const res = { output: "", binarySize: "", buildTime: "" };
+  const sizeRegExp = new RegExp("^\\d+(.\\d+)?\\s?[KMG]?$", "i");
+  const buildTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
   if (output && output.stdout) {
     const content = output.stdout.trim().split("\n");
     if (content.length > 0) {
@@ -18,24 +20,31 @@ export const handleCodeBuildOutput = (output: CommandOutput) => {
         res.output = assembly.join("\n");
       }
       const size = content.pop();
-      if (size) {
+      if (size && sizeRegExp.test(size)) {
         res.binarySize = size;
       }
     }
   }
   if (output && output.stderr) {
-    res.buildTime = output.stderr.trim().split("\n")[0] + " s";
+    const buildTime = output.stderr.trim().split("\n")[0];
+    if (buildTimeRegExp.test(buildTime)) {
+      res.buildTime = buildTime + " s";
+    }
   }
   return res;
 };
 
 export const handleCodeRunOutput = (output: CommandOutput) => {
   const res = { output: "", executionTime: "" };
+  const executionTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
   if (output && output.stdout) {
     res.output = output.stdout.trim();
   }
   if (output && output.stderr) {
-    res.executionTime = output.stderr.trim().split("\n")[0] + " s";
+    const executionTime = output.stderr.trim().split("\n")[0];
+    if (executionTimeRegExp.test(executionTime)) {
+      res.executionTime = executionTime + " s";
+    }
   }
   return res;
 };

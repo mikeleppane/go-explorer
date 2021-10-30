@@ -1,7 +1,7 @@
 import express from "express";
 import { FormatEntry } from "../types";
 import { validateFormatRequest } from "../validators/formatValidator";
-import { rmdir, writeFile } from "fs/promises";
+import { rm, writeFile } from "fs/promises";
 import logger from "../utils/logging";
 import { run } from "../utils/commandExecutor";
 import { lintCode } from "../docker/commands";
@@ -31,10 +31,10 @@ lintRouter.post("/", async (req, res) => {
     if (output && "stdout" in output) {
       res.status(200).send(output.stdout);
     }
-    await rmdir(path.dirname(tempFile), { recursive: true });
+    await rm(path.dirname(tempFile), { recursive: true, force: true });
   } catch (error) {
     if (tempFile) {
-      await rmdir(path.dirname(tempFile), { recursive: true });
+      await rm(path.dirname(tempFile), { recursive: true, force: true });
     }
     if (error instanceof Error) {
       logger.error(error.message);

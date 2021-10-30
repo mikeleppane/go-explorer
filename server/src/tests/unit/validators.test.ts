@@ -62,6 +62,16 @@ describe("buildValidator", () => {
     const { error } = validateBuildRequest(buildData);
     expect(error).not.toBeUndefined();
   });
+  test("Invalid version number should not pass from validation", () => {
+    const buildData = {
+      code: "some code",
+      version: "0.1rc",
+    };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const { error } = validateBuildRequest(buildData);
+    expect(error).not.toBeUndefined();
+  });
 });
 
 describe("formatValidator", () => {

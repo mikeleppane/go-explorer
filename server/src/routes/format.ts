@@ -1,7 +1,7 @@
 import express from "express";
 import { FormatEntry } from "../types";
 import { validateFormatRequest } from "../validators/formatValidator";
-import { readFile, rmdir, writeFile } from "fs/promises";
+import { readFile, rm, writeFile } from "fs/promises";
 import logger from "../utils/logging";
 import { run } from "../utils/commandExecutor";
 import { formatCode } from "../docker/commands";
@@ -30,10 +30,10 @@ formatRouter.post("/", async (req, res) => {
     const content = await readFile(tempFile);
     logger.info("Code snippet was successfully reformatted.");
     res.status(200).send(content);
-    await rmdir(path.dirname(tempFile), { recursive: true });
+    await rm(path.dirname(tempFile), { recursive: true, force: true });
   } catch (error) {
     if (tempFile) {
-      await rmdir(path.dirname(tempFile), { recursive: true });
+      await rm(path.dirname(tempFile), { recursive: true, force: true });
     }
     if (error instanceof Error) {
       logger.error(error.message);

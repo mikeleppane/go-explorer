@@ -8,7 +8,7 @@ export function validateBuildRequest(format: BuildEntry) {
     goarch: Joi.string().optional(),
     buildOptions: Joi.object().optional(),
     symregexp: Joi.string().optional(),
-    version: Joi.string().optional(),
+    version: Joi.string().pattern(new RegExp("^\\d+(.\\d+)?$")).optional(),
   });
 
   return schema.validate(format);

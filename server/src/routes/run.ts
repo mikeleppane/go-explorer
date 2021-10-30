@@ -1,5 +1,5 @@
 import express from "express";
-import { rmdir, writeFile } from "fs/promises";
+import { rm, writeFile } from "fs/promises";
 import logger from "../utils/logging";
 import { run } from "../utils/commandExecutor";
 import { runCode } from "../docker/commands";
@@ -38,10 +38,10 @@ runRouter.post("/", async (req, res) => {
     logger.info("Code snippet was successfully executed.");
     const responseObj = handleCodeRunOutput(output);
     res.status(200).json(responseObj);
-    await rmdir(path.dirname(tempFile), { recursive: true });
+    await rm(path.dirname(tempFile), { recursive: true, force: true });
   } catch (error) {
     if (tempFile) {
-      await rmdir(path.dirname(tempFile), { recursive: true });
+      await rm(path.dirname(tempFile), { recursive: true, force: true });
     }
     if (error instanceof Error) {
       logger.error(error.message);
