@@ -14,7 +14,13 @@ export const handleCodeBuildOutput = (output: CommandOutput) => {
   const buildTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
   if (output && output.stdout) {
     const content = output.stdout.trim().split("\n");
-    if (content.length > 0) {
+    if (content.length === 1 && sizeRegExp.test(content[0])) {
+      res.binarySize = content[0];
+    }
+    if (content.length === 1 && !sizeRegExp.test(content[0])) {
+      res.output = content[0];
+    }
+    if (content.length > 1) {
       const assembly = content.slice(0, content.length - 1);
       if (assembly) {
         res.output = assembly.join("\n");

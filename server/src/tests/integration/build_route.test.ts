@@ -12,6 +12,7 @@ describe("POST /api/build", () => {
       code: 'package main;import "fmt";func add(x int, y int) int {return x+y};func main() {fmt.Println(add(150, 5))}',
     };
     const response = await api.post("/api/build").send(requestBody).expect(200);
+    console.log(response.body);
     expect(response.body.output).toBeFalsy();
     expect(response.body.binarySize).not.toBeFalsy();
     expect(response.body.buildTime).not.toBeFalsy();
@@ -66,6 +67,16 @@ describe("POST /api/build", () => {
     expect(response.body.binarySize).not.toBeFalsy();
     expect(response.body.buildTime).not.toBeFalsy();
   });
+  test("debug trace should be outputted if GODEBUG is enabled", async () => {
+    const requestBody = {
+      code: 'package main;import "fmt";func add(x int, y int) int {return x+y};func main() {fmt.Println(add(150, 5))}',
+      godebug: "gctrace=1",
+    };
+    const response = await api.post("/api/build").send(requestBody).expect(200);
+    expect(response.body.output).not.toBeFalsy();
+    expect(response.body.binarySize).not.toBeFalsy();
+    expect(response.body.buildTime).not.toBeFalsy();
+  });
   test("object dump should be returned if requested", async () => {
     const requestBody = {
       code: 'package main;import "fmt";func add(x int, y int) int {return x+y};func main() {fmt.Println(add(150, 5))}',
@@ -75,6 +86,26 @@ describe("POST /api/build", () => {
       .post("/api/build?objdump=true")
       .send(requestBody)
       .expect(200);
+    expect(response.body.output).not.toBeFalsy();
+    expect(response.body.binarySize).toBeFalsy();
+    expect(response.body.buildTime).toBeFalsy();
+  });
+  test("build should fail if given GOOS is not supported", async () => {
+    const requestBody = {
+      code: 'package main;import "fmt";func add(x int, y int) int {return x+y};func main() {fmt.Println(add(150, 5))}',
+      goos: "newLinux",
+    };
+    const response = await api.post("/api/build").send(requestBody).expect(200);
+    expect(response.body.output).not.toBeFalsy();
+    expect(response.body.binarySize).toBeFalsy();
+    expect(response.body.buildTime).toBeFalsy();
+  });
+  test("build should fail if given GOARCH is not supported", async () => {
+    const requestBody = {
+      code: 'package main;import "fmt";func add(x int, y int) int {return x+y};func main() {fmt.Println(add(150, 5))}',
+      goarch: "newArch",
+    };
+    const response = await api.post("/api/build").send(requestBody).expect(200);
     expect(response.body.output).not.toBeFalsy();
     expect(response.body.binarySize).toBeFalsy();
     expect(response.body.buildTime).toBeFalsy();

@@ -6,6 +6,8 @@ export function validateRunRequest(format: RunEntry) {
     code: Joi.string().required(),
     goos: Joi.string().optional(),
     goarch: Joi.string().optional(),
+    gogc: Joi.string().optional(),
+    godebug: Joi.string().optional(),
     buildOptions: Joi.object().optional(),
     version: Joi.string().pattern(new RegExp("^\\d+(.\\d+)?$")).optional(),
   });

@@ -27,7 +27,7 @@ buildRouter.post("/", async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
   const version = getVersion(validateQsVersion(req.query.version));
-  const { code, goos, goarch, buildOptions, symregexp } =
+  const { code, goos, goarch, gogc, godebug, buildOptions, symregexp } =
     parseRequestEntries(body);
   let tempFile = "";
   try {
@@ -37,7 +37,6 @@ buildRouter.post("/", async (req, res) => {
       `Code snippet was successfully written to the file: ${tempFile}`
     );
     let responseObj;
-    //let output = { stdout: "", stderr: "" };
     const isObjectDumpRequested = req.query.objdump === "true";
     if (isObjectDumpRequested) {
       const output = await run(
@@ -46,7 +45,7 @@ buildRouter.post("/", async (req, res) => {
       responseObj = handleObjectDumpOutput(output);
     } else {
       const output = await run(
-        buildCode(goos, goarch, buildOptions, tempFile, version)
+        buildCode(goos, goarch, gogc, godebug, buildOptions, tempFile, version)
       );
       logger.info("Code snippet was successfully build.");
       responseObj = handleCodeBuildOutput(output);

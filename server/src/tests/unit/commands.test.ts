@@ -37,10 +37,20 @@ describe("Commands executed inside Docker container", () => {
     const file = "test.go";
     const goos = "linux";
     const goarch = "amd64";
+    const gogc = "";
+    const godebug = "gctrace=1";
     const buildOptions = "-gcflags '-m -m'";
-    const command = buildCode(goos, goarch, buildOptions, filePath, version);
+    const command = buildCode(
+      goos,
+      goarch,
+      gogc,
+      godebug,
+      buildOptions,
+      filePath,
+      version
+    );
     expect(command).toMatch(
-      `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOOS=${goos} --env GOARCH=${goarch} golang:${version} bash -c "TIMEFORMAT=%R;time go build -o x.exe ${buildOptions} ${file} 2>&1;ls -sh x.exe | cut -d ' ' -f1"`
+      `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOOS=${goos} --env GOARCH=${goarch} --env GODEBUG=gctrace=1 golang:${version} bash -c "TIMEFORMAT=%R;time go build -o x.exe ${buildOptions} ${file} 2>&1;ls -sh x.exe | cut -d ' ' -f1"`
     );
   });
   test("getObjDump should return correct command", () => {

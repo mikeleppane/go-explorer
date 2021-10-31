@@ -34,6 +34,14 @@ export const parseRequestEntries = (entry: RunEntry | BuildEntry) => {
   if (entry.goarch) {
     goarch = entry.goarch;
   }
+  let gogc = "";
+  if (entry.gogc) {
+    gogc = entry.gogc;
+  }
+  let godebug = "";
+  if (entry.godebug) {
+    godebug = entry.godebug;
+  }
   let buildOptions = "";
   if (entry.buildOptions && Object.keys(entry.buildOptions).length > 0) {
     for (const [key, value] of Object.entries(entry.buildOptions)) {
@@ -52,5 +60,5 @@ export const parseRequestEntries = (entry: RunEntry | BuildEntry) => {
     symregexp = entry.symregexp;
   }
   const code = entry.code;
-  return { code, goos, goarch, buildOptions, symregexp };
+  return { code, goos, goarch, gogc, godebug, buildOptions, symregexp };
 };

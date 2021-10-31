@@ -13,6 +13,7 @@ export const run = async (cmd: string, timeout = 60000) => {
     if (stderr) {
       logger.error(`stderr: ${stderr}`);
     }
+    console.log("STDOUT: ", stdout);
     return { stdout, stderr };
   } catch (e) {
     if (e instanceof Error) {

@@ -1,4 +1,5 @@
 import path from "path";
+import { EnvEntry } from "../types";
 
 const getFileName = (filePath: string): string => {
   const file_parts = path.parse(filePath);
@@ -16,7 +17,9 @@ const golangImage = (version: string) => {
 };
 
 export const getEnvInfo = (version: string) => {
-  return `${dockerBaseCommand} ${golangImage(version)} go env`;
+  return `${dockerBaseCommand} ${golangImage(
+    version
+  )} bash -c "echo '====GO ENVS====';go env && echo '\n====CPU ARCH===='; lscpu"`;
 };
 
 export const formatCode = (filePath: string, version: string) => {
@@ -35,15 +38,28 @@ export const lintCode = (filePath: string, version: string) => {
   )} ${dockerWorkDir} ${golangImage(version)} go vet ${file}`;
 };
 
+const createEnvs = (envEntries: EnvEntry): string => {
+  let envs = "";
+  for (const [key, value] of Object.entries(envEntries)) {
+    if (value) {
+      envs += `--env ${key.toUpperCase()}=${value} `;
+    }
+  }
+  return envs.trim();
+};
+
 export const buildCode = (
   goos: string,
   goarch: string,
+  gogc: string,
+  godebug: string,
   buildOptions: string,
   filePath: string,
   version: string
 ) => {
   const file = getFileName(filePath);
-  const envs = `--env GOOS=${goos} --env GOARCH=${goarch}`;
+  const inputEnvs = { goos, goarch, gogc, godebug };
+  const envs = createEnvs(inputEnvs);
   const buildCommandWithTime = `TIMEFORMAT=%R;time go build -o x.exe ${buildOptions} ${file}`;
   const getBinarySize = "ls -sh x.exe | cut -d ' ' -f1";
   return `${dockerBaseCommand} ${volumeForSourceCode(
