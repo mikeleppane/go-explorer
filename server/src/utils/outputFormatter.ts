@@ -21,13 +21,14 @@ export const handleCodeBuildOutput = (output: CommandOutput) => {
       res.output = content[0];
     }
     if (content.length > 1) {
-      const assembly = content.slice(0, content.length - 1);
-      if (assembly) {
-        res.output = assembly.join("\n");
-      }
-      const size = content.pop();
+      const size = content[content.length - 1];
       if (size && sizeRegExp.test(size)) {
         res.binarySize = size;
+      }
+      if (res.binarySize) {
+        res.output = content.slice(0, content.length - 1).join("\n");
+      } else {
+        res.output = content.join("\n");
       }
     }
   }

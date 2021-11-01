@@ -47,7 +47,7 @@ buildRouter.post("/", async (req, res) => {
       const output = await run(
         buildCode(goos, goarch, gogc, godebug, buildOptions, tempFile, version)
       );
-      logger.info("Code snippet was successfully build.");
+      console.log(output);
       responseObj = handleCodeBuildOutput(output);
     }
     res.status(200).json(responseObj);

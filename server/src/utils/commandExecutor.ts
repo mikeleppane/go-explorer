@@ -13,12 +13,14 @@ export const run = async (cmd: string, timeout = 60000) => {
     if (stderr) {
       logger.error(`stderr: ${stderr}`);
     }
-    console.log("STDOUT: ", stdout);
+    logger.info(`${cmd} stdout> ${stdout}`);
     return { stdout, stderr };
   } catch (e) {
     if (e instanceof Error) {
       throw new Error(`${e.name}: ${e.message}`);
     }
-    throw new Error(`Run command: Unknown error occurred ${e}`);
+    throw new Error(
+      `Unknown error occurred while executing command (${cmd}): ${e}`
+    );
   }
 };

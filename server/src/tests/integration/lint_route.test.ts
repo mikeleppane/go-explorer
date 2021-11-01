@@ -21,7 +21,7 @@ describe("POST /api/lint", () => {
     const response = await api.post("/api/lint").send(requestBody).expect(200);
     expect(response.text).toContain("unreachable code");
   });
-  test("should return 500 error if source code is not provided", async () => {
+  test("should return 400 error if source code is not provided", async () => {
     const requestBody = {};
     await api.post("/api/lint").send(requestBody).expect(400);
   });

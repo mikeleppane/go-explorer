@@ -6,7 +6,7 @@ const getFileName = (filePath: string): string => {
   return file_parts.name + file_parts.ext;
 };
 
-const dockerBaseCommand = "docker run --rm";
+const dockerBaseCommand = "docker run -i";
 const dockerWorkDir = "-w /go/src/app";
 const volumeForSourceCode = (filePath: string, file: string) => {
   return `-v ${filePath}:/go/src/app/${file}`;
@@ -71,10 +71,10 @@ export const buildCode = (
 };
 
 export const getObjDump = (
-  goos = "linux",
-  goarch = "amd64",
-  buildOptions = "",
-  symregexp = "main.main",
+  goos: string,
+  goarch: string,
+  buildOptions: string,
+  symregexp: string,
   filePath: string,
   version: string
 ) => {
@@ -84,7 +84,8 @@ export const getObjDump = (
     symregexp = "";
   }
   const file = getFileName(filePath);
-  const envs = `--env GOOS=${goos} --env GOARCH=${goarch}`;
+  const inputEnvs = { goos, goarch };
+  const envs = createEnvs(inputEnvs);
   const buildCommand = `go build -o x.exe ${buildOptions} ${file}`;
   const executeObjDumpTool = `go tool objdump ${symregexp} x.exe`;
   return `${dockerBaseCommand} ${volumeForSourceCode(
@@ -96,14 +97,15 @@ export const getObjDump = (
 };
 
 export const runCode = (
-  goos = "linux",
-  goarch = "amd64",
-  buildOptions = "",
+  gogc: string,
+  godebug: string,
+  buildOptions: string,
   filePath: string,
   version: string
 ) => {
   const file = getFileName(filePath);
-  const envs = `--env GOOS=${goos} --env GOARCH=${goarch}`;
+  const inputEnvs = { gogc, godebug };
+  const envs = createEnvs(inputEnvs);
   const buildCommand = `go build -o x.exe ${buildOptions} ${file}`;
   const executeProgramWithTime = "time ./x.exe";
   return `${dockerBaseCommand} ${volumeForSourceCode(
@@ -112,4 +114,25 @@ export const runCode = (
   )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
     version
   )} bash -c "TIMEFORMAT=%R; ${buildCommand} && ${executeProgramWithTime}"`;
+};
+
+export const testCode = (
+  gogc: string,
+  godebug: string,
+  buildOptions: string,
+  testingOptions: string,
+  filePath: string,
+  version: string
+) => {
+  const file = getFileName(filePath);
+  const inputEnvs = { gogc, godebug };
+  let envs = createEnvs(inputEnvs);
+  envs += "--env GO111MODULE=auto";
+  const benchmarkCommand = `go test ${buildOptions} ${testingOptions}`;
+  return `${dockerBaseCommand} ${volumeForSourceCode(
+    filePath,
+    file
+  )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
+    version
+  )} bash -c "${benchmarkCommand};exit 0"`;
 };

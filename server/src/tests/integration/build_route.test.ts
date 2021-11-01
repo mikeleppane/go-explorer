@@ -110,4 +110,27 @@ describe("POST /api/build", () => {
     expect(response.body.binarySize).toBeFalsy();
     expect(response.body.buildTime).toBeFalsy();
   });
+  test("should return 400 error if request body is not valid", async () => {
+    const requestBody = {
+      code: 'package main;import "fmt";func main() {done := make(chan bool);m := make(map[string]string);m["name"] = "world";go func() {m["name"] = "data race";done <- true}();fmt.Println("Hello,", m["name"]);<-done}',
+      gotool: "gctrace=1",
+    };
+    await api.post("/api/run").send(requestBody).expect(400);
+  });
+  test("should return error message if source code cannot be built", async () => {
+    const requestBody = {
+      code: 'package main;import "fmt";func add(x int, y int) int {return x+y};func main() {fmt.Printl(add(150, 5))}',
+    };
+    const response = await api.post("/api/build").send(requestBody).expect(200);
+    expect(response.body.output).not.toBeFalsy();
+    expect(response.body.output).toContain("Printl");
+    expect(response.body.binarySize).toBeFalsy();
+    expect(response.body.buildTime).toBeFalsy();
+  });
+  test("should return 400 error if given source code is empty", async () => {
+    const requestBody = {
+      code: "",
+    };
+    await api.post("/api/build").send(requestBody).expect(400);
+  });
 });

@@ -1,5 +1,5 @@
 import { fallBackVersion, isValidVersion } from "../docker/versions";
-import { BuildEntry, RunEntry } from "../types";
+import { RequestEntries, TestingEntry } from "../types";
 
 export const validateQsVersion = (version: unknown): string => {
   if (version && isString(version)) {
@@ -25,23 +25,7 @@ export const getVersion = (version: string) => {
   return ver;
 };
 
-export const parseRequestEntries = (entry: RunEntry | BuildEntry) => {
-  let goos = "linux";
-  if (entry.goos) {
-    goos = entry.goos;
-  }
-  let goarch = "amd64";
-  if (entry.goarch) {
-    goarch = entry.goarch;
-  }
-  let gogc = "";
-  if (entry.gogc) {
-    gogc = entry.gogc;
-  }
-  let godebug = "";
-  if (entry.godebug) {
-    godebug = entry.godebug;
-  }
+const extractBuildOptions = (entry: RequestEntries) => {
   let buildOptions = "";
   if (entry.buildOptions && Object.keys(entry.buildOptions).length > 0) {
     for (const [key, value] of Object.entries(entry.buildOptions)) {
@@ -54,11 +38,57 @@ export const parseRequestEntries = (entry: RunEntry | BuildEntry) => {
       buildOptions += option;
     }
   }
-  buildOptions = buildOptions.trim();
+  return buildOptions.trim();
+};
+
+const extractTestingOptions = (entry: TestingEntry) => {
+  let testingOptions = "";
+  if (entry.testingOptions && Object.keys(entry.testingOptions).length > 0) {
+    for (const [key, value] of Object.entries(entry.testingOptions)) {
+      let option = key[0] !== "-" ? "-" + key : key;
+      if (value) {
+        option += ` '${value}' `;
+      } else {
+        option += " ";
+      }
+      testingOptions += option;
+    }
+  }
+  return testingOptions.trim();
+};
+
+export const parseRequestEntries = (entry: RequestEntries) => {
+  let goos = "";
+  if ("goos" in entry && entry.goos) {
+    goos = entry.goos;
+  }
+  let goarch = "";
+  if ("goarch" in entry && entry.goarch) {
+    goarch = entry.goarch;
+  }
+  let gogc = "";
+  if (entry.gogc) {
+    gogc = entry.gogc;
+  }
+  let godebug = "";
+  if (entry.godebug) {
+    godebug = entry.godebug;
+  }
+  const buildOptions = extractBuildOptions(entry);
+  const testingOptions = extractTestingOptions(entry);
   let symregexp = "";
   if ("symregexp" in entry && entry.symregexp) {
     symregexp = entry.symregexp;
   }
   const code = entry.code;
-  return { code, goos, goarch, gogc, godebug, buildOptions, symregexp };
+  return {
+    code,
+    goos,
+    goarch,
+    gogc,
+    godebug,
+    buildOptions,
+    testingOptions,
+    symregexp,
+  };
 };
