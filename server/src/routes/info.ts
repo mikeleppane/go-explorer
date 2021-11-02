@@ -2,6 +2,7 @@ import express from "express";
 import { getEnvInfo } from "../docker/commands";
 import { run } from "../utils/commandExecutor";
 import { validateVersion } from "../utils/route_helpers";
+import logger from "../utils/logging";
 
 const infoRouter = express.Router();
 
@@ -15,6 +16,7 @@ infoRouter.get("/", (req, res) => {
     .then((response) => {
       if (response && "stdout" in response) {
         res.status(200).send(response.stdout);
+        logger.info(`Environment info sent successfully; go:${version}`);
       }
     })
     .catch((error) => {

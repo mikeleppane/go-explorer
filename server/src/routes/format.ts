@@ -23,17 +23,17 @@ formatRouter.post("/", async (req, res) => {
     return;
   }
   let tempFile = "";
+  logger.info(`Code formatting started with GO version ${version}.`);
   try {
     tempFile = await createTempFile();
     await writeFile(tempFile, body.code, { encoding: "utf-8" });
-    logger.info(
-      `Code snippet was successfully written to the file: ${tempFile}`
-    );
+    logger.info(`Code was successfully written to the file: ${tempFile}`);
     await run(formatCode(tempFile, version));
     const content = await readFile(tempFile);
-    logger.info("Code snippet was successfully reformatted.");
+    logger.info("Code was successfully reformatted.");
     res.status(200).send(content.toString("utf-8"));
     await rm(path.dirname(tempFile), { recursive: true, force: true });
+    logger.info(`Temporary file was removed successfully.`);
   } catch (error) {
     if (tempFile) {
       await rm(path.dirname(tempFile), { recursive: true, force: true });

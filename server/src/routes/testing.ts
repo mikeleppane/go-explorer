@@ -6,11 +6,7 @@ import { testCode } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
 import { TestingEntry } from "../types";
-import {
-  getVersion,
-  parseRequestEntries,
-  validateQsVersion,
-} from "../utils/route_helpers";
+import { parseRequestEntries, validateVersion } from "../utils/route_helpers";
 import { handleCodeTestOutput } from "../utils/outputFormatter";
 import { validateTestingRequest } from "../validators/testingValidator";
 
@@ -23,22 +19,25 @@ testingRouter.post("/", async (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
-  const version = getVersion(validateQsVersion(req.query.version));
+  const version = validateVersion(body.version, res);
+  if (!version) {
+    return;
+  }
   const { code, gogc, godebug, buildFlags, testFlags } =
     parseRequestEntries(body);
   let tempFile = "";
+  logger.info(`Code testing started with GO version ${version}.`);
   try {
     tempFile = await createTempFile("go-", "", "_test.go");
     await writeFile(tempFile, code, { encoding: "utf-8" });
-    logger.info(
-      `Code snippet was successfully written to the file: ${tempFile}`
-    );
+    logger.info(`Code was successfully written to the file: ${tempFile}`);
     const output = await run(
       testCode(gogc, godebug, buildFlags, testFlags, tempFile, version)
     );
     const responseObj = handleCodeTestOutput(output);
     res.status(200).json(responseObj);
     await rm(path.dirname(tempFile), { recursive: true, force: true });
+    logger.info(`Temporary file was removed successfully.`);
   } catch (error) {
     if (tempFile) {
       await rm(path.dirname(tempFile), { recursive: true, force: true });

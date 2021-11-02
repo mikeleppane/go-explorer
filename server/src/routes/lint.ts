@@ -23,12 +23,11 @@ lintRouter.post("/", async (req, res) => {
     return;
   }
   let tempFile = "";
+  logger.info(`Linting operation started with GO version ${version}.`);
   try {
     tempFile = await createTempFile();
     await writeFile(tempFile, body.code, { encoding: "utf-8" });
-    logger.info(
-      `Code snippet was successfully written to the file: ${tempFile}`
-    );
+    logger.info(`Code was successfully written to the file: ${tempFile}`);
     let output;
     try {
       output = await run(lintCode(tempFile, version));
@@ -37,13 +36,15 @@ lintRouter.post("/", async (req, res) => {
         output = e.message.trim().split("\n").slice(1).join("\n");
       }
     }
-    logger.info("Code snippet was successfully linted.");
     if (output && typeof output === "string") {
+      logger.warn(`Linter found some issues: ${output}`);
       res.status(200).send(output);
     } else {
+      logger.info("Linter analysis was clean.");
       res.status(200).send("");
     }
     await rm(path.dirname(tempFile), { recursive: true, force: true });
+    logger.info(`Temporary file was removed successfully.`);
   } catch (error) {
     if (tempFile) {
       await rm(path.dirname(tempFile), { recursive: true, force: true });

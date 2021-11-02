@@ -24,7 +24,7 @@ export const createTempFile = async (
       logger.error(
         `An error occurred while creating temporary file: ${e.message}`
       );
-      throw new Error(e?.message);
+      throw new Error(e.message);
     }
     throw new Error(`createTempFile: Unknown error occurred, ${e}`);
   }

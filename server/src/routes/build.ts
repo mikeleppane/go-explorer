@@ -6,17 +6,12 @@ import { buildCode, getObjDump } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
 import { BuildEntry } from "../types";
-import {
-  getVersion,
-  parseRequestEntries,
-  validateQsVersion,
-} from "../utils/route_helpers";
+import { parseRequestEntries, validateVersion } from "../utils/route_helpers";
 import { validateBuildRequest } from "../validators/buildValidator";
 import {
   handleCodeBuildOutput,
   handleObjectDumpOutput,
 } from "../utils/outputFormatter";
-import { availableVersions } from "../docker/versions";
 
 const buildRouter = express.Router();
 
@@ -27,23 +22,18 @@ buildRouter.post("/", async (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
-  const version = getVersion(validateQsVersion(req.query.version));
+  const version = validateVersion(body.version, res);
   if (!version) {
-    return res
-      .status(400)
-      .send(
-        `No should GO version available: ${req.query.version}. Currently available version are: ${availableVersions}`
-      );
+    return;
   }
   const { code, goos, goarch, gogc, godebug, buildFlags, symregexp } =
     parseRequestEntries(body);
   let tempFile = "";
+  logger.info(`Code building started with GO version ${version}.`);
   try {
     tempFile = await createTempFile();
     await writeFile(tempFile, code, { encoding: "utf-8" });
-    logger.info(
-      `Code snippet was successfully written to the file: ${tempFile}`
-    );
+    logger.info(`Code was successfully written to the file: ${tempFile}`);
     let responseObj;
     const isObjectDumpRequested = req.query.objdump === "true";
     if (isObjectDumpRequested) {
@@ -55,11 +45,11 @@ buildRouter.post("/", async (req, res) => {
       const output = await run(
         buildCode(goos, goarch, gogc, godebug, buildFlags, tempFile, version)
       );
-      console.log(output);
       responseObj = handleCodeBuildOutput(output);
     }
     res.status(200).json(responseObj);
     await rm(path.dirname(tempFile), { recursive: true, force: true });
+    logger.info(`Temporary file was removed successfully.`);
   } catch (error) {
     if (tempFile) {
       await rm(path.dirname(tempFile), { recursive: true, force: true });
