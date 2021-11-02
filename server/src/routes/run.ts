@@ -24,7 +24,7 @@ runRouter.post("/", async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
   const version = getVersion(validateQsVersion(req.query.version));
-  const { code, gogc, godebug, buildOptions } = parseRequestEntries(body);
+  const { code, gogc, godebug, buildFlags } = parseRequestEntries(body);
   let tempFile = "";
   try {
     tempFile = await createTempFile();
@@ -34,9 +34,7 @@ runRouter.post("/", async (req, res) => {
     );
     let output = { stdout: "", stderr: "" };
     try {
-      output = await run(
-        runCode(gogc, godebug, buildOptions, tempFile, version)
-      );
+      output = await run(runCode(gogc, godebug, buildFlags, tempFile, version));
     } catch (e) {
       if (e instanceof Error) {
         output.stderr = e.message.trim().split("\n").slice(1).join("\n");

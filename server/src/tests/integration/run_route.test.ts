@@ -27,7 +27,6 @@ describe("POST /api/run", () => {
       code: validCode,
     };
     const response = await api.post("/api/run").send(requestBody).expect(200);
-    console.log(response.body);
     expect(response.body.output).toBe("155");
     expect(response.body.executionTime).not.toBeFalsy();
     expect(response.body.stderr).toBeFalsy();
@@ -80,14 +79,13 @@ describe("POST /api/run", () => {
       code: 'package main;import "fmt";func main() {done := make(chan bool);m := make(map[string]string);m["name"] = "world";go func() {m["name"] = "data race";done <- true}();fmt.Println("Hello,", m["name"]);<-done}',
     };
     const response = await api.post("/api/run").send(requestBody);
-    console.log(response.body);
     expect(response.body.output).toBeFalsy();
     expect(response.body.executionTime).toBeFalsy();
     expect(response.body.stderr).toContain("-gcfags");
   });
   test("should return error message if incorrect build option is", async () => {
     const requestBody = {
-      code: 'package main;import "fmt";func main() {done := make(chan bool);m := make(map[string]string);m["name"] = "world";go func() {m["name"] = "data race";done <- true}();fmt.Println(Errorf("ERROR occurred"));<-done}',
+      code: 'package main;import "fmt";func main() {done := make(chan bool);m := make(map[string]string);m["name"] = "world";panic("fdg");go func() {m["name"] = "data race";done <- true}();fmt.Println(Errorf("ERROR occurred"));<-done}',
     };
     const response = await api.post("/api/run").send(requestBody);
     console.log(response.body);

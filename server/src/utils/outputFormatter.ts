@@ -60,3 +60,14 @@ export const handleCodeRunOutput = (output: CommandOutput) => {
   }
   return res;
 };
+
+export const handleCodeTestOutput = (output: CommandOutput) => {
+  const res = { output: "", error: "" };
+  if (output && output.stdout) {
+    res.output = output.stdout.trim();
+  }
+  if (output && output.stderr) {
+    res.error = output.stderr.trim();
+  }
+  return res;
+};

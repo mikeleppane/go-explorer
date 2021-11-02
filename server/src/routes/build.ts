@@ -27,7 +27,7 @@ buildRouter.post("/", async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
   const version = getVersion(validateQsVersion(req.query.version));
-  const { code, goos, goarch, gogc, godebug, buildOptions, symregexp } =
+  const { code, goos, goarch, gogc, godebug, buildFlags, symregexp } =
     parseRequestEntries(body);
   let tempFile = "";
   try {
@@ -40,12 +40,12 @@ buildRouter.post("/", async (req, res) => {
     const isObjectDumpRequested = req.query.objdump === "true";
     if (isObjectDumpRequested) {
       const output = await run(
-        getObjDump(goos, goarch, buildOptions, symregexp, tempFile, version)
+        getObjDump(goos, goarch, buildFlags, symregexp, tempFile, version)
       );
       responseObj = handleObjectDumpOutput(output);
     } else {
       const output = await run(
-        buildCode(goos, goarch, gogc, godebug, buildOptions, tempFile, version)
+        buildCode(goos, goarch, gogc, godebug, buildFlags, tempFile, version)
       );
       console.log(output);
       responseObj = handleCodeBuildOutput(output);

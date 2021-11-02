@@ -12,7 +12,6 @@ describe("POST /api/build", () => {
       code: 'package main;import "fmt";func add(x int, y int) int {return x+y};func main() {fmt.Println(add(150, 5))}',
     };
     const response = await api.post("/api/build").send(requestBody).expect(200);
-    console.log(response.body);
     expect(response.body.output).toBeFalsy();
     expect(response.body.binarySize).not.toBeFalsy();
     expect(response.body.buildTime).not.toBeFalsy();
@@ -38,7 +37,6 @@ describe("POST /api/build", () => {
       },
     };
     const response = await api.post("/api/build").send(requestBody).expect(200);
-    console.log(response.body);
     expect(response.body.output).not.toBeFalsy();
     expect(response.body.binarySize).toBeFalsy();
     expect(response.body.buildTime).toBeFalsy();

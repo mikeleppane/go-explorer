@@ -27,10 +27,6 @@ describe("POST /api/format", () => {
     const requestBody = {
       code: 'package main;import "fmt";func add(x int, y int) int {return x  +  y};func main() {fmt.Prin(add(150, 5))}',
     };
-    const response = await api
-      .post("/api/format")
-      .send(requestBody)
-      .expect(200);
-    console.log(response.body);
+    await api.post("/api/format").send(requestBody).expect(200);
   });
 });

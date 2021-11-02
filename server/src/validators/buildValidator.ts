@@ -8,7 +8,7 @@ export function validateBuildRequest(format: BuildEntry) {
     goarch: Joi.string().optional(),
     gogc: Joi.string().optional(),
     godebug: Joi.string().optional(),
-    buildOptions: Joi.object().optional(),
+    buildFlags: Joi.string().optional(),
     symregexp: Joi.string().optional(),
     version: Joi.string().pattern(new RegExp("^\\d+(.\\d+)?$")).optional(),
   });

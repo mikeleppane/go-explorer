@@ -1,5 +1,5 @@
 import { fallBackVersion, isValidVersion } from "../docker/versions";
-import { RequestEntries, TestingEntry } from "../types";
+import { RequestEntries } from "../types";
 
 export const validateQsVersion = (version: unknown): string => {
   if (version && isString(version)) {
@@ -25,38 +25,6 @@ export const getVersion = (version: string) => {
   return ver;
 };
 
-const extractBuildOptions = (entry: RequestEntries) => {
-  let buildOptions = "";
-  if (entry.buildOptions && Object.keys(entry.buildOptions).length > 0) {
-    for (const [key, value] of Object.entries(entry.buildOptions)) {
-      let option = key[0] !== "-" ? "-" + key : key;
-      if (value) {
-        option += ` '${value}' `;
-      } else {
-        option += " ";
-      }
-      buildOptions += option;
-    }
-  }
-  return buildOptions.trim();
-};
-
-const extractTestingOptions = (entry: TestingEntry) => {
-  let testingOptions = "";
-  if (entry.testingOptions && Object.keys(entry.testingOptions).length > 0) {
-    for (const [key, value] of Object.entries(entry.testingOptions)) {
-      let option = key[0] !== "-" ? "-" + key : key;
-      if (value) {
-        option += ` '${value}' `;
-      } else {
-        option += " ";
-      }
-      testingOptions += option;
-    }
-  }
-  return testingOptions.trim();
-};
-
 export const parseRequestEntries = (entry: RequestEntries) => {
   let goos = "";
   if ("goos" in entry && entry.goos) {
@@ -74,8 +42,14 @@ export const parseRequestEntries = (entry: RequestEntries) => {
   if (entry.godebug) {
     godebug = entry.godebug;
   }
-  const buildOptions = extractBuildOptions(entry);
-  const testingOptions = extractTestingOptions(entry);
+  let buildFlags = "";
+  if (entry.buildFlags) {
+    buildFlags = entry.buildFlags;
+  }
+  let testFlags = "";
+  if ("testFlags" in entry && entry.testFlags) {
+    testFlags = entry.testFlags;
+  }
   let symregexp = "";
   if ("symregexp" in entry && entry.symregexp) {
     symregexp = entry.symregexp;
@@ -87,8 +61,8 @@ export const parseRequestEntries = (entry: RequestEntries) => {
     goarch,
     gogc,
     godebug,
-    buildOptions,
-    testingOptions,
+    buildFlags,
+    testFlags,
     symregexp,
   };
 };

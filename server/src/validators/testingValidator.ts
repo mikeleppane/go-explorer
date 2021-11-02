@@ -6,8 +6,8 @@ export function validateTestingRequest(format: TestingEntry) {
     code: Joi.string().required(),
     gogc: Joi.string().optional(),
     godebug: Joi.string().optional(),
-    buildOptions: Joi.object().optional(),
-    testingOptions: Joi.object().optional(),
+    buildFlags: Joi.string().optional(),
+    testFlags: Joi.string().optional(),
     version: Joi.string().pattern(new RegExp("^\\d+(.\\d+)?$")).optional(),
   });
 

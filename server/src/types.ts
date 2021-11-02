@@ -3,14 +3,6 @@ export interface FormatEntry {
   version?: string;
 }
 
-type buildOptionType = {
-  [key: string]: string;
-};
-
-type testingOptionType = {
-  [key: string]: string;
-};
-
 export interface EnvEntry {
   goarch?: string;
   goos?: string;
@@ -24,7 +16,7 @@ export interface BuildEntry {
   goos?: string;
   gogc?: string;
   godebug?: string;
-  buildOptions?: buildOptionType;
+  buildFlags?: string;
   symregexp?: string;
   version?: string;
 }
@@ -33,7 +25,7 @@ export interface RunEntry {
   code: string;
   gogc?: string;
   godebug?: string;
-  buildOptions?: buildOptionType;
+  buildFlags?: string;
   version?: string;
 }
 
@@ -41,8 +33,8 @@ export interface TestingEntry {
   code: string;
   gogc?: string;
   godebug?: string;
-  buildOptions?: buildOptionType;
-  testingOptions?: testingOptionType;
+  buildFlags?: string;
+  testFlags?: string;
   version?: string;
 }
 

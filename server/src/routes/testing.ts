@@ -11,7 +11,7 @@ import {
   parseRequestEntries,
   validateQsVersion,
 } from "../utils/route_helpers";
-import { handleCodeRunOutput } from "../utils/outputFormatter";
+import { handleCodeTestOutput } from "../utils/outputFormatter";
 import { validateTestingRequest } from "../validators/testingValidator";
 
 const testingRouter = express.Router();
@@ -24,7 +24,7 @@ testingRouter.post("/", async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
   const version = getVersion(validateQsVersion(req.query.version));
-  const { code, gogc, godebug, buildOptions, testingOptions } =
+  const { code, gogc, godebug, buildFlags, testFlags } =
     parseRequestEntries(body);
   let tempFile = "";
   try {
@@ -33,20 +33,10 @@ testingRouter.post("/", async (req, res) => {
     logger.info(
       `Code snippet was successfully written to the file: ${tempFile}`
     );
-    let output = { stdout: "", stderr: "" };
-    try {
-      output = await run(
-        testCode(gogc, godebug, buildOptions, testingOptions, tempFile, version)
-      );
-    } catch (e) {
-      console.log("ERROR: ", e);
-      if (e instanceof Error) {
-        output.stderr = e.message.trim().split("\n").slice(1).join("\n");
-      }
-    }
-    console.log(output);
-    logger.info("Testing command was executed successful.");
-    const responseObj = handleCodeRunOutput(output);
+    const output = await run(
+      testCode(gogc, godebug, buildFlags, testFlags, tempFile, version)
+    );
+    const responseObj = handleCodeTestOutput(output);
     res.status(200).json(responseObj);
     await rm(path.dirname(tempFile), { recursive: true, force: true });
   } catch (error) {
@@ -55,9 +45,7 @@ testingRouter.post("/", async (req, res) => {
     }
     if (error instanceof Error) {
       logger.error(error.message);
-      return res
-        .status(500)
-        .send(error.message.trim().split("\n").slice(1).join("\n"));
+      return res.status(500).send(error.message.trim());
     }
   }
 });
