@@ -1,12 +1,15 @@
 import express from "express";
 import { getEnvInfo } from "../docker/commands";
 import { run } from "../utils/commandExecutor";
-import { getVersion, validateQsVersion } from "../utils/route_helpers";
+import { validateVersion } from "../utils/route_helpers";
 
 const infoRouter = express.Router();
 
 infoRouter.get("/", (req, res) => {
-  const version = getVersion(validateQsVersion(req.query.version));
+  const version = validateVersion(req.query.version, res);
+  if (!version) {
+    return;
+  }
   const envInfoQuery = getEnvInfo(version);
   run(envInfoQuery)
     .then((response) => {

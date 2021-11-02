@@ -1,5 +1,6 @@
 import { validateBuildRequest } from "../../validators/buildValidator";
 import { validateFormatRequest } from "../../validators/formatValidator";
+import { validateTestingRequest } from "../../validators/testingValidator";
 
 describe("buildValidator", () => {
   test("Valid build data should pass from validation", () => {
@@ -7,7 +8,7 @@ describe("buildValidator", () => {
       code: "some code",
       goos: "linux",
       goarch: "amd64",
-      buildOptions: {},
+      buildFlags: "some flag",
       version: "1.17",
     };
     const { error } = validateBuildRequest(buildData);
@@ -24,7 +25,7 @@ describe("buildValidator", () => {
     const buildData = {
       goos: "linux",
       goarch: "amd64",
-      buildOptions: {},
+      buildFlags: "some flag",
       version: "1.17",
     };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -36,7 +37,7 @@ describe("buildValidator", () => {
     const buildData = {
       goos: "linux",
       goarch: "amd64",
-      buildOptions: {},
+      buildFlags: "some flag",
       version: "1.17",
       shouldnotbehere: "error",
     };
@@ -92,6 +93,30 @@ describe("formatValidator", () => {
   });
   test("Invalid format data should not pass from validation", () => {
     const formatData = {
+      version: "1.17",
+    };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const { error } = validateFormatRequest(formatData);
+    expect(error).not.toBeUndefined();
+  });
+});
+
+describe("testValidator", () => {
+  test("Valid format data should pass from validation", () => {
+    const formatData = {
+      code: "some code",
+      buildFlags: "build flag",
+      testFlags: "test flag",
+      version: "1.17",
+    };
+    const { error } = validateTestingRequest(formatData);
+    expect(error).toBeUndefined();
+  });
+  test("Invalid format data should not pass from validation", () => {
+    const formatData = {
+      code: "some code",
+      testFlag: "test flag",
       version: "1.17",
     };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

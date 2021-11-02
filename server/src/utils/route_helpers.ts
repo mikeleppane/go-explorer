@@ -1,5 +1,11 @@
-import { fallBackVersion, isValidVersion } from "../docker/versions";
+import {
+  availableVersions,
+  fallBackVersion,
+  isValidVersion,
+} from "../docker/versions";
 import { RequestEntries } from "../types";
+import logger from "./logging";
+import express from "express";
 
 export const validateQsVersion = (version: unknown): string => {
   if (version && isString(version)) {
@@ -15,14 +21,35 @@ const isString = (text: unknown): text is string => {
   return typeof text === "string";
 };
 
-export const getVersion = (version: string) => {
+export const getVersion = (version: string | undefined) => {
   let ver = fallBackVersion;
   if (version) {
     if (isValidVersion(version)) {
       ver = version;
+    } else {
+      ver = "";
     }
   }
   return ver;
+};
+
+export const validateVersion = (qsVersion: unknown, res: express.Response) => {
+  let version = "";
+  try {
+    version = getVersion(validateQsVersion(qsVersion));
+    if (!version) {
+      res.status(400).send(
+        `No should GO version available: ${qsVersion}. 
+          Currently available version are: ${availableVersions}`
+      );
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      logger.error(`${e.message}`);
+      res.status(500).send(e.message);
+    }
+  }
+  return version;
 };
 
 export const parseRequestEntries = (entry: RequestEntries) => {

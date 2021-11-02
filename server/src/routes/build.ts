@@ -16,6 +16,7 @@ import {
   handleCodeBuildOutput,
   handleObjectDumpOutput,
 } from "../utils/outputFormatter";
+import { availableVersions } from "../docker/versions";
 
 const buildRouter = express.Router();
 
@@ -27,6 +28,13 @@ buildRouter.post("/", async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
   const version = getVersion(validateQsVersion(req.query.version));
+  if (!version) {
+    return res
+      .status(400)
+      .send(
+        `No should GO version available: ${req.query.version}. Currently available version are: ${availableVersions}`
+      );
+  }
   const { code, goos, goarch, gogc, godebug, buildFlags, symregexp } =
     parseRequestEntries(body);
   let tempFile = "";

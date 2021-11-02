@@ -6,7 +6,7 @@ const getFileName = (filePath: string): string => {
   return file_parts.name + file_parts.ext;
 };
 
-const dockerBaseCommand = "docker run -i";
+const dockerBaseCommand = "docker run --rm";
 const dockerWorkDir = "-w /go/src/app";
 const volumeForSourceCode = (filePath: string, file: string) => {
   return `-v ${filePath}:/go/src/app/${file}`;

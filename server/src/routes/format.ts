@@ -7,7 +7,7 @@ import { run } from "../utils/commandExecutor";
 import { formatCode } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
-import { getVersion } from "../utils/route_helpers";
+import { validateVersion } from "../utils/route_helpers";
 
 const formatRouter = express.Router();
 
@@ -18,7 +18,10 @@ formatRouter.post("/", async (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
-  const version = getVersion(req.query.version as string);
+  const version = validateVersion(body.version, res);
+  if (!version) {
+    return;
+  }
   let tempFile = "";
   try {
     tempFile = await createTempFile();

@@ -10,14 +10,73 @@ const validCode = `
   package main;
   import (
     "fmt"
+  )
+  func add(x int, y int) int {
+    return x+y
+  }
+  func main() {
+    fmt.Println(add(150, 5))
+    fmt.Println(add(500, 500))
+  }
+`;
+
+const invalidCode = `
+  package main;
+  import (
+    "fmt"
     "os"
   )
   func add(x int, y int) int {
     return x+y
   }
   func main() {
-    os.Exit(1)
     fmt.Println(add(150, 5))
+  }
+`;
+
+const panicCode = `
+  package main;
+  import (
+    "fmt"
+  )
+  func add(x int, y int) int {
+    return x+y
+  }
+  func main() {
+    panic("A problem")
+    fmt.Println(add(150, 5))
+  }
+`;
+
+const exitCode = `
+  package main;
+  import (
+    "fmt"
+    "os"
+  )
+  func add(x int, y int) int {
+    return x+y
+  }
+  func main() {
+    fmt.Println(add(150, 5))
+    fmt.Println(add(500, 500))    
+    os.Exit(3)
+  }
+`;
+
+const concurrentCode = `
+  package main
+  import "fmt"
+  func main() {
+    done := make(chan bool)
+    m := make(map[string]string)
+    m["name"] = "world"
+    go func() {
+      m["name"] = "data race"
+      done <- true
+    }()
+    fmt.Println("Hello,", m["name"])
+    <-done
   }
 `;
 
@@ -27,70 +86,73 @@ describe("POST /api/run", () => {
       code: validCode,
     };
     const response = await api.post("/api/run").send(requestBody).expect(200);
-    expect(response.body.output).toBe("155");
+    expect(response.body.output).toContain("155");
+    expect(response.body.output).toContain("1000");
     expect(response.body.executionTime).not.toBeFalsy();
-    expect(response.body.stderr).toBeFalsy();
+    expect(response.body.error).toBeFalsy();
   });
   test("should return correct code output and execution time when gcflags='-m -m' ", async () => {
     const requestBody = {
-      code: 'package main;import "fmt";func add(x int, y int) int {return x+y};func main() {fmt.Println(add(150, 5))}',
-      buildOptions: {
-        gcflags: "-m -m",
-      },
+      code: validCode,
+      buildFlags: "-gcflags='-m -m'",
     };
     const response = await api.post("/api/run").send(requestBody).expect(200);
-    expect(response.body.output).toBe("155");
+    expect(response.body.output).toContain("155");
     expect(response.body.executionTime).not.toBeFalsy();
-    expect(response.body.stderr).not.toBeFalsy();
+    expect(response.body.error).not.toBeFalsy();
   });
   test("should return correct code output and execution time when race detector is enabled ", async () => {
     const requestBody = {
-      code: 'package main;import "fmt";func main() {done := make(chan bool);m := make(map[string]string);m["name"] = "world";go func() {m["name"] = "data race";done <- true}();fmt.Println("Hello,", m["name"]);<-done}',
-      buildOptions: {
-        race: "",
-      },
+      code: concurrentCode,
+      buildFlags: "-race",
     };
     const response = await api.post("/api/run").send(requestBody);
     expect(response.body.output).toBeFalsy();
     expect(response.body.executionTime).not.toBeFalsy();
-    expect(response.body.stderr).toContain("WARNING: DATA RACE");
+    expect(response.body.error).toContain("WARNING: DATA RACE");
   });
   test("should return error message if incorrect build option is given", async () => {
     const requestBody = {
-      code: 'package main;import "fmt";func main() {done := make(chan bool);m := make(map[string]string);m["name"] = "world";go func() {m["name"] = "data race";done <- true}();fmt.Println("Hello,", m["name"]);<-done}',
-      buildOptions: {
-        gcfags: "-incorrectflag",
-      },
+      code: concurrentCode,
+      buildFlags: "-gcfags=incorrectflag",
     };
     const response = await api.post("/api/run").send(requestBody);
     expect(response.body.output).toBeFalsy();
     expect(response.body.executionTime).toBeFalsy();
-    expect(response.body.stderr).toContain("-gcfags");
+    expect(response.body.error).toContain("-gcfags");
   });
   test("should return 400 error if request body is not valid", async () => {
     const requestBody = {
-      code: 'package main;import "fmt";func main() {done := make(chan bool);m := make(map[string]string);m["name"] = "world";go func() {m["name"] = "data race";done <- true}();fmt.Println("Hello,", m["name"]);<-done}',
+      code: concurrentCode,
       goos: "windows",
     };
     await api.post("/api/run").send(requestBody).expect(400);
   });
   test("should return error message if build fails", async () => {
     const requestBody = {
-      code: 'package main;import "fmt";func main() {done := make(chan bool);m := make(map[string]string);m["name"] = "world";go func() {m["name"] = "data race";done <- true}();fmt.Println("Hello,", m["name"]);<-done}',
+      code: invalidCode,
     };
     const response = await api.post("/api/run").send(requestBody);
     expect(response.body.output).toBeFalsy();
     expect(response.body.executionTime).toBeFalsy();
-    expect(response.body.stderr).toContain("-gcfags");
+    expect(response.body.error).toContain("os");
   });
-  test("should return error message if incorrect build option is", async () => {
+  test("should return error message if code is panicked", async () => {
     const requestBody = {
-      code: 'package main;import "fmt";func main() {done := make(chan bool);m := make(map[string]string);m["name"] = "world";panic("fdg");go func() {m["name"] = "data race";done <- true}();fmt.Println(Errorf("ERROR occurred"));<-done}',
+      code: panicCode,
     };
     const response = await api.post("/api/run").send(requestBody);
-    console.log(response.body);
-    // expect(response.body.output).toBeFalsy();
-    // expect(response.body.executionTime).toBeFalsy();
-    // expect(response.body.stderr).toContain("-gcfags");
+    expect(response.body.output).toBeFalsy();
+    expect(response.body.executionTime).not.toBeFalsy();
+    expect(response.body.error).toContain("A problem");
+  });
+  test("should return error message if code is exited", async () => {
+    const requestBody = {
+      code: exitCode,
+    };
+    const response = await api.post("/api/run").send(requestBody);
+    expect(response.body.output).toBeFalsy();
+    expect(response.body.executionTime).not.toBeFalsy();
+    expect(response.body.error).toBeFalsy();
   });
 });

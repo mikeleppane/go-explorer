@@ -23,9 +23,13 @@ describe("getVersion", () => {
     const version = "1.16";
     expect(getVersion(version)).toBe(version);
   });
-  test("should return fallback version if given version is not available", () => {
-    const version = "0.123";
+  test("should return fallback version if version is not specified", () => {
+    const version = undefined;
     expect(getVersion(version)).toBe(fallBackVersion);
+  });
+  test("should return empty if given version is not available", () => {
+    const version = "0.12345";
+    expect(getVersion(version)).toBe("");
   });
 });
 
@@ -48,24 +52,43 @@ describe("parseRequestEntries", () => {
   test("should return correct goarch field", () => {
     const entry = {
       code: "code",
+      goarch: "amd64",
     };
     const { goarch } = parseRequestEntries(entry);
     expect(goarch).toBe("amd64");
   });
-  test("should return correct buildOptions field", () => {
+  test("should return correct gogc field", () => {
     const entry = {
       code: "code",
-      buildOptions: {
-        gcflags: "-m -m -S",
-        ldflags: "-s -w",
-        "-race": "",
-        "-v": "",
-        x: "",
-      },
+      gogc: "off",
     };
-    const { buildOptions } = parseRequestEntries(entry);
-    const expextedBuildCommand =
-      "-gcflags '-m -m -S' -ldflags '-s -w' -race -v -x";
-    expect(buildOptions).toBe(expextedBuildCommand);
+    const { gogc } = parseRequestEntries(entry);
+    expect(gogc).toBe("off");
+  });
+  test("should return correct godebug field", () => {
+    const entry = {
+      code: "code",
+      godebug: "gctrace=1",
+    };
+    const { godebug } = parseRequestEntries(entry);
+    expect(godebug).toBe("gctrace=1");
+  });
+  test("should return correct buildFlags field", () => {
+    const entry = {
+      code: "code",
+      buildFlags: "-gcflags='-m -m'",
+    };
+    const { buildFlags } = parseRequestEntries(entry);
+    const expextedBuildFlags = "-gcflags='-m -m'";
+    expect(buildFlags).toBe(expextedBuildFlags);
+  });
+  test("should return correct testFlags field", () => {
+    const entry = {
+      code: "code",
+      testFlags: "-v -bench=. -count=2",
+    };
+    const { testFlags } = parseRequestEntries(entry);
+    const expextedTestFlags = "-v -bench=. -count=2";
+    expect(testFlags).toBe(expextedTestFlags);
   });
 });

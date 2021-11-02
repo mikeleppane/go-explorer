@@ -1,6 +1,7 @@
 import {
   handleCodeBuildOutput,
   handleCodeRunOutput,
+  handleCodeTestOutput,
   handleObjectDumpOutput,
 } from "../../utils/outputFormatter";
 
@@ -50,7 +51,7 @@ describe("handleCodeBuildOutput", () => {
       stderr: "12.1",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput\neven more output",
+      output: "some output\nmoreoutput\neven more output\nsize",
       binarySize: "",
       buildTime: "12.1 s",
     };
@@ -106,7 +107,35 @@ describe("handleCodeBuildOutput", () => {
       stderr: "0.555",
     };
     const expectedResultObject = {
-      output: "some code",
+      output: "some code\n.12",
+      binarySize: "",
+      buildTime: "0.555 s",
+    };
+    expect(handleCodeBuildOutput(commandOutput)).toMatchObject(
+      expectedResultObject
+    );
+  });
+  test("should return correct result if binary size is only present in stdout", () => {
+    const commandOutput = {
+      stdout: "0.85K",
+      stderr: "0.555",
+    };
+    const expectedResultObject = {
+      output: "",
+      binarySize: "0.85K",
+      buildTime: "0.555 s",
+    };
+    expect(handleCodeBuildOutput(commandOutput)).toMatchObject(
+      expectedResultObject
+    );
+  });
+  test("should return correct result if binary size is not present", () => {
+    const commandOutput = {
+      stdout: "build failed",
+      stderr: "0.555",
+    };
+    const expectedResultObject = {
+      output: "build failed",
       binarySize: "",
       buildTime: "0.555 s",
     };
@@ -125,7 +154,7 @@ describe("handleCodeRunOutput", () => {
     const expectedResultObject = {
       output: "some output\nmoreoutput",
       executionTime: "0.755 s",
-      stderr: "",
+      error: "",
     };
     expect(handleCodeRunOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -139,7 +168,7 @@ describe("handleCodeRunOutput", () => {
     const expectedResultObject = {
       output: "some output\nmoreoutput\neven more output",
       executionTime: "",
-      stderr: "",
+      error: "",
     };
     expect(handleCodeRunOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -153,7 +182,7 @@ describe("handleCodeRunOutput", () => {
     const expectedResultObject = {
       output: "some output\nmoreoutput\neven more output",
       executionTime: "",
-      stderr: "",
+      error: "number",
     };
     expect(handleCodeRunOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -167,9 +196,38 @@ describe("handleCodeRunOutput", () => {
     const expectedResultObject = {
       output: "some output\nmoreoutput\neven more output",
       executionTime: "2.444 s",
-      stderr: "some error",
+      error: "some error",
     };
     expect(handleCodeRunOutput(commandOutput)).toMatchObject(
+      expectedResultObject
+    );
+  });
+});
+
+describe("handleCodeTestOutput", () => {
+  test("code test output should return correct result for given input", () => {
+    const commandOutput = {
+      stdout: "test case PASS",
+      stderr: "",
+    };
+    const expectedResultObject = {
+      output: "test case PASS",
+      error: "",
+    };
+    expect(handleCodeTestOutput(commandOutput)).toMatchObject(
+      expectedResultObject
+    );
+  });
+  test("code test output should return correct result for given input and if error is not empty", () => {
+    const commandOutput = {
+      stdout: "test case FAIL\nFAIL at line 10:6",
+      stderr: "some error\nbuild failed",
+    };
+    const expectedResultObject = {
+      output: "test case FAIL\nFAIL at line 10:6",
+      error: "some error\nbuild failed",
+    };
+    expect(handleCodeTestOutput(commandOutput)).toMatchObject(
       expectedResultObject
     );
   });

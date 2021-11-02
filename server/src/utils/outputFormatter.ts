@@ -43,7 +43,7 @@ export const handleCodeBuildOutput = (output: CommandOutput) => {
 };
 
 export const handleCodeRunOutput = (output: CommandOutput) => {
-  const res = { output: "", executionTime: "", stderr: "" };
+  const res = { output: "", executionTime: "", error: "" };
   const executionTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
   if (output && output.stdout) {
     res.output = output.stdout.trim();
@@ -54,8 +54,10 @@ export const handleCodeRunOutput = (output: CommandOutput) => {
     if (executionTimeRegExp.test(executionTime)) {
       res.executionTime = executionTime + " s";
     }
-    if (stderr.length > 1) {
-      res.stderr = stderr.slice(0, stderr.length - 1).join("\n");
+    if (res.executionTime) {
+      res.error = stderr.slice(0, stderr.length - 1).join("\n");
+    } else {
+      res.error = stderr.join("\n");
     }
   }
   return res;
