@@ -17,7 +17,7 @@ const handleOnClick = (
   if (defaultSize) {
     setSize(defaultSize);
     setTimeout(() => {
-      setSize((window.innerHeight * 0.1001).toString() + "px");
+      setSize((window.innerHeight * 0.1 + 0.1).toString() + "px");
     }, 500);
   }
 };
