@@ -25,11 +25,13 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "BROWSER='firefox' react-scripts start",
+    "start": "webpack-dev-server --mode development",
+    "ss": "react-scripts start",
     "watch": "BROWSER='firefox' tsc -p . -w",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint './src/**/*.{ts,tsx}'"
   },
   "eslintConfig": {
     "extends": [
@@ -50,7 +52,12 @@
     ]
   },
   "devDependencies": {
+    "@types/react-split-pane": "^0.1.67",
     "@typescript-eslint/parser": "^4.33.0",
-    "prettier": "^2.4.1"
+    "html-webpack-plugin": "^5.5.0",
+    "prettier": "^2.4.1",
+    "ts-loader": "^9.2.6",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.4.0"
   }
 }

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { Box } from "@mui/material";
 
