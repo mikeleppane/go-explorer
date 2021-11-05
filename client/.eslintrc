@@ -7,7 +7,8 @@
   ],
   "plugins": [
     "@typescript-eslint",
-    "react"
+    "react",
+    "react-hooks"
   ],
   "env": {
     "browser": true,
@@ -29,7 +30,9 @@
     ],
     "no-case-declarations": 0,
     "react/prop-types": 0,
-    "@typescript-eslint/ban-ts-ignore": "off"
+    "no-console": 0,
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "react-hooks/rules-of-hooks": "error"
   },
   "settings": {
     "react": {

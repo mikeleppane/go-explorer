@@ -18,17 +18,7 @@ const ExplorerView = () => {
   }, []);
 
   return (
-    <SplitPane
-      split="horizontal"
-      // onChange={(size: unknown) => {
-      //   if (
-      //     Array.isArray(size) &&
-      //     size.every((item) => typeof item === "string")
-      //   ) {
-      //     localStorage.setItem("bottomPanePos", size[1]);
-      //   }
-      // }}
-    >
+    <SplitPane split="horizontal">
       <Pane
         initialSize={(window.innerHeight * 0.8).toString() + "px"}
         minSize="10%"

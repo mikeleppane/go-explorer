@@ -1,14 +1,8 @@
 import * as React from "react";
-import { CSSProperties, FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 import Button from "@mui/material/Button";
-
-const containerStyle: CSSProperties = {
-  margin: "10px",
-};
-
-interface IProps {
-  setPaneSize: React.Dispatch<React.SetStateAction<string>>;
-}
+import Box from "@mui/material/Box";
+import { ICodeOutputViewProps } from "../types";
 
 const handleOnClick = (
   setSize: React.Dispatch<React.SetStateAction<string>>
@@ -22,36 +16,21 @@ const handleOnClick = (
   }
 };
 
-const CodeOutputView: FunctionComponent<IProps> = ({ setPaneSize }) => {
-  // const classes = useStyles;
+const CodeOutputView: FunctionComponent<ICodeOutputViewProps> = ({
+  setPaneSize,
+}) => {
   return (
-    <div style={containerStyle}>
+    <Box className="CodeOutputView">
       <Button
         variant="contained"
         size="small"
-        style={{
-          position: "relative",
-          top: "-5px",
-          right: "-5px",
-          padding: "3px",
-          float: "right",
-        }}
+        className="ResetButton"
         onClick={() => handleOnClick(setPaneSize)}
       >
         Reset
       </Button>
-      <p
-        style={{
-          textAlign: "center",
-          margin: 0,
-          padding: 0,
-          position: "relative",
-          top: "-5px",
-        }}
-      >
-        Execution
-      </p>
-    </div>
+      <p className="CodeOutputViewTitle">Execution</p>
+    </Box>
   );
 };
 
