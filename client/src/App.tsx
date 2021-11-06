@@ -13,12 +13,6 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  // useEffect(() => {
-  //   codeService
-  //     .getInfo()
-  //     .then((response) => console.log(response))
-  //     .catch((e) => console.log(e));
-  // }, []);
   return (
     <div className="App">
       <ThemeProvider theme={darkTheme}>
