@@ -12,16 +12,12 @@ const defaultCodeBlock = `
   }
 `;
 
-const initialState = {
-  code: defaultCodeBlock,
-};
-
-const codeReducer = (state = initialState, action: CodeAction) => {
+const codeReducer = (state = defaultCodeBlock, action: CodeAction) => {
   switch (action.type) {
     case "NEW_CODE":
       return action.payload;
     default:
-      return state.code;
+      return state;
   }
 };
 

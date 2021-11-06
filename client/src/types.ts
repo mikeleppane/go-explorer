@@ -48,7 +48,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 interface NewCodeAction {
   type: "NEW_CODE";
-  payload: { code: string };
+  payload: string;
 }
 
 export type CodeAction = NewCodeAction;
