@@ -10,11 +10,14 @@ import {
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useAppDispatch } from "../types";
+import { addNewCode } from "../state/actionsCreators/codeCreator";
 
 export default function FileLoadMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const dispatch = useAppDispatch();
 
   const handleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -37,7 +40,6 @@ export default function FileLoadMenu() {
   };
 
   const fileCopySelectHandler = () => {
-    console.log("File copied to...");
     handleClose();
   };
 
@@ -47,7 +49,9 @@ export default function FileLoadMenu() {
     reader.readAsText(file);
 
     reader.onload = function () {
-      console.log(reader.result);
+      if (reader.result && typeof reader.result === "string") {
+        dispatch(addNewCode(reader.result));
+      }
     };
 
     reader.onerror = function () {
