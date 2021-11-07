@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useAppDispatch } from "../types";
-import { addNewCode } from "../state/actionsCreators/codeCreator";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { addNewCode } from "../state/actionCreators";
 
 export default function FileLoadMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(

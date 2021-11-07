@@ -1,6 +1,5 @@
 import * as React from "react";
-import store from "./state/store";
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { store } from "./state";
 import reducers from "./state/reducers";
 
 export interface ICodeOutputViewProps {
@@ -42,12 +41,13 @@ export interface CodeParams {
 
 export type RootState = ReturnType<typeof reducers>;
 export type AppDispatch = typeof store.dispatch;
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-export const useAppDispatch = () => useDispatch<AppDispatch>();
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+export enum ActionType {
+  NEW_CODE = "NEW_CODE",
+}
 
 interface NewCodeAction {
-  type: "NEW_CODE";
+  type: ActionType.NEW_CODE;
   payload: string;
 }
 

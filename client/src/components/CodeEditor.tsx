@@ -1,9 +1,10 @@
 import React from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { Box } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../types";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { useAppSelector } from "../hooks/useAppSelector";
 import * as monaco from "monaco-editor";
-import { addNewCode } from "../state/actionsCreators/codeCreator";
+import { addNewCode } from "../state/actionCreators";
 
 const CodeEditor = () => {
   const code = useAppSelector((state) => state.code);

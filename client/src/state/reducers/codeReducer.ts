@@ -1,4 +1,4 @@
-import { CodeAction } from "../../types";
+import { ActionType, CodeAction } from "../../types";
 
 const defaultCodeBlock = `
   // You can edit this code!
@@ -12,13 +12,11 @@ const defaultCodeBlock = `
   }
 `;
 
-const codeReducer = (state = defaultCodeBlock, action: CodeAction) => {
+export const codeReducer = (state = defaultCodeBlock, action: CodeAction) => {
   switch (action.type) {
-    case "NEW_CODE":
+    case ActionType.NEW_CODE:
       return action.payload;
     default:
       return state;
   }
 };
-
-export default codeReducer;

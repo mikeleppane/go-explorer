@@ -1,6 +1,8 @@
+import { ActionType } from "../../types";
+
 export const addNewCode = (code: string) => {
   return {
-    type: "NEW_CODE",
+    type: ActionType.NEW_CODE,
     payload: code,
   };
 };

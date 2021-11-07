@@ -1,9 +1,10 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import CodeIcon from "@mui/icons-material/Code";
-import { useAppDispatch, useAppSelector } from "../types";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { useAppSelector } from "../hooks/useAppSelector";
 import codeService from "../services/codeService";
-import { addNewCode } from "../state/actionsCreators/codeCreator";
+import { addNewCode } from "../state/actionCreators";
 
 export default function FormatCodeMenu() {
   const dispatch = useAppDispatch();

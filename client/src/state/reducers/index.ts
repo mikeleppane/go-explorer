@@ -1,4 +1,4 @@
-import codeReducer from "./codeReducer";
+import { codeReducer } from "./codeReducer";
 import { combineReducers } from "redux";
 
 const reducers = combineReducers({
