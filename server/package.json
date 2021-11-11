@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest --verbose --runInBand",
-    "tsc": "tsc",
-    "dev": "ts-node-dev src/index.ts",
+    "tsc": "tsc -p .",
+    "start": "NODE_ENV=production node ./build/index.js",
+    "dev": "NODE_ENV=development ts-node-dev src/index.ts",
     "lint": "eslint './src/**/*.{ts,tsx}'"
   },
   "author": "Mikko Leppänen",

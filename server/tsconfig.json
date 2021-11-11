@@ -27,7 +27,7 @@
     /* Modules */
     "module": "commonjs",
     /* Specify what module code is generated. */
-    "rootDir": "src",
+    "rootDir": "./src",
     /* Specify the root folder within your source files. */
     "moduleResolution": "node",
     /* Specify how TypeScript looks up a file from a given module specifier. */
@@ -91,7 +91,8 @@
     /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
     // "strictBindCallApply": true,                      /* Check that the arguments for `bind`, `call`, and `apply` methods match the original function. */
     // "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
-    "noImplicitThis": true,                           /* Enable error reporting when `this` is given the type `any`. */
+    "noImplicitThis": true,
+    /* Enable error reporting when `this` is given the type `any`. */
     // "useUnknownInCatchVariables": true,               /* Type catch clause variables as 'unknown' instead of 'any'. */
     "alwaysStrict": true,
     /* Ensure 'use strict' is always emitted. */
