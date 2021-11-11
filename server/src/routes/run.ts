@@ -6,11 +6,35 @@ import { runCode } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
 import { validateRunRequest } from "../validators/runValidator";
-import { RunEntry } from "../types";
+import { CodeExecutionEntry, RunEntry } from "../types";
 import { parseRequestEntries, validateVersion } from "../utils/route_helpers";
 import { handleCodeRunOutput } from "../utils/outputFormatter";
+import { baseRouteExceptionHandler } from "../errors/routeExpectionHandler";
 
 const runRouter = express.Router();
+
+const handleCodeRunTask = async (
+  tempFile: string,
+  requestEntries: CodeExecutionEntry,
+  version: string,
+  res: express.Response
+) => {
+  const { code, gogc, godebug, buildFlags } = requestEntries;
+  await writeFile(tempFile, code, { encoding: "utf-8" });
+  logger.info(`Code was successfully written to the file: ${tempFile}`);
+  let output = { stdout: "", stderr: "" };
+  try {
+    output = await run(runCode(gogc, godebug, buildFlags, tempFile, version));
+  } catch (e) {
+    if (e instanceof Error) {
+      output.stderr = e.message.trim().split("\n").slice(1).join("\n");
+    }
+  }
+  const responseObj = handleCodeRunOutput(output);
+  res.status(200).json(responseObj);
+  await rm(path.dirname(tempFile), { recursive: true, force: true });
+  logger.info(`Temporary file was removed successfully.`);
+};
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 runRouter.post("/", async (req, res) => {
@@ -23,35 +47,14 @@ runRouter.post("/", async (req, res) => {
   if (!version) {
     return;
   }
-  const { code, gogc, godebug, buildFlags } = parseRequestEntries(body);
+  const requestEntries = parseRequestEntries(body);
   let tempFile = "";
   logger.info(`Code execution started with GO version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await writeFile(tempFile, code, { encoding: "utf-8" });
-    logger.info(`Code was successfully written to the file: ${tempFile}`);
-    let output = { stdout: "", stderr: "" };
-    try {
-      output = await run(runCode(gogc, godebug, buildFlags, tempFile, version));
-    } catch (e) {
-      if (e instanceof Error) {
-        output.stderr = e.message.trim().split("\n").slice(1).join("\n");
-      }
-    }
-    const responseObj = handleCodeRunOutput(output);
-    res.status(200).json(responseObj);
-    await rm(path.dirname(tempFile), { recursive: true, force: true });
-    logger.info(`Temporary file was removed successfully.`);
+    await handleCodeRunTask(tempFile, requestEntries, version, res);
   } catch (error) {
-    if (tempFile) {
-      await rm(path.dirname(tempFile), { recursive: true, force: true });
-    }
-    if (error instanceof Error) {
-      logger.error(error.message);
-      return res
-        .status(500)
-        .send(error.message.trim().split("\n").slice(1).join("\n"));
-    }
+    await baseRouteExceptionHandler(tempFile, error, res);
   }
 });
 

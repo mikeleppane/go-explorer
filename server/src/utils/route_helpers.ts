@@ -6,6 +6,7 @@ import {
 import { RequestEntries } from "../types";
 import logger from "./logging";
 import express from "express";
+import { VersionQueryValidationError } from "../errors/errorTypes";
 
 export const validateQsVersion = (version: unknown): string => {
   if (version && isString(version)) {
@@ -14,7 +15,7 @@ export const validateQsVersion = (version: unknown): string => {
   if (!version) {
     return "";
   }
-  throw new Error(`Incorrect version: ${version}`);
+  throw new VersionQueryValidationError(`Incorrect version: ${version}`);
 };
 
 const isString = (text: unknown): text is string => {
@@ -92,4 +93,8 @@ export const parseRequestEntries = (entry: RequestEntries) => {
     testFlags,
     symregexp,
   };
+};
+
+export const removeFirstLineFromString = (content: string) => {
+  return content.trim().split("\n").slice(1).join("\n");
 };

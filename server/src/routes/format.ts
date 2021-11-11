@@ -8,8 +8,25 @@ import { formatCode } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
 import { validateVersion } from "../utils/route_helpers";
+import { baseRouteExceptionHandler } from "../errors/routeExpectionHandler";
 
 const formatRouter = express.Router();
+
+const handleCodeFormatTask = async (
+  tempFile: string,
+  code: string,
+  version: string,
+  res: express.Response
+) => {
+  await writeFile(tempFile, code, { encoding: "utf-8" });
+  logger.info(`Code was successfully written to the file: ${tempFile}`);
+  await run(formatCode(tempFile, version));
+  const content = await readFile(tempFile);
+  logger.info("Code was successfully reformatted.");
+  res.status(200).send(content.toString("utf-8"));
+  await rm(path.dirname(tempFile), { recursive: true, force: true });
+  logger.info(`Temporary file was removed successfully.`);
+};
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 formatRouter.post("/", async (req, res) => {
@@ -26,24 +43,9 @@ formatRouter.post("/", async (req, res) => {
   logger.info(`Code formatting started with GO version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await writeFile(tempFile, body.code, { encoding: "utf-8" });
-    logger.info(`Code was successfully written to the file: ${tempFile}`);
-    await run(formatCode(tempFile, version));
-    const content = await readFile(tempFile);
-    logger.info("Code was successfully reformatted.");
-    res.status(200).send(content.toString("utf-8"));
-    await rm(path.dirname(tempFile), { recursive: true, force: true });
-    logger.info(`Temporary file was removed successfully.`);
+    await handleCodeFormatTask(tempFile, body.code, version, res);
   } catch (error) {
-    if (tempFile) {
-      await rm(path.dirname(tempFile), { recursive: true, force: true });
-    }
-    if (error instanceof Error) {
-      logger.error(error.message);
-      return res
-        .status(500)
-        .send(error.message.trim().split("\n").slice(1).join("\n"));
-    }
+    await baseRouteExceptionHandler(tempFile, error, res);
   }
 });
 

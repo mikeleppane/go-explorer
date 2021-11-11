@@ -43,6 +43,17 @@ export interface CommandExecutorType {
   stderr: string | undefined;
 }
 
+export interface CodeExecutionEntry {
+  code: string;
+  goarch: string;
+  goos: string;
+  gogc: string;
+  godebug: string;
+  buildFlags: string;
+  testFlags: string;
+  symregexp: string;
+}
+
 export type RequestEntries = RunEntry | BuildEntry | TestingEntry;
 
 export type CommandOutput = CommandExecutorType | undefined;

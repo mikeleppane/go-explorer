@@ -1,7 +1,10 @@
 import express from "express";
 import { getEnvInfo } from "../docker/commands";
 import { run } from "../utils/commandExecutor";
-import { validateVersion } from "../utils/route_helpers";
+import {
+  removeFirstLineFromString,
+  validateVersion,
+} from "../utils/route_helpers";
 import logger from "../utils/logging";
 
 const infoRouter = express.Router();
@@ -19,10 +22,8 @@ infoRouter.get("/", (req, res) => {
         logger.info(`Environment info sent successfully; go:${version}`);
       }
     })
-    .catch((error) => {
-      res
-        .status(500)
-        .send(error.message.trim().split("\n").slice(1).join("\n"));
+    .catch((error: Error) => {
+      res.status(500).send(removeFirstLineFromString(error.message));
     });
 });
 

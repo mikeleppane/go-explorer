@@ -5,13 +5,42 @@ import { run } from "../utils/commandExecutor";
 import { buildCode, getObjDump } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
-import { BuildEntry } from "../types";
+import { BuildEntry, CodeExecutionEntry } from "../types";
 import { parseRequestEntries, validateVersion } from "../utils/route_helpers";
 import { validateBuildRequest } from "../validators/buildValidator";
 import {
   handleCodeBuildOutput,
   handleObjectDumpOutput,
 } from "../utils/outputFormatter";
+import { baseRouteExceptionHandler } from "../errors/routeExpectionHandler";
+
+const handleCodeBuildTask = async (
+  tempFile: string,
+  requestEntries: CodeExecutionEntry,
+  version: string,
+  res: express.Response,
+  isObjectDumpRequested: boolean
+) => {
+  const { code, goos, goarch, gogc, godebug, buildFlags, symregexp } =
+    requestEntries;
+  await writeFile(tempFile, code, { encoding: "utf-8" });
+  logger.info(`Code was successfully written to the file: ${tempFile}`);
+  let responseObj;
+  if (isObjectDumpRequested) {
+    const output = await run(
+      getObjDump(goos, goarch, buildFlags, symregexp, tempFile, version)
+    );
+    responseObj = handleObjectDumpOutput(output);
+  } else {
+    const output = await run(
+      buildCode(goos, goarch, gogc, godebug, buildFlags, tempFile, version)
+    );
+    responseObj = handleCodeBuildOutput(output);
+  }
+  res.status(200).json(responseObj);
+  await rm(path.dirname(tempFile), { recursive: true, force: true });
+  logger.info(`Temporary file was removed successfully.`);
+};
 
 const buildRouter = express.Router();
 
@@ -26,40 +55,21 @@ buildRouter.post("/", async (req, res) => {
   if (!version) {
     return;
   }
-  const { code, goos, goarch, gogc, godebug, buildFlags, symregexp } =
-    parseRequestEntries(body);
+  const isObjectDumpRequested = req.query.objdump === "true";
+  const requestEntries = parseRequestEntries(body);
   let tempFile = "";
   logger.info(`Code building started with GO version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await writeFile(tempFile, code, { encoding: "utf-8" });
-    logger.info(`Code was successfully written to the file: ${tempFile}`);
-    let responseObj;
-    const isObjectDumpRequested = req.query.objdump === "true";
-    if (isObjectDumpRequested) {
-      const output = await run(
-        getObjDump(goos, goarch, buildFlags, symregexp, tempFile, version)
-      );
-      responseObj = handleObjectDumpOutput(output);
-    } else {
-      const output = await run(
-        buildCode(goos, goarch, gogc, godebug, buildFlags, tempFile, version)
-      );
-      responseObj = handleCodeBuildOutput(output);
-    }
-    res.status(200).json(responseObj);
-    await rm(path.dirname(tempFile), { recursive: true, force: true });
-    logger.info(`Temporary file was removed successfully.`);
+    await handleCodeBuildTask(
+      tempFile,
+      requestEntries,
+      version,
+      res,
+      isObjectDumpRequested
+    );
   } catch (error) {
-    if (tempFile) {
-      await rm(path.dirname(tempFile), { recursive: true, force: true });
-    }
-    if (error instanceof Error) {
-      logger.error(error.message);
-      return res
-        .status(500)
-        .send(error.message.trim().split("\n").slice(1).join("\n"));
-    }
+    await baseRouteExceptionHandler(tempFile, error, res);
   }
 });
 

@@ -3,6 +3,7 @@ import path from "path";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
 import logger from "./logging";
+import { TempFileCreationError } from "../errors/errorTypes";
 
 export const createTempFile = async (
   prefix = "go-",
@@ -24,8 +25,8 @@ export const createTempFile = async (
       logger.error(
         `An error occurred while creating temporary file: ${e.message}`
       );
-      throw new Error(e.message);
+      throw new TempFileCreationError(e.message);
     }
-    throw new Error(`createTempFile: Unknown error occurred, ${e}`);
+    throw new TempFileCreationError(`Unknown error occurred, ${e}`);
   }
 };
