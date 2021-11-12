@@ -6,3 +6,17 @@ export const addNewCode = (code: string) => {
     payload: code,
   };
 };
+
+export const lintCode = (output: string) => {
+  return {
+    type: ActionType.LINT_CODE,
+    payload: output,
+  };
+};
+
+export const loading = (description: string) => {
+  return {
+    type: ActionType.LOADING,
+    payload: description,
+  };
+};

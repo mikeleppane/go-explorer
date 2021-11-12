@@ -30,6 +30,9 @@ const CodeOutputView: FunctionComponent<ICodeOutputViewProps> = ({
         Reset
       </Button>
       <p className="CodeOutputViewTitle">Execution</p>
+      <p style={{ color: "white" }}>
+        {"sdfwefwefwe \\n dsfweofijwoijew \\n sfsfe"}
+      </p>
     </Box>
   );
 };

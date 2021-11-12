@@ -39,10 +39,12 @@ const formatCode = async (formatCodeParams: CodeParams) => {
 const lintCode = async (lintCodeParams: CodeParams) => {
   const response = await api.post("/lint", lintCodeParams);
   if (response.ok) {
+    console.log("OK=>RESPONSE DATA: ", response.data);
     console.log("lintCode> ok");
     return response.data;
   }
   if (response.problem) {
+    console.log("NOT OK=>RESPONSE DATA: ", response.data);
     console.log("lintCode> problem: ", response.problem);
     return response;
   }

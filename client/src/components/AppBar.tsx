@@ -5,6 +5,7 @@ import AppBarTitle from "./AppBarTitle";
 import FileLoadMenu from "./FileLoadMenu";
 import { Divider, Toolbar } from "@mui/material";
 import FormatCodeMenu from "./CodeFormatMenu";
+import LintCodeMenu from "./CodeLintMenu";
 
 export default function NavBar() {
   return (
@@ -19,6 +20,7 @@ export default function NavBar() {
             style={{ marginLeft: "10px" }}
           />
           <FormatCodeMenu />
+          <LintCodeMenu />
         </Toolbar>
       </AppBar>
     </Box>

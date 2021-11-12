@@ -44,6 +44,9 @@ export type AppDispatch = typeof store.dispatch;
 
 export enum ActionType {
   NEW_CODE = "NEW_CODE",
+  LINT_CODE = "LINT_CODE",
+  LOADING = "LOADING",
+  STATE = "STATE",
 }
 
 interface NewCodeAction {
@@ -51,4 +54,23 @@ interface NewCodeAction {
   payload: string;
 }
 
-export type CodeAction = NewCodeAction;
+interface LintCodeAction {
+  type: ActionType.LINT_CODE;
+  payload: string;
+}
+
+interface LoadingAction {
+  type: ActionType.LOADING;
+  payload: string;
+}
+
+interface StateAction {
+  type: ActionType.STATE;
+  payload: string;
+}
+
+export type CodeAction =
+  | NewCodeAction
+  | LintCodeAction
+  | LoadingAction
+  | StateAction;
