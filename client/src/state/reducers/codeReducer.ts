@@ -16,8 +16,6 @@ export const codeReducer = (state = defaultCodeBlock, action: CodeAction) => {
   switch (action.type) {
     case ActionType.NEW_CODE:
       return action.payload;
-    case ActionType.LOADING:
-      return action.payload;
     default:
       return state;
   }

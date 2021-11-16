@@ -45,8 +45,8 @@ export type AppDispatch = typeof store.dispatch;
 export enum ActionType {
   NEW_CODE = "NEW_CODE",
   LINT_CODE = "LINT_CODE",
-  LOADING = "LOADING",
-  STATE = "STATE",
+  SET_STATUS = "SET_STATUS",
+  CLEAR_STATUS = "CLEAR_STATUS",
 }
 
 interface NewCodeAction {
@@ -59,18 +59,25 @@ interface LintCodeAction {
   payload: string;
 }
 
-interface LoadingAction {
-  type: ActionType.LOADING;
-  payload: string;
+// interface LoadingAction {
+//   type: ActionType.LOADING;
+//   payload: string;
+// }
+
+export interface StatusActionPayload {
+  message: string;
+  //timeoutHandle: number | null;
 }
 
-interface StateAction {
-  type: ActionType.STATE;
-  payload: string;
+interface SetStatusAction {
+  type: ActionType.SET_STATUS;
+  payload: StatusActionPayload;
 }
 
-export type CodeAction =
-  | NewCodeAction
-  | LintCodeAction
-  | LoadingAction
-  | StateAction;
+interface ClearAction {
+  type: ActionType.CLEAR_STATUS;
+  payload: StatusActionPayload;
+}
+
+export type CodeAction = NewCodeAction | LintCodeAction;
+export type StatusAction = SetStatusAction | ClearAction;

@@ -4,13 +4,14 @@ import CodeIcon from "@mui/icons-material/Code";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 import codeService from "../services/codeService";
-import { addNewCode } from "../state/actionCreators";
+import { addNewCode, setStatus } from "../state/actionCreators";
 
 export default function FormatCodeMenu() {
   const dispatch = useAppDispatch();
   const code = useAppSelector((state) => state.code);
 
   const handleFormatMenu = () => {
+    dispatch(setStatus("Wait for code formatting..."));
     codeService
       .formatCode({ code })
       .then((response) => {

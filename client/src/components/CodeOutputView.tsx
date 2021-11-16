@@ -3,6 +3,7 @@ import { FunctionComponent } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { ICodeOutputViewProps } from "../types";
+import { useAppSelector } from "../hooks/useAppSelector";
 
 const handleOnClick = (
   setSize: React.Dispatch<React.SetStateAction<string>>
@@ -19,6 +20,11 @@ const handleOnClick = (
 const CodeOutputView: FunctionComponent<ICodeOutputViewProps> = ({
   setPaneSize,
 }) => {
+  const status = useAppSelector((state) => state.status);
+  // const [timeoutHandle, setTimeoutHandle] = useState<null | NodeJS.Timeout>(
+  //   null
+  // );
+
   return (
     <Box className="CodeOutputView">
       <Button
@@ -30,9 +36,7 @@ const CodeOutputView: FunctionComponent<ICodeOutputViewProps> = ({
         Reset
       </Button>
       <p className="CodeOutputViewTitle">Execution</p>
-      <p style={{ color: "white" }}>
-        {"sdfwefwefwe \\n dsfweofijwoijew \\n sfsfe"}
-      </p>
+      {status.message && <p style={{ color: "white" }}>{status.message}</p>}
     </Box>
   );
 };
