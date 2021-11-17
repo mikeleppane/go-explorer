@@ -1,35 +1,31 @@
 import React, { useEffect, useState } from "react";
-import SplitPane from "react-split-pane";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import Pane from "react-split-pane/lib/Pane";
+import Split from "react-split";
 import CodeEditor from "./CodeEditor";
 import CodeOutputView from "./CodeOutputView";
 
-const bottomPaneDefaultSize = (window.innerHeight * 0.1).toString() + "px";
+const defaultSplitSize = (window.innerHeight - 100).toString() + "px";
 
 const ExplorerView = () => {
-  const [codeOutputViewSize, setCodeOutputViewSize] = useState(
-    bottomPaneDefaultSize
-  );
+  const [splitSizes, setSplitSizes] = useState([80, 20]);
 
   useEffect(() => {
-    localStorage.setItem("bottomPaneDefaultSize", bottomPaneDefaultSize);
+    localStorage.setItem("split-sizes", JSON.stringify(splitSizes));
   }, []);
 
   return (
-    <SplitPane split="horizontal">
-      <Pane
-        initialSize={(window.innerHeight * 0.8).toString() + "px"}
-        minSize="10%"
-        primary="second"
-      >
-        <CodeEditor />
-      </Pane>
-      <Pane size={codeOutputViewSize} minSize={bottomPaneDefaultSize}>
-        <CodeOutputView setPaneSize={setCodeOutputViewSize} />
-      </Pane>
-    </SplitPane>
+    <Split
+      className="split"
+      sizes={splitSizes}
+      direction="vertical"
+      minSize={10}
+      gutterSize={5}
+      gutterAlign="center"
+      dragInterval={1}
+      style={{ height: defaultSplitSize }}
+    >
+      <CodeEditor />
+      <CodeOutputView setSizes={setSplitSizes} />
+    </Split>
   );
 };
 

@@ -1,13 +1,13 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import CodeIcon from "@mui/icons-material/Code";
-import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 import codeService from "../services/codeService";
 import { addNewCode, setStatus } from "../state/actionCreators";
+import { useDispatch } from "react-redux";
 
 export default function FormatCodeMenu() {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const code = useAppSelector((state) => state.code);
 
   const handleFormatMenu = () => {

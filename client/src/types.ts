@@ -1,9 +1,11 @@
 import * as React from "react";
 import { store } from "./state";
 import reducers from "./state/reducers";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
 
 export interface ICodeOutputViewProps {
-  setPaneSize: React.Dispatch<React.SetStateAction<string>>;
+  setSizes: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 export interface BuildCodeParams {
@@ -81,3 +83,19 @@ interface ClearAction {
 
 export type CodeAction = NewCodeAction | LintCodeAction;
 export type StatusAction = SetStatusAction | ClearAction;
+export type ThunkAction<
+  R, // Return type of the thunk function
+  S, // state type used by getState
+  E, // any "extra argument" injected into the thunk
+  A extends AnyAction // known types of actions that can be dispatched
+> = (
+  dispatch: ThunkDispatch<S, E, A>,
+  getState: () => S,
+  extraArgument: E
+) => R;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  NewCodeAction | LintCodeAction | SetStatusAction | ClearAction
+>;

@@ -11,6 +11,7 @@
     padding: 0;
     top: 0;
     left: 0;
+    height: 10px
 }
 
 .AppBarTitle {
@@ -35,14 +36,18 @@
 .CodeOutputView {
     margin: 10px;
     background-color: #171421;
+    height: 100px
 }
 
 .ResetButton {
     position: relative;
     top: -5px;
     right: -5px;
-    padding: 3px;
     float: right;
+    max-width: 12px;
+    max-height: 18px;
+    font-size: 12px;
+    z-index: 5;
 }
 
 .CodeOutputViewTitle {
@@ -53,4 +58,32 @@
     top: -5px;
     color: white;
     font-size: 12px;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.StatusBar {
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    color: white;
+    background-color: #505050;
+    font-size: 12px;
+    height: 16px;
+    width: 100%;
+    flex-grow: 1;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.gutter.gutter-vertical {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    cursor: row-resize;
 }

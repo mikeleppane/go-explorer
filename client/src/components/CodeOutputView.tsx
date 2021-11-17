@@ -3,40 +3,35 @@ import { FunctionComponent } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { ICodeOutputViewProps } from "../types";
-import { useAppSelector } from "../hooks/useAppSelector";
 
 const handleOnClick = (
-  setSize: React.Dispatch<React.SetStateAction<string>>
+  setSizes: React.Dispatch<React.SetStateAction<number[]>>
 ) => {
-  const defaultSize = localStorage.getItem("bottomPaneDefaultSize");
+  const defaultSize = localStorage.getItem("split-sizes");
   if (defaultSize) {
-    setSize(defaultSize);
+    const values: number[] = JSON.parse(defaultSize);
+    setSizes([values[0] + 0.001, values[1]]);
+    console.log(defaultSize);
     setTimeout(() => {
-      setSize((window.innerHeight * 0.1 + 0.1).toString() + "px");
+      setSizes(values);
     }, 500);
   }
 };
 
 const CodeOutputView: FunctionComponent<ICodeOutputViewProps> = ({
-  setPaneSize,
+  setSizes,
 }) => {
-  const status = useAppSelector((state) => state.status);
-  // const [timeoutHandle, setTimeoutHandle] = useState<null | NodeJS.Timeout>(
-  //   null
-  // );
-
   return (
     <Box className="CodeOutputView">
       <Button
         variant="contained"
         size="small"
         className="ResetButton"
-        onClick={() => handleOnClick(setPaneSize)}
+        onClick={() => handleOnClick(setSizes)}
       >
         Reset
       </Button>
       <p className="CodeOutputViewTitle">Execution</p>
-      {status.message && <p style={{ color: "white" }}>{status.message}</p>}
     </Box>
   );
 };

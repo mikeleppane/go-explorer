@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import NavBar from "./components/AppBar";
 import ExplorerView from "./components/ExplorerView";
 import "./styles.css";
+import StatusBar from "./components/StatusBar";
 
 const darkTheme = createTheme({
   palette: {
@@ -18,6 +19,7 @@ function App() {
       <ThemeProvider theme={darkTheme}>
         <NavBar />
         <ExplorerView />
+        <StatusBar />
       </ThemeProvider>
     </div>
   );
