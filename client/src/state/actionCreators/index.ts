@@ -14,6 +14,13 @@ export const addNewCode = (code: string): CodeAction => {
   };
 };
 
+export const newTemplateCode = (): CodeAction => {
+  return {
+    type: ActionType.USE_DEFAULT_CODE,
+    payload: "",
+  };
+};
+
 export const lintCode = (output: string): OutputAction => {
   return {
     type: ActionType.LINT_CODE,

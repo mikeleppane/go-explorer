@@ -5,10 +5,12 @@ import { useAppSelector } from "../hooks/useAppSelector";
 import * as monaco from "monaco-editor";
 import { addNewCode } from "../state/actionCreators";
 import { useDispatch } from "react-redux";
+import { LocalStorage } from "../services/localStorage";
 
 const CodeEditor = () => {
   const code = useAppSelector((state) => state.code);
   const dispatch = useDispatch();
+  const storage = new LocalStorage("", "golang-explorer-recent-code");
 
   const onEditorChange = (
     value: string | undefined,
@@ -16,6 +18,7 @@ const CodeEditor = () => {
   ) => {
     if (value) {
       dispatch(addNewCode(value));
+      storage.state = value;
     }
   };
 

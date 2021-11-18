@@ -50,10 +50,16 @@ export enum ActionType {
   CLEAR_OUTPUT = "CLEAR_OUTPUT",
   SET_STATUS = "SET_STATUS",
   CLEAR_STATUS = "CLEAR_STATUS",
+  USE_DEFAULT_CODE = "USE_DEFAULT_CODE",
 }
 
 interface NewCodeAction {
   type: ActionType.NEW_CODE;
+  payload: string;
+}
+
+interface NewTemplateAction {
+  type: ActionType.USE_DEFAULT_CODE;
   payload: string;
 }
 
@@ -91,7 +97,7 @@ interface ClearAction {
 }
 
 export type OutputAction = LintCodeAction | ClearOutputAction;
-export type CodeAction = NewCodeAction;
+export type CodeAction = NewCodeAction | NewTemplateAction;
 export type StatusAction = SetStatusAction | ClearAction;
 export type ThunkAction<
   R, // Return type of the thunk function
