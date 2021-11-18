@@ -3,6 +3,9 @@ import { FunctionComponent } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { ICodeOutputViewProps } from "../types";
+import Output from "./Output";
+import { useDispatch } from "react-redux";
+import { clearOutput } from "../state/actionCreators";
 
 const handleOnClick = (
   setSizes: React.Dispatch<React.SetStateAction<number[]>>
@@ -18,22 +21,25 @@ const handleOnClick = (
   }
 };
 
-const CodeOutputView: FunctionComponent<ICodeOutputViewProps> = ({
-  setSizes,
-}) => {
+const ResultView: FunctionComponent<ICodeOutputViewProps> = ({ setSizes }) => {
+  const dispatch = useDispatch();
   return (
     <Box className="CodeOutputView">
       <Button
         variant="contained"
         size="small"
         className="ResetButton"
-        onClick={() => handleOnClick(setSizes)}
+        onClick={() => {
+          dispatch(clearOutput());
+          handleOnClick(setSizes);
+        }}
       >
         Reset
       </Button>
       <p className="CodeOutputViewTitle">Execution</p>
+      <Output />
     </Box>
   );
 };
 
-export default CodeOutputView;
+export default ResultView;

@@ -1,4 +1,10 @@
-import { ActionType, AppThunk, CodeAction, StatusAction } from "../../types";
+import {
+  ActionType,
+  AppThunk,
+  CodeAction,
+  OutputAction,
+  StatusAction,
+} from "../../types";
 import { Dispatch } from "react";
 
 export const addNewCode = (code: string): CodeAction => {
@@ -8,19 +14,31 @@ export const addNewCode = (code: string): CodeAction => {
   };
 };
 
-export const lintCode = (output: string): CodeAction => {
+export const lintCode = (output: string): OutputAction => {
   return {
     type: ActionType.LINT_CODE,
-    payload: output,
+    payload: {
+      output: output,
+      binarySize: "",
+      buildTime: "",
+      error: "",
+    },
   };
 };
 
-export const setStatus = (message: string): AppThunk => {
-  // return {
-  //   type: ActionType.SET_STATUS,
-  //   payload: { message },
-  // };
+export const clearOutput = (): OutputAction => {
+  return {
+    type: ActionType.CLEAR_OUTPUT,
+    payload: {
+      output: "",
+      binarySize: "",
+      buildTime: "",
+      error: "",
+    },
+  };
+};
 
+export const setStatus = (message: string, color = "", time = 5): AppThunk => {
   // eslint-disable-next-line @typescript-eslint/require-await
   return async (dispatch: Dispatch<StatusAction>) => {
     const timeoutHandle = setTimeout(() => {
@@ -28,15 +46,17 @@ export const setStatus = (message: string): AppThunk => {
         type: ActionType.CLEAR_STATUS,
         payload: {
           message: "",
-          //timeoutHandle: null,
+          timeoutHandle: null,
+          color: "",
         },
       });
-    }, 3 * 1000);
+    }, time * 1000);
     dispatch({
       type: ActionType.SET_STATUS,
       payload: {
         message: message,
-        //timeoutHandle: timeoutHandle,
+        timeoutHandle: timeoutHandle,
+        color: color,
       },
     });
   };
@@ -45,6 +65,6 @@ export const setStatus = (message: string): AppThunk => {
 export const clearStatus = (): StatusAction => {
   return {
     type: ActionType.CLEAR_STATUS,
-    payload: { message: "" },
+    payload: { message: "", timeoutHandle: null, color: "" },
   };
 };

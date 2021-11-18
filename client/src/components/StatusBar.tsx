@@ -4,10 +4,11 @@ import { Box } from "@mui/material";
 import { useAppSelector } from "../hooks/useAppSelector";
 
 const StatusBar: FunctionComponent = () => {
-  const status = useAppSelector((state) => state.status);
+  const { message, color } = useAppSelector((state) => state.status);
+  const newColor = color ? color : "white";
   return (
     <Box className="StatusBar">
-      <span style={{ marginLeft: "5px" }}>{status.message}</span>
+      <span style={{ marginLeft: "5px", color: newColor }}>{message}</span>
     </Box>
   );
 };

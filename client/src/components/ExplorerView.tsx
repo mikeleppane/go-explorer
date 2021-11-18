@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Split from "react-split";
 import CodeEditor from "./CodeEditor";
-import CodeOutputView from "./CodeOutputView";
+import ResultView from "./ResultView";
 
 const defaultSplitSize = (window.innerHeight - 100).toString() + "px";
 
@@ -24,7 +24,7 @@ const ExplorerView = () => {
       style={{ height: defaultSplitSize }}
     >
       <CodeEditor />
-      <CodeOutputView setSizes={setSplitSizes} />
+      <ResultView setSizes={setSplitSizes} />
     </Split>
   );
 };

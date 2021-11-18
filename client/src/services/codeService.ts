@@ -46,7 +46,7 @@ const lintCode = async (lintCodeParams: CodeParams) => {
   if (response.problem) {
     console.log("NOT OK=>RESPONSE DATA: ", response.data);
     console.log("lintCode> problem: ", response.problem);
-    return response;
+    throw new Error(response.problem);
   }
 };
 

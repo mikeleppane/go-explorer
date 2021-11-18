@@ -1,14 +1,14 @@
 import React from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { Box } from "@mui/material";
-import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 import * as monaco from "monaco-editor";
 import { addNewCode } from "../state/actionCreators";
+import { useDispatch } from "react-redux";
 
 const CodeEditor = () => {
   const code = useAppSelector((state) => state.code);
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const onEditorChange = (
     value: string | undefined,

@@ -10,14 +10,14 @@ import {
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useAppDispatch } from "../hooks/useAppDispatch";
 import { addNewCode } from "../state/actionCreators";
+import { useDispatch } from "react-redux";
 
 export default function FileLoadMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const handleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>

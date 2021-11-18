@@ -66,8 +66,8 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
     color: white;
     background-color: #505050;
     font-size: 12px;
@@ -86,4 +86,12 @@
 .gutter.gutter-vertical {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
     cursor: row-resize;
+}
+
+.ResultInfo {
+    margin-top: 10px;
+    font-family: 'Source Sans Pro', sans-serif;
+    color: white;
+    font-size: 12px;
+    margin-left: 5px
 }

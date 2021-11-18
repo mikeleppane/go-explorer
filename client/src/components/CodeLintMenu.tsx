@@ -1,24 +1,36 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
-import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 import codeService from "../services/codeService";
-import { addNewCode } from "../state/actionCreators";
+import { clearOutput, lintCode, setStatus } from "../state/actionCreators";
+import { useDispatch } from "react-redux";
 
 export default function LintCodeMenu() {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const code = useAppSelector((state) => state.code);
 
   const handleLintMenu = () => {
+    dispatch(clearOutput());
+    dispatch(setStatus("Wait for static code analysis.."));
     codeService
       .lintCode({ code })
       .then((response) => {
         if (response && typeof response === "string") {
-          dispatch(addNewCode(response));
+          dispatch(
+            setStatus("Analyzer found some issues. Check the output...")
+          );
+          dispatch(lintCode(response));
+        } else {
+          dispatch(setStatus("Analysis ok."));
         }
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        if (e instanceof Error) {
+          dispatch(setStatus(`An error occurred: ${e.message}`, "red", 10));
+        }
+      });
   };
 
   return (

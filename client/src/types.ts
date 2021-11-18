@@ -47,6 +47,7 @@ export type AppDispatch = typeof store.dispatch;
 export enum ActionType {
   NEW_CODE = "NEW_CODE",
   LINT_CODE = "LINT_CODE",
+  CLEAR_OUTPUT = "CLEAR_OUTPUT",
   SET_STATUS = "SET_STATUS",
   CLEAR_STATUS = "CLEAR_STATUS",
 }
@@ -56,19 +57,27 @@ interface NewCodeAction {
   payload: string;
 }
 
-interface LintCodeAction {
-  type: ActionType.LINT_CODE;
-  payload: string;
+export interface OutputActionPayload {
+  output: string;
+  buildTime: string;
+  binarySize: string;
+  error: string;
 }
 
-// interface LoadingAction {
-//   type: ActionType.LOADING;
-//   payload: string;
-// }
+export interface LintCodeAction {
+  type: ActionType.LINT_CODE;
+  payload: OutputActionPayload;
+}
+
+export interface ClearOutputAction {
+  type: ActionType.CLEAR_OUTPUT;
+  payload: OutputActionPayload;
+}
 
 export interface StatusActionPayload {
   message: string;
-  //timeoutHandle: number | null;
+  timeoutHandle: ReturnType<typeof setTimeout> | null;
+  color: string;
 }
 
 interface SetStatusAction {
@@ -81,7 +90,8 @@ interface ClearAction {
   payload: StatusActionPayload;
 }
 
-export type CodeAction = NewCodeAction | LintCodeAction;
+export type OutputAction = LintCodeAction | ClearOutputAction;
+export type CodeAction = NewCodeAction;
 export type StatusAction = SetStatusAction | ClearAction;
 export type ThunkAction<
   R, // Return type of the thunk function
