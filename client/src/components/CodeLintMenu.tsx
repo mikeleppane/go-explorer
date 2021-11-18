@@ -37,7 +37,7 @@ export default function LintCodeMenu() {
     <div>
       <Button
         variant="contained"
-        style={{ marginLeft: "30px", backgroundColor: "#64748B" }}
+        style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
         endIcon={<FindInPageIcon />}
         onClick={handleLintMenu}
       >
