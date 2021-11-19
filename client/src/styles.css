@@ -65,7 +65,7 @@
     text-align: left;
     margin: 0;
     padding: 0;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     color: white;
@@ -92,6 +92,7 @@
     margin-top: 10px;
     font-family: 'Source Sans Pro', sans-serif;
     color: white;
-    font-size: 12px;
-    margin-left: 5px
+    font-size: 14px;
+    margin-left: 5px;
+    overflow: scroll;
 }

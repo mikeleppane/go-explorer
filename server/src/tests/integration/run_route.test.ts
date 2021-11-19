@@ -80,6 +80,29 @@ const concurrentCode = `
   }
 `;
 
+const invalidImportCode = `
+  package main
+  import "fmtt123"
+  func add(x int, y int) int {
+    return x+y
+    return 0
+  }
+  func main() {
+    fmt.Println(add(150, 5))
+  }
+`;
+
+const mainPackageMissingCode = `
+  import "fmt"
+  func add(x int, y int) int {
+    return x+y
+    return 0
+  }
+  func main() {
+    fmt.Println(add(150, 5))
+  }
+`;
+
 describe("POST /api/run", () => {
   test("should return correct code output and execution time", async () => {
     const requestBody = {
@@ -154,5 +177,25 @@ describe("POST /api/run", () => {
     expect(response.body.output).toBeFalsy();
     expect(response.body.executionTime).not.toBeFalsy();
     expect(response.body.error).toBeFalsy();
+  });
+  test("should report error if source code import statement is not valid", async () => {
+    const requestBody = {
+      code: invalidImportCode,
+    };
+    const response = await api.post("/api/run").send(requestBody);
+    expect(response.body.output).toBeFalsy();
+    expect(response.body.executionTime).toBeFalsy();
+    expect(response.body.error).not.toBeFalsy();
+    expect(response.body.error).toContain("fmtt123 is not in GOROOT");
+  });
+  test("should report error if package statement is missing", async () => {
+    const requestBody = {
+      code: mainPackageMissingCode,
+    };
+    const response = await api.post("/api/run").send(requestBody);
+    expect(response.body.output).toBeFalsy();
+    expect(response.body.executionTime).toBeFalsy();
+    expect(response.body.error).not.toBeFalsy();
+    expect(response.body.error).toContain("expected 'package'");
   });
 });

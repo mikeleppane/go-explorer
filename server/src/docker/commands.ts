@@ -41,7 +41,7 @@ export const lintCode = (filePath: string, version: string) => {
 const createEnvs = (envEntries: EnvEntry): string => {
   let envs = "";
   for (const [key, value] of Object.entries(envEntries)) {
-    if (value) {
+    if (value.trim()) {
       envs += `--env ${key.toUpperCase()}=${value} `;
     }
   }

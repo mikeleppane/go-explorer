@@ -18,7 +18,11 @@ export default function LintCodeMenu() {
       .then((response) => {
         if (response && typeof response === "string") {
           dispatch(
-            setStatus("Analyzer found some issues. Check the output...")
+            setStatus(
+              "Analyzer found some issues. Check the output...",
+              "red",
+              10
+            )
           );
           dispatch(lintCode(response));
         } else {

@@ -46,19 +46,29 @@ export const handleCodeRunOutput = (output: CommandOutput) => {
   const res = { output: "", executionTime: "", error: "" };
   const executionTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
   if (output && output.stdout) {
-    res.output = output.stdout.trim();
+    res.output = output.stdout;
   }
   if (output && output.stderr) {
-    const stderr = output.stderr.trim().split("\n");
+    let stderr = output.stderr.trim().split("\n");
     const executionTime = stderr[stderr.length - 1];
     if (executionTimeRegExp.test(executionTime)) {
       res.executionTime = executionTime + " s";
     }
     if (res.executionTime) {
-      res.error = stderr.slice(0, stderr.length - 1).join("\n");
-    } else {
-      res.error = stderr.join("\n");
+      stderr = stderr.slice(0, stderr.length - 1);
     }
+    res.error = stderr
+      .map((line) => {
+        if (line.includes("command-line-arguments")) {
+          return "";
+        }
+        if (line.includes(".go")) {
+          return line.replace(/([\w\d-]+\.go)/gi, "go");
+        }
+        return line;
+      })
+      .join("\n")
+      .trim();
   }
   return res;
 };
@@ -72,4 +82,16 @@ export const handleCodeTestOutput = (output: CommandOutput) => {
     res.error = output.stderr.trim();
   }
   return res;
+};
+
+export const handleCodeLintOutput = (output: string) => {
+  return output
+    .split("\n")
+    .map((line) => {
+      if (line.includes(".go")) {
+        return line.replace(/([\w\d-]+\.go)/i, "go");
+      }
+    })
+    .join("\n")
+    .trim();
 };

@@ -7,7 +7,11 @@ import { createTempFile } from "../utils/tempfile";
 import path from "path";
 import { validateRunRequest } from "../validators/runValidator";
 import { CodeExecutionEntry, RunEntry } from "../types";
-import { parseRequestEntries, validateVersion } from "../utils/route_helpers";
+import {
+  parseRequestEntries,
+  removeFirstLineFromString,
+  validateVersion,
+} from "../utils/route_helpers";
 import { handleCodeRunOutput } from "../utils/outputFormatter";
 import { baseRouteExceptionHandler } from "../errors/routeExpectionHandler";
 
@@ -27,7 +31,7 @@ const handleCodeRunTask = async (
     output = await run(runCode(gogc, godebug, buildFlags, tempFile, version));
   } catch (e) {
     if (e instanceof Error) {
-      output.stderr = e.message.trim().split("\n").slice(1).join("\n");
+      output.stderr = removeFirstLineFromString(e.message);
     }
   }
   const responseObj = handleCodeRunOutput(output);

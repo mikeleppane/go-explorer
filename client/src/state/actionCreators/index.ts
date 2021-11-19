@@ -3,9 +3,11 @@ import {
   AppThunk,
   CodeAction,
   OutputAction,
+  RunCodeAction,
   StatusAction,
 } from "../../types";
 import { Dispatch } from "react";
+import codeService from "../../services/codeService";
 
 export const addNewCode = (code: string): CodeAction => {
   return {
@@ -25,10 +27,11 @@ export const lintCode = (output: string): OutputAction => {
   return {
     type: ActionType.LINT_CODE,
     payload: {
-      output: output,
+      output: "",
       binarySize: "",
       buildTime: "",
-      error: "",
+      executionTime: "",
+      error: output,
     },
   };
 };
@@ -40,6 +43,7 @@ export const clearOutput = (): OutputAction => {
       output: "",
       binarySize: "",
       buildTime: "",
+      executionTime: "",
       error: "",
     },
   };
@@ -73,5 +77,51 @@ export const clearStatus = (): StatusAction => {
   return {
     type: ActionType.CLEAR_STATUS,
     payload: { message: "", timeoutHandle: null, color: "" },
+  };
+};
+
+export const runCode = (
+  buildFlags: string,
+  gogc: string,
+  godebug: string,
+  version: string
+): AppThunk => {
+  return (
+    dispatch: Dispatch<
+      ReturnType<typeof setStatus> | RunCodeAction | OutputAction
+    >,
+    getState
+  ) => {
+    dispatch(clearOutput());
+    dispatch(setStatus("Wait for code execution..."));
+    const { code } = getState();
+    codeService
+      .runCode({ code, buildFlags, gogc, godebug, version })
+      .then((response) => {
+        if (response) {
+          dispatch({
+            type: ActionType.RUN_CODE,
+            payload: {
+              output: response.output,
+              binarySize: "",
+              buildTime: "",
+              executionTime: response.executionTime,
+              error: response.error,
+            },
+          });
+          if (response.executionTime) {
+            dispatch(setStatus("Code execution ok."));
+          }
+          if (!response.executionTime && response.error) {
+            dispatch(setStatus("Code execution failed", "red", 10));
+          }
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e instanceof Error) {
+          dispatch(setStatus(`An error occurred: ${e.message}`, "red", 10));
+        }
+      });
   };
 };

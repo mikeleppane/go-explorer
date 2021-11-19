@@ -19,9 +19,7 @@ export const run = async (cmd: string, timeout = 60000) => {
   } catch (e) {
     if (e instanceof Error) {
       console.log(e);
-      throw new CommandExecutionError(
-        `${e.message.trim().split("\n").slice(1).join("\n")}`
-      );
+      throw new CommandExecutionError(`${e.message.trim()}`);
     }
     throw new CommandExecutionError(
       `Unknown error occurred while executing command (${cmd}): ${e}`

@@ -12,6 +12,7 @@ import {
   validateVersion,
 } from "../utils/route_helpers";
 import { baseRouteExceptionHandler } from "../errors/routeExpectionHandler";
+import { handleCodeLintOutput } from "../utils/outputFormatter";
 
 const lintRouter = express.Router();
 
@@ -33,7 +34,7 @@ const handleCodeLintTask = async (
   }
   if (output && typeof output === "string") {
     logger.warn(`Linter found some issues: ${output}`);
-    res.status(200).send(output);
+    res.status(200).send(handleCodeLintOutput(output));
   } else {
     logger.info("Linter analysis was clean.");
     res.status(200).send("");

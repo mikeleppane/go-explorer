@@ -10,7 +10,10 @@ export function validateBuildRequest(format: BuildEntry) {
     godebug: Joi.string().optional(),
     buildFlags: Joi.string().optional(),
     symregexp: Joi.string().optional(),
-    version: Joi.string().pattern(new RegExp("^\\d+(.\\d+)?$")).optional(),
+    version: Joi.string()
+      .allow("")
+      .pattern(new RegExp("^\\d+(.\\d+)?$"))
+      .optional(),
   });
 
   return schema.validate(format);

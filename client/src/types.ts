@@ -51,6 +51,7 @@ export enum ActionType {
   SET_STATUS = "SET_STATUS",
   CLEAR_STATUS = "CLEAR_STATUS",
   USE_DEFAULT_CODE = "USE_DEFAULT_CODE",
+  RUN_CODE = "RUN_CODE",
 }
 
 interface NewCodeAction {
@@ -67,6 +68,7 @@ export interface OutputActionPayload {
   output: string;
   buildTime: string;
   binarySize: string;
+  executionTime: string;
   error: string;
 }
 
@@ -74,6 +76,16 @@ export interface LintCodeAction {
   type: ActionType.LINT_CODE;
   payload: OutputActionPayload;
 }
+
+export interface RunCodeAction {
+  type: ActionType.RUN_CODE;
+  payload: OutputActionPayload;
+}
+
+export type RunCodeResponse = Omit<
+  OutputActionPayload,
+  "buildTime" | "binarySize"
+>;
 
 export interface ClearOutputAction {
   type: ActionType.CLEAR_OUTPUT;
@@ -96,7 +108,7 @@ interface ClearAction {
   payload: StatusActionPayload;
 }
 
-export type OutputAction = LintCodeAction | ClearOutputAction;
+export type OutputAction = LintCodeAction | ClearOutputAction | RunCodeAction;
 export type CodeAction = NewCodeAction | NewTemplateAction;
 export type StatusAction = SetStatusAction | ClearAction;
 export type ThunkAction<
@@ -113,5 +125,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  NewCodeAction | LintCodeAction | SetStatusAction | ClearAction
+  OutputAction | CodeAction | StatusAction
 >;

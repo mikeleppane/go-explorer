@@ -4,6 +4,7 @@ import {
   BuildCodeParams,
   CodeParams,
   RunCodeParams,
+  RunCodeResponse,
   TestCodeParams,
 } from "../types";
 
@@ -44,7 +45,6 @@ const lintCode = async (lintCodeParams: CodeParams) => {
     return response.data;
   }
   if (response.problem) {
-    console.log("NOT OK=>RESPONSE DATA: ", response.data);
     console.log("lintCode> problem: ", response.problem);
     throw new Error(response.problem);
   }
@@ -70,7 +70,7 @@ const buildCode = async (
 };
 
 const runCode = async (runCodeParams: RunCodeParams) => {
-  const response = await api.post("/run", runCodeParams);
+  const response = await api.post<RunCodeResponse>("/run", runCodeParams);
 
   if (response.ok) {
     console.log("runCode> ok");
@@ -78,7 +78,7 @@ const runCode = async (runCodeParams: RunCodeParams) => {
   }
   if (response.problem) {
     console.log("runCode> problem: ", response.problem);
-    return response;
+    throw new Error(response.problem);
   }
 };
 
