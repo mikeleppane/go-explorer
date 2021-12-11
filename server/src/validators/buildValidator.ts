@@ -4,12 +4,12 @@ import { BuildEntry } from "../types";
 export function validateBuildRequest(format: BuildEntry) {
   const schema = Joi.object({
     code: Joi.string().required(),
-    goos: Joi.string().optional(),
-    goarch: Joi.string().optional(),
-    gogc: Joi.string().optional(),
-    godebug: Joi.string().optional(),
-    buildFlags: Joi.string().optional(),
-    symregexp: Joi.string().optional(),
+    goos: Joi.string().allow("").optional(),
+    goarch: Joi.string().allow("").optional(),
+    gogc: Joi.string().allow("").optional(),
+    godebug: Joi.string().allow("").optional(),
+    buildFlags: Joi.string().allow("").optional(),
+    symregexp: Joi.string().allow("").optional(),
     version: Joi.string()
       .allow("")
       .pattern(new RegExp("^\\d+(.\\d+)?$"))

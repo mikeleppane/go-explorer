@@ -2,6 +2,7 @@ import { create } from "apisauce";
 import { apiBaseUrl } from "../constants";
 import {
   BuildCodeParams,
+  BuildCodeResponse,
   CodeParams,
   RunCodeParams,
   RunCodeResponse,
@@ -54,7 +55,7 @@ const buildCode = async (
   buildCodeParams: BuildCodeParams,
   returnObjDump = false
 ) => {
-  const response = await api.post(
+  const response = await api.post<BuildCodeResponse>(
     `${returnObjDump ? "/build?objdump=true" : "/build"}`,
     buildCodeParams
   );
@@ -65,7 +66,7 @@ const buildCode = async (
   }
   if (response.problem) {
     console.log("buildCode> problem: ", response.problem);
-    return response;
+    throw new Error(response.problem);
   }
 };
 

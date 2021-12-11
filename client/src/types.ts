@@ -52,6 +52,7 @@ export enum ActionType {
   CLEAR_STATUS = "CLEAR_STATUS",
   USE_DEFAULT_CODE = "USE_DEFAULT_CODE",
   RUN_CODE = "RUN_CODE",
+  BUILD_CODE = "BUILD_CODE",
 }
 
 interface NewCodeAction {
@@ -82,9 +83,19 @@ export interface RunCodeAction {
   payload: OutputActionPayload;
 }
 
+export interface BuildCodeAction {
+  type: ActionType.BUILD_CODE;
+  payload: OutputActionPayload;
+}
+
 export type RunCodeResponse = Omit<
   OutputActionPayload,
   "buildTime" | "binarySize"
+>;
+
+export type BuildCodeResponse = Omit<
+  OutputActionPayload,
+  "executionTime" | "error"
 >;
 
 export interface ClearOutputAction {
@@ -108,7 +119,11 @@ interface ClearAction {
   payload: StatusActionPayload;
 }
 
-export type OutputAction = LintCodeAction | ClearOutputAction | RunCodeAction;
+export type OutputAction =
+  | LintCodeAction
+  | ClearOutputAction
+  | RunCodeAction
+  | BuildCodeAction;
 export type CodeAction = NewCodeAction | NewTemplateAction;
 export type StatusAction = SetStatusAction | ClearAction;
 export type ThunkAction<

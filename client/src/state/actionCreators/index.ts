@@ -3,7 +3,6 @@ import {
   AppThunk,
   CodeAction,
   OutputAction,
-  RunCodeAction,
   StatusAction,
 } from "../../types";
 import { Dispatch } from "react";
@@ -87,9 +86,7 @@ export const runCode = (
   version: string
 ): AppThunk => {
   return (
-    dispatch: Dispatch<
-      ReturnType<typeof setStatus> | RunCodeAction | OutputAction
-    >,
+    dispatch: Dispatch<ReturnType<typeof setStatus> | OutputAction>,
     getState
   ) => {
     dispatch(clearOutput());
@@ -114,6 +111,66 @@ export const runCode = (
           }
           if (!response.executionTime && response.error) {
             dispatch(setStatus("Code execution failed", "red", 10));
+          }
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e instanceof Error) {
+          dispatch(setStatus(`An error occurred: ${e.message}`, "red", 10));
+        }
+      });
+  };
+};
+
+export const buildCode = (
+  buildFlags: string,
+  gogc: string,
+  godebug: string,
+  goarch: string,
+  goos: string,
+  symregexp: string,
+  version: string,
+  returnObjDump: boolean
+): AppThunk => {
+  return (
+    dispatch: Dispatch<ReturnType<typeof setStatus> | OutputAction>,
+    getState
+  ) => {
+    dispatch(clearOutput());
+    dispatch(setStatus("Wait for code building..."));
+    const { code } = getState();
+    codeService
+      .buildCode(
+        {
+          code,
+          buildFlags,
+          gogc,
+          godebug,
+          goarch,
+          goos,
+          symregexp,
+          version,
+        },
+        returnObjDump
+      )
+      .then((response) => {
+        if (response) {
+          dispatch({
+            type: ActionType.BUILD_CODE,
+            payload: {
+              output: response.output,
+              binarySize: response.binarySize,
+              buildTime: response.buildTime,
+              executionTime: "",
+              error: "",
+            },
+          });
+          if (response.buildTime && response.binarySize) {
+            dispatch(setStatus("Code building successful."));
+          }
+          if (!response.buildTime && response.binarySize) {
+            dispatch(setStatus("Code building failed", "red", 10));
           }
         }
       })

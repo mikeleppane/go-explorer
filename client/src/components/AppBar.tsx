@@ -7,6 +7,7 @@ import { Divider, Toolbar } from "@mui/material";
 import FormatCodeMenu from "./CodeFormatMenu";
 import LintCodeMenu from "./CodeLintMenu";
 import RunCodeMenu from "./RunCodeMenu";
+import BuildCodeMenu from "./BuildCodeMenu";
 
 export default function NavBar() {
   return (
@@ -21,6 +22,7 @@ export default function NavBar() {
             style={{ marginLeft: "10px" }}
           />
           <RunCodeMenu />
+          <BuildCodeMenu />
           <Divider
             orientation="vertical"
             flexItem
