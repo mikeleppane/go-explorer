@@ -1,4 +1,4 @@
-## Golang Explorer
+## Go Explorer
 
 ### Introduction
 
