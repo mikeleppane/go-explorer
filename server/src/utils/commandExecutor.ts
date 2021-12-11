@@ -4,12 +4,13 @@ import { CommandExecutionError } from "../errors/errorTypes";
 import util = require("util");
 
 const execProm = util.promisify(exec);
+const bufferSize = 1024 * 1024 * 10;
 
 export const run = async (cmd: string, timeout = 60000) => {
   try {
     const { stdout, stderr } = await execProm(cmd, {
       timeout,
-      maxBuffer: 1024 * 10000,
+      maxBuffer: bufferSize,
     });
     if (stderr) {
       logger.info(`stderr>: ${stderr}`);

@@ -8,7 +8,7 @@
     "tsc": "tsc -p .",
     "start": "NODE_ENV=production node ./build/index.js",
     "dev": "NODE_ENV=development ts-node-dev src/index.ts",
-    "lint": "eslint './src/**/*.{ts,tsx}'"
+    "lint": "tsc -p . --noEmit && eslint './src/**/*.ts'"
   },
   "author": "Mikko Leppänen",
   "license": "MIT",
