@@ -2,7 +2,10 @@ import React from "react";
 import Button from "@mui/material/Button";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import {
+  Collapse,
   Divider,
+  List,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Menu,
@@ -14,17 +17,20 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CachedIcon from "@mui/icons-material/Cached";
 import {
   addNewCode,
+  loadFromTemplate,
   newTemplateCode,
   setStatus,
 } from "../state/actionCreators";
 import { useDispatch } from "react-redux";
 import { LocalStorage } from "../services/localStorage";
 import { useAppSelector } from "../hooks/useAppSelector";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 export default function FileLoadMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const [templatesOpen, setTemplatesOpen] = React.useState(false);
   const dispatch = useDispatch();
   const code = useAppSelector((state) => state.code);
   const storage = new LocalStorage("", "golang-explorer-recent-code");
@@ -58,7 +64,7 @@ export default function FileLoadMenu() {
         if (e instanceof Error) {
           dispatch(
             setStatus(
-              "An error occurred while copiying code block to the clipboard",
+              "An error occurred while copying code block to the clipboard",
               "red",
               10
             )
@@ -98,6 +104,12 @@ export default function FileLoadMenu() {
     };
   };
 
+  const handleLoadFromTemplate = (template: string) => {
+    if (template) {
+      dispatch(loadFromTemplate(template));
+    }
+  };
+
   return (
     <div>
       <Button
@@ -134,6 +146,46 @@ export default function FileLoadMenu() {
             </ListItemIcon>
             <ListItemText>Open Recent Changes</ListItemText>
           </MenuItem>
+          <ListItemButton
+            onClick={() => {
+              setTemplatesOpen(!templatesOpen);
+            }}
+          >
+            <ListItemText primary="Load From Templates" />
+            {templatesOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={templatesOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  handleLoadFromTemplate("default");
+                }}
+              >
+                <ListItemText primary="Default" />
+              </ListItemButton>
+              <ListItemButton
+                onClick={() => {
+                  handleLoadFromTemplate("testing");
+                }}
+              >
+                <ListItemText primary="Testing" />
+              </ListItemButton>
+              <ListItemButton
+                onClick={() => {
+                  handleLoadFromTemplate("benchmark");
+                }}
+              >
+                <ListItemText primary="Benchmark" />
+              </ListItemButton>
+              <ListItemButton
+                onClick={() => {
+                  handleLoadFromTemplate("concurrency");
+                }}
+              >
+                <ListItemText primary="Concurrency" />
+              </ListItemButton>
+            </List>
+          </Collapse>
           <Divider />
           <input
             accept=".go"

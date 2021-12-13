@@ -51,6 +51,7 @@ export enum ActionType {
   SET_STATUS = "SET_STATUS",
   CLEAR_STATUS = "CLEAR_STATUS",
   USE_DEFAULT_CODE = "USE_DEFAULT_CODE",
+  LOAD_FROM_TEMPLATE = "LOAD_FROM_TEMPLATE",
   RUN_CODE = "RUN_CODE",
   BUILD_CODE = "BUILD_CODE",
 }
@@ -62,6 +63,11 @@ interface NewCodeAction {
 
 interface NewTemplateAction {
   type: ActionType.USE_DEFAULT_CODE;
+  payload: string;
+}
+
+interface LoadTemplateAction {
+  type: ActionType.LOAD_FROM_TEMPLATE;
   payload: string;
 }
 
@@ -121,7 +127,7 @@ export type OutputAction =
   | ClearOutputAction
   | RunCodeAction
   | BuildCodeAction;
-export type CodeAction = NewCodeAction | NewTemplateAction;
+export type CodeAction = NewCodeAction | NewTemplateAction | LoadTemplateAction;
 export type StatusAction = SetStatusAction | ClearAction;
 export type ThunkAction<
   R, // Return type of the thunk function

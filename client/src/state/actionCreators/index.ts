@@ -7,6 +7,12 @@ import {
 } from "../../types";
 import { Dispatch } from "react";
 import codeService from "../../services/codeService";
+import {
+  benchmarkCode,
+  concurrencyCode,
+  defaultCode,
+  testingCode,
+} from "../../config/codeTemplates";
 
 export const addNewCode = (code: string): CodeAction => {
   return {
@@ -20,6 +26,40 @@ export const newTemplateCode = (): CodeAction => {
     type: ActionType.USE_DEFAULT_CODE,
     payload: "",
   };
+};
+
+export const loadFromTemplate = (template: string): CodeAction => {
+  switch (template) {
+    case "default": {
+      return {
+        type: ActionType.LOAD_FROM_TEMPLATE,
+        payload: defaultCode,
+      };
+    }
+    case "testing": {
+      return {
+        type: ActionType.LOAD_FROM_TEMPLATE,
+        payload: testingCode,
+      };
+    }
+    case "benchmark": {
+      return {
+        type: ActionType.LOAD_FROM_TEMPLATE,
+        payload: benchmarkCode,
+      };
+    }
+    case "concurrency": {
+      return {
+        type: ActionType.LOAD_FROM_TEMPLATE,
+        payload: concurrencyCode,
+      };
+    }
+    default:
+      return {
+        type: ActionType.LOAD_FROM_TEMPLATE,
+        payload: defaultCode,
+      };
+  }
 };
 
 export const lintCode = (output: string): OutputAction => {
