@@ -93,10 +93,7 @@ export type RunCodeResponse = Omit<
   "buildTime" | "binarySize"
 >;
 
-export type BuildCodeResponse = Omit<
-  OutputActionPayload,
-  "executionTime" | "error"
->;
+export type BuildCodeResponse = Omit<OutputActionPayload, "executionTime">;
 
 export interface ClearOutputAction {
   type: ActionType.CLEAR_OUTPUT;

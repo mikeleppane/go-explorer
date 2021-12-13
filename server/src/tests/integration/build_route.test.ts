@@ -60,7 +60,8 @@ describe("POST /api/build", () => {
       buildFlags: "-ldflags='-nn -s'",
     };
     const response = await api.post("/api/build").send(requestBody).expect(200);
-    expect(response.body.output).not.toBeFalsy();
+    expect(response.body.error).not.toBeFalsy();
+    expect(response.body.output).toBeFalsy();
     expect(response.body.binarySize).toBeFalsy();
     expect(response.body.buildTime).toBeFalsy();
   });
@@ -107,13 +108,29 @@ describe("POST /api/build", () => {
     expect(response.body.binarySize).toBeFalsy();
     expect(response.body.buildTime).toBeFalsy();
   });
+  test("should return error message if object dump cannot be produced", async () => {
+    const requestBody = {
+      code: validCode,
+      buildFlags: "-gcflags='abc123'",
+      symregexp: "main.main",
+    };
+    const response = await api
+      .post("/api/build?objdump=true")
+      .send(requestBody)
+      .expect(500);
+    expect(response.body.error).not.toBeFalsy();
+    expect(response.body.output).toBeFalsy();
+    expect(response.body.binarySize).toBeFalsy();
+    expect(response.body.buildTime).toBeFalsy();
+  });
   test("build should fail if given GOOS is not supported", async () => {
     const requestBody = {
       code: validCode,
       goos: "newLinux",
     };
     const response = await api.post("/api/build").send(requestBody).expect(200);
-    expect(response.body.output).not.toBeFalsy();
+    expect(response.body.error).not.toBeFalsy();
+    expect(response.body.output).toBeFalsy();
     expect(response.body.binarySize).toBeFalsy();
     expect(response.body.buildTime).toBeFalsy();
   });
@@ -123,7 +140,8 @@ describe("POST /api/build", () => {
       goarch: "newArch",
     };
     const response = await api.post("/api/build").send(requestBody).expect(200);
-    expect(response.body.output).not.toBeFalsy();
+    expect(response.body.error).not.toBeFalsy();
+    expect(response.body.output).toBeFalsy();
     expect(response.body.binarySize).toBeFalsy();
     expect(response.body.buildTime).toBeFalsy();
   });
@@ -139,8 +157,9 @@ describe("POST /api/build", () => {
       code: invalidCode,
     };
     const response = await api.post("/api/build").send(requestBody).expect(200);
-    expect(response.body.output).not.toBeFalsy();
-    expect(response.body.output).toContain("Printl");
+    expect(response.body.error).not.toBeFalsy();
+    expect(response.body.error).toContain("Printl");
+    expect(response.body.output).toBeFalsy();
     expect(response.body.binarySize).toBeFalsy();
     expect(response.body.buildTime).toBeFalsy();
   });

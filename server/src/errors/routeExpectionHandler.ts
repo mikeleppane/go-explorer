@@ -14,7 +14,7 @@ export const baseRouteExceptionHandler = async (
   }
   if (error instanceof Error) {
     logger.error(error.message);
-    res.status(500).send(removeFirstLineFromString(error.message));
+    res.status(500).json({ error: removeFirstLineFromString(error.message) });
   }
 };
 

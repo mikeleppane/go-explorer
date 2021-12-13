@@ -1,15 +1,19 @@
 import { CommandOutput } from "../types";
 
 export const handleObjectDumpOutput = (output: CommandOutput) => {
-  const res = { output: "", binarySize: "", buildTime: "" };
+  const res = { output: "", error: "" };
   if (output && output.stdout) {
     res.output = output.stdout.trim();
+  }
+  if (output && output.stderr) {
+    const error = output.stderr.trim().split("\n");
+    res.error = error.slice(1, error.length).join("\n");
   }
   return res;
 };
 
 export const handleCodeBuildOutput = (output: CommandOutput) => {
-  const res = { output: "", binarySize: "", buildTime: "" };
+  const res = { output: "", binarySize: "", buildTime: "", error: "" };
   const sizeRegExp = new RegExp("^\\d+(.\\d+)?\\s?[KMG]?$", "i");
   const buildTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
   if (output && output.stdout) {
@@ -31,6 +35,11 @@ export const handleCodeBuildOutput = (output: CommandOutput) => {
         res.output = content.join("\n");
       }
     }
+  }
+  if (!res.binarySize) {
+    res.error = res.output;
+    res.output = "";
+    return res;
   }
   if (output && output.stderr) {
     const stderr = output.stderr.trim().split("\n");

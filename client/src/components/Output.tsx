@@ -4,11 +4,10 @@ import { Box } from "@mui/material";
 import { useAppSelector } from "../hooks/useAppSelector";
 
 const ResultInfo: FunctionComponent = () => {
-  const { output, error, executionTime } = useAppSelector(
-    (state) => state.output
-  );
-  const isStatsAvailable = executionTime;
-  if (!output.trim() && !error.trim() && !executionTime.trim()) {
+  const { output, error, executionTime, buildTime, binarySize } =
+    useAppSelector((state) => state.output);
+  const isStatsAvailable = (executionTime || buildTime || binarySize) != "";
+  if (!output && !error && !isStatsAvailable) {
     return null;
   }
   return (
@@ -20,6 +19,8 @@ const ResultInfo: FunctionComponent = () => {
               ========== Stats ==========
             </span>
             <br /> {executionTime ? `Execution time: ${executionTime} ` : null}
+            <br /> {buildTime ? `Build time: ${buildTime} ` : null}
+            <br /> {binarySize ? `Binary size: ${binarySize} ` : null}
           </p>
         </Box>
       )}
@@ -27,7 +28,7 @@ const ResultInfo: FunctionComponent = () => {
         <Box className="ResultInfo">
           <span style={{ color: "#4caf50" }}>========== Output ==========</span>
           <br />
-          <div style={{ whiteSpace: "pre-line" }}>{output}</div>
+          <div style={{ whiteSpace: "pre-line" }}>{output + "\n\n"}</div>
         </Box>
       )}
       {error && (
@@ -35,7 +36,7 @@ const ResultInfo: FunctionComponent = () => {
           <span style={{ color: "#f44336" }}>========== Error ==========</span>
           <br />
           <div style={{ whiteSpace: "pre-line", overflow: "scroll" }}>
-            {error}
+            {error + "\n\n"}
           </div>
         </Box>
       )}

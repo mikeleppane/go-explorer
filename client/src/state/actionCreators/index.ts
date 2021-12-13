@@ -86,7 +86,9 @@ export const runCode = (
   version: string
 ): AppThunk => {
   return (
-    dispatch: Dispatch<ReturnType<typeof setStatus> | OutputAction>,
+    dispatch: Dispatch<
+      ReturnType<typeof setStatus> | ReturnType<typeof clearOutput>
+    >,
     getState
   ) => {
     dispatch(clearOutput());
@@ -159,18 +161,26 @@ export const buildCode = (
           dispatch({
             type: ActionType.BUILD_CODE,
             payload: {
-              output: response.output,
-              binarySize: response.binarySize,
-              buildTime: response.buildTime,
+              output: response.output || "",
+              binarySize: response.binarySize || "",
+              buildTime: response.buildTime || "",
               executionTime: "",
-              error: "",
+              error: response.error || "",
             },
           });
-          if (response.buildTime && response.binarySize) {
-            dispatch(setStatus("Code building successful."));
-          }
-          if (!response.buildTime && response.binarySize) {
-            dispatch(setStatus("Code building failed", "red", 10));
+          if (returnObjDump) {
+            if (response.error && !response.output) {
+              dispatch(setStatus("Code building failed", "red", 10));
+            } else {
+              dispatch(setStatus("Code building successful."));
+            }
+          } else {
+            if (response.buildTime && response.binarySize) {
+              dispatch(setStatus("Code building successful."));
+            }
+            if (!response.binarySize) {
+              dispatch(setStatus("Code building failed", "red", 10));
+            }
           }
         }
       })

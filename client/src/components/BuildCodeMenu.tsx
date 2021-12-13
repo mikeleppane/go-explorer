@@ -221,7 +221,7 @@ export default function BuildCodeMenu() {
                   label="GOOS"
                   variant="standard"
                   size="small"
-                  value={goarch}
+                  value={goos}
                   inputProps={{ style: { fontSize: "12px" } }}
                   onChange={(event) => {
                     setGoos(event.target.value);

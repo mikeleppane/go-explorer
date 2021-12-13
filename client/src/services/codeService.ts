@@ -41,7 +41,6 @@ const formatCode = async (formatCodeParams: CodeParams) => {
 const lintCode = async (lintCodeParams: CodeParams) => {
   const response = await api.post("/lint", lintCodeParams);
   if (response.ok) {
-    console.log("OK=>RESPONSE DATA: ", response.data);
     console.log("lintCode> ok");
     return response.data;
   }
@@ -65,7 +64,10 @@ const buildCode = async (
     return response.data;
   }
   if (response.problem) {
-    console.log("buildCode> problem: ", response.problem);
+    console.error("buildCode> problem: ", response.problem);
+    if (response.data && "error" in response.data) {
+      return response.data;
+    }
     throw new Error(response.problem);
   }
 };
@@ -78,7 +80,10 @@ const runCode = async (runCodeParams: RunCodeParams) => {
     return response.data;
   }
   if (response.problem) {
-    console.log("runCode> problem: ", response.problem);
+    console.error("runCode> problem: ", response.problem);
+    if (response.data && "error" in response.data) {
+      return response.data;
+    }
     throw new Error(response.problem);
   }
 };
