@@ -165,6 +165,53 @@ export const runCode = (
   };
 };
 
+export const testCode = (
+  buildFlags: string,
+  testFlags: string,
+  gogc: string,
+  godebug: string,
+  version: string
+): AppThunk => {
+  return (
+    dispatch: Dispatch<
+      ReturnType<typeof setStatus> | ReturnType<typeof clearOutput>
+    >,
+    getState
+  ) => {
+    dispatch(clearOutput());
+    dispatch(setStatus("Wait for code testing..."));
+    const { code } = getState();
+    codeService
+      .testCode({ code, buildFlags, testFlags, gogc, godebug, version })
+      .then((response) => {
+        if (response) {
+          dispatch({
+            type: ActionType.TEST_CODE,
+            payload: {
+              output: response.output,
+              binarySize: "",
+              buildTime: "",
+              executionTime: "",
+              error: response.error,
+            },
+          });
+          if (response.output && !response.error) {
+            dispatch(setStatus("Code testing ok."));
+          }
+          if (response.error) {
+            dispatch(setStatus("Code testing failed", "red", 10));
+          }
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e instanceof Error) {
+          dispatch(setStatus(`An error occurred: ${e.message}`, "red", 10));
+        }
+      });
+  };
+};
+
 export const buildCode = (
   buildFlags: string,
   gogc: string,

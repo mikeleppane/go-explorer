@@ -14,7 +14,6 @@ export const testingCode = `
 package main
 
 import (
-  "fmt"
   "testing"
 )
 
@@ -37,7 +36,6 @@ export const benchmarkCode = `
 package main
 
 import (
-  "fmt"
   "testing"
 )
 

@@ -18,6 +18,8 @@ export const outputReducer = (state = initialState, action: OutputAction) => {
       return { ...action.payload };
     case ActionType.BUILD_CODE:
       return { ...action.payload };
+    case ActionType.TEST_CODE:
+      return { ...action.payload };
     default:
       return state;
   }

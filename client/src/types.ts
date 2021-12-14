@@ -54,6 +54,7 @@ export enum ActionType {
   LOAD_FROM_TEMPLATE = "LOAD_FROM_TEMPLATE",
   RUN_CODE = "RUN_CODE",
   BUILD_CODE = "BUILD_CODE",
+  TEST_CODE = "TEST_CODE",
 }
 
 interface NewCodeAction {
@@ -89,6 +90,11 @@ export interface RunCodeAction {
   payload: OutputActionPayload;
 }
 
+export interface TestCodeAction {
+  type: ActionType.TEST_CODE;
+  payload: OutputActionPayload;
+}
+
 export interface BuildCodeAction {
   type: ActionType.BUILD_CODE;
   payload: OutputActionPayload;
@@ -97,6 +103,11 @@ export interface BuildCodeAction {
 export type RunCodeResponse = Omit<
   OutputActionPayload,
   "buildTime" | "binarySize"
+>;
+
+export type TestCodeResponse = Omit<
+  OutputActionPayload,
+  "buildTime" | "binarySize" | "executionTime"
 >;
 
 export type BuildCodeResponse = Omit<OutputActionPayload, "executionTime">;
@@ -126,7 +137,9 @@ export type OutputAction =
   | LintCodeAction
   | ClearOutputAction
   | RunCodeAction
-  | BuildCodeAction;
+  | BuildCodeAction
+  | TestCodeAction;
+
 export type CodeAction = NewCodeAction | NewTemplateAction | LoadTemplateAction;
 export type StatusAction = SetStatusAction | ClearAction;
 export type ThunkAction<

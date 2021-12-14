@@ -128,11 +128,11 @@ export const testCode = (
   const inputEnvs = { gogc, godebug };
   let envs = createEnvs(inputEnvs);
   envs += "--env GO111MODULE=auto";
-  const benchmarkCommand = `go test ${buildFlags} ${testFlags}`;
+  const testingCommand = `go test ${buildFlags} ${testFlags}`;
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
     file
   )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
     version
-  )} bash -c "${benchmarkCommand} 2>&1;exit 0"`;
+  )} bash -c "go build ${buildFlags} ${file} && ${testingCommand};exit 0"`;
 };

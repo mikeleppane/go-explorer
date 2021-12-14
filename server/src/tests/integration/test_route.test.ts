@@ -25,7 +25,7 @@ const validCode = `
   }
 `;
 
-const failAtBuildCode = `
+const buildTimeFailureCode = `
   package main;
   import (
     "testing"
@@ -122,19 +122,19 @@ describe("POST /api/testing", () => {
       .send(requestBody)
       .expect(200);
     expect(response.body.output).toContain("PASS");
-    expect(response.body.stderr).toBeFalsy();
+    expect(response.body.error).toBeFalsy();
   });
 
   test("should raise error due to build time failure", async () => {
     const requestBody = {
-      code: failAtBuildCode,
+      code: buildTimeFailureCode,
     };
     const response = await api
       .post("/api/testing")
       .send(requestBody)
       .expect(200);
     expect(response.body.output).toContain("build failed");
-    expect(response.body.stderr).toBeFalsy();
+    expect(response.body.error).not.toBeFalsy();
   });
 
   test("should report failure when test case fails", async () => {
@@ -146,7 +146,7 @@ describe("POST /api/testing", () => {
       .send(requestBody)
       .expect(200);
     expect(response.body.output).toContain("FAIL");
-    expect(response.body.stderr).toBeFalsy();
+    expect(response.body.error).toBeFalsy();
   });
 
   test("should report two successful test case runs", async () => {
@@ -160,7 +160,7 @@ describe("POST /api/testing", () => {
       .expect(200);
     expect(response.body.output).toContain("PASS: TestIntMinBasic");
     expect(response.body.output).toContain("PASS: TestIntMinZero");
-    expect(response.body.stderr).toBeFalsy();
+    expect(response.body.error).toBeFalsy();
   });
 
   test("should execute code benchmark successfully", async () => {
@@ -173,7 +173,7 @@ describe("POST /api/testing", () => {
       .send(requestBody)
       .expect(200);
     expect(response.body.output).toContain("PASS");
-    expect(response.body.stderr).toBeFalsy();
+    expect(response.body.error).toBeFalsy();
   });
 
   test("should return 400 error if request body is not valid", async () => {
@@ -187,13 +187,13 @@ describe("POST /api/testing", () => {
   test("should report error if build flags is not valid", async () => {
     const requestBody = {
       code: validCode,
-      buildFlags: "-gcfla='-N'",
+      buildFlags: "-gcflags='123abc'",
     };
     const response = await api
       .post("/api/testing")
       .send(requestBody)
       .expect(200);
-    expect(response.body.output).toContain("FAIL");
-    expect(response.body.stderr).toBeFalsy();
+    expect(response.body.error).not.toBeFalsy();
+    expect(response.body.output).toBeFalsy();
   });
 });

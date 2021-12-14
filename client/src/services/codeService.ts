@@ -7,6 +7,7 @@ import {
   RunCodeParams,
   RunCodeResponse,
   TestCodeParams,
+  TestCodeResponse,
 } from "../types";
 
 const api = create({
@@ -89,15 +90,18 @@ const runCode = async (runCodeParams: RunCodeParams) => {
 };
 
 const testCode = async (testCodeParams: TestCodeParams) => {
-  const response = await api.post("/testing", testCodeParams);
+  const response = await api.post<TestCodeResponse>("/testing", testCodeParams);
 
   if (response.ok) {
     console.log("testCode> ok");
     return response.data;
   }
   if (response.problem) {
-    console.log("testCode> problem: ", response.problem);
-    return response;
+    console.error("testCode> problem: ", response.problem);
+    if (response.data && "error" in response.data) {
+      return response.data;
+    }
+    throw new Error(response.problem);
   }
 };
 
