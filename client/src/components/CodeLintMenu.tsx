@@ -38,7 +38,7 @@ export default function LintCodeMenu() {
   };
 
   return (
-    <div>
+    <div style={{ flexGrow: 1 }}>
       <Button
         variant="contained"
         style={{ marginLeft: "10px", backgroundColor: "#64748B" }}

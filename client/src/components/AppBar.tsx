@@ -10,6 +10,7 @@ import RunCodeMenu from "./RunCodeMenu";
 import BuildCodeMenu from "./BuildCodeMenu";
 import TestCodeMenu from "./TestCodeMenu";
 import ShowEnvInfoMenu from "./ShowEnvInfoMenu";
+import About from "./About";
 
 export default function NavBar() {
   return (
@@ -33,17 +34,9 @@ export default function NavBar() {
           />
           <FormatCodeMenu />
           <LintCodeMenu />
-          <Divider
-            orientation="vertical"
-            flexItem
-            style={{ marginLeft: "10px" }}
-          />
-          <Divider
-            orientation="vertical"
-            flexItem
-            style={{ marginLeft: "10px", flexGrow: 1 }}
-          />
+          <Divider orientation="vertical" flexItem style={{ flexGrow: 1 }} />
           <ShowEnvInfoMenu />
+          <About />
         </Toolbar>
       </AppBar>
     </Box>

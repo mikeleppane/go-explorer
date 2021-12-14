@@ -45,7 +45,7 @@ export default function ShowEnvInfoMenu() {
       <Tooltip title="Show info about GO environment variables and used CPU architecture">
         <IconButton
           style={{
-            marginLeft: "10px",
+            marginLeft: "50px",
             marginRight: "10px",
             backgroundColor: "#64748B",
           }}
