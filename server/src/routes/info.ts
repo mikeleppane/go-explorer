@@ -18,12 +18,12 @@ infoRouter.get("/", (req, res) => {
   run(envInfoQuery)
     .then((response) => {
       if (response && "stdout" in response) {
-        res.status(200).send(response.stdout);
+        res.status(200).json({ output: response.stdout });
         logger.info(`Environment info sent successfully; go:${version}`);
       }
     })
     .catch((error: Error) => {
-      res.status(500).send(removeFirstLineFromString(error.message));
+      res.status(500).json({ error: removeFirstLineFromString(error.message) });
     });
 });
 

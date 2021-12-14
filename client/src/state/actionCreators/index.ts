@@ -279,3 +279,38 @@ export const buildCode = (
       });
   };
 };
+
+export const showEnvInfo = (version: string): AppThunk => {
+  return (
+    dispatch: Dispatch<
+      ReturnType<typeof setStatus> | ReturnType<typeof clearOutput>
+    >
+  ) => {
+    dispatch(clearOutput());
+    dispatch(setStatus("Wait for env info..."));
+    codeService
+      .getInfo(version)
+      .then((response) => {
+        console.log(response);
+        if (response && "output" in response) {
+          dispatch({
+            type: ActionType.ENV_INFO,
+            payload: {
+              output: response.output || "",
+              error: "",
+              binarySize: "",
+              buildTime: "",
+              executionTime: "",
+            },
+          });
+          dispatch(setStatus("Environment information received successfully."));
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e instanceof Error) {
+          dispatch(setStatus(`An error occurred: ${e.message}`, "red", 10));
+        }
+      });
+  };
+};

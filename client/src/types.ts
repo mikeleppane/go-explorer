@@ -55,6 +55,7 @@ export enum ActionType {
   RUN_CODE = "RUN_CODE",
   BUILD_CODE = "BUILD_CODE",
   TEST_CODE = "TEST_CODE",
+  ENV_INFO = "ENV_INFO",
 }
 
 interface NewCodeAction {
@@ -100,6 +101,11 @@ export interface BuildCodeAction {
   payload: OutputActionPayload;
 }
 
+export interface EnvInfoAction {
+  type: ActionType.ENV_INFO;
+  payload: OutputActionPayload;
+}
+
 export type RunCodeResponse = Omit<
   OutputActionPayload,
   "buildTime" | "binarySize"
@@ -109,6 +115,11 @@ export type TestCodeResponse = Omit<
   OutputActionPayload,
   "buildTime" | "binarySize" | "executionTime"
 >;
+
+export interface EnvInfoResponse {
+  output?: string;
+  error?: string;
+}
 
 export type BuildCodeResponse = Omit<OutputActionPayload, "executionTime">;
 
@@ -138,7 +149,8 @@ export type OutputAction =
   | ClearOutputAction
   | RunCodeAction
   | BuildCodeAction
-  | TestCodeAction;
+  | TestCodeAction
+  | EnvInfoAction;
 
 export type CodeAction = NewCodeAction | NewTemplateAction | LoadTemplateAction;
 export type StatusAction = SetStatusAction | ClearAction;

@@ -9,6 +9,7 @@ import LintCodeMenu from "./CodeLintMenu";
 import RunCodeMenu from "./RunCodeMenu";
 import BuildCodeMenu from "./BuildCodeMenu";
 import TestCodeMenu from "./TestCodeMenu";
+import ShowEnvInfoMenu from "./ShowEnvInfoMenu";
 
 export default function NavBar() {
   return (
@@ -37,6 +38,12 @@ export default function NavBar() {
             flexItem
             style={{ marginLeft: "10px" }}
           />
+          <Divider
+            orientation="vertical"
+            flexItem
+            style={{ marginLeft: "10px", flexGrow: 1 }}
+          />
+          <ShowEnvInfoMenu />
         </Toolbar>
       </AppBar>
     </Box>

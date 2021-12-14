@@ -4,6 +4,7 @@ import {
   BuildCodeParams,
   BuildCodeResponse,
   CodeParams,
+  EnvInfoResponse,
   RunCodeParams,
   RunCodeResponse,
   TestCodeParams,
@@ -15,15 +16,20 @@ const api = create({
   timeout: 60000,
 });
 
-const getInfo = async () => {
-  const response = await api.get("/info");
+const getInfo = async (version = "") => {
+  const url = version ? `/info?${version}` : "/info";
+
+  const response = await api.get<EnvInfoResponse>(url);
   if (response.ok) {
     console.log("getInfo> ok");
     return response.data;
   }
   if (response.problem) {
     console.log("getInfo> problem: ", response.problem);
-    return response;
+    if (response.data && "error" in response.data) {
+      return response.data;
+    }
+    throw new Error(response.problem);
   }
 };
 
