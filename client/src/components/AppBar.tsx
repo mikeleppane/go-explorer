@@ -15,8 +15,8 @@ import About from "./About";
 export default function NavBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar elevation={0} position="static" className=" Appbar">
-        <Toolbar>
+      <AppBar elevation={0} position="static" className="Appbar">
+        <Toolbar variant="dense">
           <AppBarTitle />
           <FileLoadMenu />
           <Divider

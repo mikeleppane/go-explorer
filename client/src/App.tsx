@@ -4,6 +4,7 @@ import NavBar from "./components/AppBar";
 import ExplorerView from "./components/ExplorerView";
 import "./styles.css";
 import StatusBar from "./components/StatusBar";
+import CodeTabs from "./components/CodeTabs";
 
 const darkTheme = createTheme({
   palette: {
@@ -18,6 +19,7 @@ function App() {
     <div className="App">
       <ThemeProvider theme={darkTheme}>
         <NavBar />
+        <CodeTabs />
         <ExplorerView />
         <StatusBar />
       </ThemeProvider>

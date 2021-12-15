@@ -3,7 +3,7 @@ import Split from "react-split";
 import CodeEditor from "./CodeEditor";
 import ResultView from "./ResultView";
 
-const defaultSplitSize = (window.innerHeight - 100).toString() + "px";
+const defaultSplitSize = (window.innerHeight - 150).toString() + "px";
 
 const ExplorerView = () => {
   const [splitSizes, setSplitSizes] = useState([80, 20]);
