@@ -2,19 +2,25 @@ import React from "react";
 import { AppBar, Box, Tab, Tabs } from "@mui/material";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useDispatch } from "react-redux";
+import {
+  changeCurrentTab,
+  deleteCode,
+  newTemplateCode,
+} from "../state/actionCreators";
+import { confirm } from "react-confirm-box";
 
 let maxTabIndex = 0;
 //let currentTabIndex = 0;
 
 export default function CodeTabs() {
-  const [tabId, setTabId] = React.useState(0);
-  //const [tabs, setAddTab] = React.useState<ReturnType<typeof Tab>[]>([]);
+  const [currentTabId, setTabId] = React.useState(0);
   const [tabs, setAddTab] = React.useState<{ codeTabId: number }[]>([]);
+  const dispatch = useDispatch();
   const handleTabChange = (
     _event: React.SyntheticEvent,
     newTabId: number | string
   ) => {
-    console.log(`handleTabChange: ${newTabId} ==> ${typeof newTabId}`);
     if (newTabId === "newTab") {
       handleAddTab();
     } else {
@@ -22,34 +28,50 @@ export default function CodeTabs() {
         typeof newTabId === "number" &&
         (tabs.find((tab) => tab.codeTabId === newTabId) || newTabId === 0)
       ) {
-        //currentTabIndex = newTabId;
         setTabId(newTabId);
+        dispatch(changeCurrentTab(newTabId));
       }
     }
   };
 
   const handleTabRemove = (id: number) => {
-    if (id !== tabId) {
-      return;
-    }
-    if (tabId === maxTabIndex && tabId > 1) {
-      console.log("STEP 1");
-      setTabId(maxTabIndex - 1);
-    } else if (tabId === 1 && tabs.length === 1) {
-      console.log("STEP 2");
-      setTabId(0);
-    } else if (tabId < maxTabIndex && tabs.length > 0) {
-      console.log("STEP 3");
-      setTabId(tabId + 1);
-    }
-    setAddTab(tabs.filter((tab) => tab.codeTabId !== tabId));
+    void confirm(`Are you sure you want to remove tab ${id}`).then((result) => {
+      if (result) {
+        if (id !== currentTabId) {
+          return;
+        }
+        if (id === maxTabIndex && tabs.length > 1) {
+          maxTabIndex = tabs[tabs.length - 2].codeTabId;
+          setTabId(maxTabIndex);
+          dispatch(changeCurrentTab(maxTabIndex));
+        } else if (tabs.length === 1) {
+          setTabId(0);
+          maxTabIndex = 0;
+          dispatch(changeCurrentTab(0));
+        } else if (id < maxTabIndex && tabs.length > 1) {
+          maxTabIndex = tabs[tabs.length - 1].codeTabId;
+          setTabId(maxTabIndex);
+          dispatch(changeCurrentTab(maxTabIndex));
+        }
+        setAddTab(tabs.filter((tab) => tab.codeTabId !== id));
+        dispatch(deleteCode(id));
+      }
+    });
   };
 
   const handleAddTab = () => {
     maxTabIndex = maxTabIndex + 1;
     const id = maxTabIndex;
-    setAddTab([...tabs, { codeTabId: id }]);
+    const sortedTabs = [...tabs, { codeTabId: id }];
+    sortedTabs.sort(function (a, b) {
+      if (a.codeTabId < b.codeTabId) return -1;
+      if (a.codeTabId > b.codeTabId) return 1;
+      return 0;
+    });
+    setAddTab(sortedTabs);
     setTabId(id);
+    dispatch(changeCurrentTab(id));
+    dispatch(newTemplateCode());
   };
 
   return (
@@ -61,12 +83,12 @@ export default function CodeTabs() {
         }}
       >
         <Tabs
-          value={tabId}
+          value={currentTabId}
           onChange={handleTabChange}
           variant="scrollable"
           scrollButtons={true}
         >
-          <Tab label="Main" value={0} sx={{ color: "white" }} />
+          <Tab label="Main" value={0} sx={{ color: "white", fontSize: 16 }} />
           {tabs.length > 0 &&
             tabs.map((tab) => {
               return (
@@ -77,10 +99,16 @@ export default function CodeTabs() {
                   icon={
                     <ClearIcon
                       fontSize="small"
-                      style={{
+                      sx={{
                         marginLeft: "10px",
+                        "&:hover": {
+                          color: "red",
+                          backgroundColor: "#797D7F",
+                        },
                       }}
-                      onClick={() => handleTabRemove(tab.codeTabId)}
+                      onClick={() => {
+                        handleTabRemove(tab.codeTabId);
+                      }}
                     />
                   }
                   iconPosition="end"
@@ -89,6 +117,7 @@ export default function CodeTabs() {
                     paddingRight: "15px",
                     minHeight: "15px",
                     color: "white",
+                    fontSize: 16,
                   }}
                 />
               );

@@ -9,10 +9,11 @@ import { LocalStorage } from "../services/localStorage";
 
 export default function FormatCodeMenu() {
   const dispatch = useDispatch();
-  const code = useAppSelector((state) => state.code);
+  const state = useAppSelector((state) => state);
   const storage = new LocalStorage("", "golang-explorer-recent-code");
 
   const handleFormatMenu = () => {
+    const code = state.code[state.tab.currentTab];
     dispatch(setStatus("Wait for code formatting..."));
     codeService
       .formatCode({ code })

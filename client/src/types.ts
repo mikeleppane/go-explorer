@@ -56,21 +56,36 @@ export enum ActionType {
   BUILD_CODE = "BUILD_CODE",
   TEST_CODE = "TEST_CODE",
   ENV_INFO = "ENV_INFO",
+  DELETE_CODE = "DELETE_CODE",
 }
 
-interface NewCodeAction {
+export enum TabActionType {
+  CHANGE_CURRENT_TAB = "CHANGE_CURRENT_TAB",
+}
+
+export interface TabAction {
+  type: TabActionType.CHANGE_CURRENT_TAB;
+  payload: { currentTab: number };
+}
+
+export interface NewCodeAction {
   type: ActionType.NEW_CODE;
-  payload: string;
+  payload: { [key: string]: string };
 }
 
-interface NewTemplateAction {
+export interface NewTemplateAction {
   type: ActionType.USE_DEFAULT_CODE;
-  payload: string;
+  payload: { [key: string]: string };
 }
 
-interface LoadTemplateAction {
+export interface LoadTemplateAction {
   type: ActionType.LOAD_FROM_TEMPLATE;
-  payload: string;
+  payload: { [key: string]: string };
+}
+
+export interface DeleteCodeAction {
+  type: ActionType.DELETE_CODE;
+  payload: number;
 }
 
 export interface OutputActionPayload {

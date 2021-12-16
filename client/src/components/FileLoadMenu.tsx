@@ -32,7 +32,7 @@ export default function FileLoadMenu() {
   );
   const [templatesOpen, setTemplatesOpen] = React.useState(false);
   const dispatch = useDispatch();
-  const code = useAppSelector((state) => state.code);
+  const state = useAppSelector((state) => state);
   const storage = new LocalStorage("", "golang-explorer-recent-code");
 
   const handleMenu = (
@@ -56,6 +56,7 @@ export default function FileLoadMenu() {
   };
 
   const CopySelectToClipboardHandler = () => {
+    const code = state.code[state.tab.currentTab];
     window.navigator.clipboard
       .writeText(code)
       .then(() => dispatch(setStatus("Code block copied to clipboard")))

@@ -1,9 +1,14 @@
 import {
   ActionType,
   AppThunk,
-  CodeAction,
+  DeleteCodeAction,
+  LoadTemplateAction,
+  NewCodeAction,
+  NewTemplateAction,
   OutputAction,
   StatusAction,
+  TabAction,
+  TabActionType,
 } from "../../types";
 import { Dispatch } from "react";
 import codeService from "../../services/codeService";
@@ -14,52 +19,76 @@ import {
   testingCode,
 } from "../../config/codeTemplates";
 
-export const addNewCode = (code: string): CodeAction => {
-  return {
-    type: ActionType.NEW_CODE,
-    payload: code,
+type CodePayloadType = {
+  [key: number]: string;
+};
+
+const createCodePayload = (id: number, code: string): CodePayloadType => {
+  const payloadToBeSent: CodePayloadType = {};
+  payloadToBeSent[id] = code;
+  return payloadToBeSent;
+};
+
+export const addNewCode = (code: string): AppThunk => {
+  return (dispatch: Dispatch<NewCodeAction>, getState) => {
+    const { tab } = getState();
+    dispatch({
+      type: ActionType.NEW_CODE,
+      payload: createCodePayload(tab.currentTab, code),
+    });
   };
 };
 
-export const newTemplateCode = (): CodeAction => {
-  return {
-    type: ActionType.USE_DEFAULT_CODE,
-    payload: "",
+export const newTemplateCode = (): AppThunk => {
+  return (dispatch: Dispatch<NewTemplateAction>, getState) => {
+    const { tab } = getState();
+    dispatch({
+      type: ActionType.USE_DEFAULT_CODE,
+      payload: createCodePayload(tab.currentTab, defaultCode),
+    });
   };
 };
 
-export const loadFromTemplate = (template: string): CodeAction => {
-  switch (template) {
-    case "default": {
-      return {
-        type: ActionType.LOAD_FROM_TEMPLATE,
-        payload: defaultCode,
-      };
+export const loadFromTemplate = (template: string): AppThunk => {
+  return (dispatch: Dispatch<LoadTemplateAction>, getState) => {
+    const { tab } = getState();
+    switch (template) {
+      case "default": {
+        dispatch({
+          type: ActionType.LOAD_FROM_TEMPLATE,
+          payload: createCodePayload(tab.currentTab, defaultCode),
+        });
+        break;
+      }
+      case "testing": {
+        dispatch({
+          type: ActionType.LOAD_FROM_TEMPLATE,
+          payload: createCodePayload(tab.currentTab, testingCode),
+        });
+        break;
+      }
+      case "benchmark": {
+        dispatch({
+          type: ActionType.LOAD_FROM_TEMPLATE,
+          payload: createCodePayload(tab.currentTab, benchmarkCode),
+        });
+        break;
+      }
+      case "concurrency": {
+        dispatch({
+          type: ActionType.LOAD_FROM_TEMPLATE,
+          payload: createCodePayload(tab.currentTab, concurrencyCode),
+        });
+        break;
+      }
+      default:
+        dispatch({
+          type: ActionType.LOAD_FROM_TEMPLATE,
+          payload: createCodePayload(tab.currentTab, defaultCode),
+        });
+        break;
     }
-    case "testing": {
-      return {
-        type: ActionType.LOAD_FROM_TEMPLATE,
-        payload: testingCode,
-      };
-    }
-    case "benchmark": {
-      return {
-        type: ActionType.LOAD_FROM_TEMPLATE,
-        payload: benchmarkCode,
-      };
-    }
-    case "concurrency": {
-      return {
-        type: ActionType.LOAD_FROM_TEMPLATE,
-        payload: concurrencyCode,
-      };
-    }
-    default:
-      return {
-        type: ActionType.LOAD_FROM_TEMPLATE,
-        payload: defaultCode,
-      };
-  }
+  };
 };
 
 export const lintCode = (output: string): OutputAction => {
@@ -133,7 +162,8 @@ export const runCode = (
   ) => {
     dispatch(clearOutput());
     dispatch(setStatus("Wait for code execution..."));
-    const { code } = getState();
+    const state = getState();
+    const code = state.code[state.tab.currentTab];
     codeService
       .runCode({ code, buildFlags, gogc, godebug, version })
       .then((response) => {
@@ -180,7 +210,8 @@ export const testCode = (
   ) => {
     dispatch(clearOutput());
     dispatch(setStatus("Wait for code testing..."));
-    const { code } = getState();
+    const state = getState();
+    const code = state.code[state.tab.currentTab];
     codeService
       .testCode({ code, buildFlags, testFlags, gogc, godebug, version })
       .then((response) => {
@@ -228,7 +259,8 @@ export const buildCode = (
   ) => {
     dispatch(clearOutput());
     dispatch(setStatus("Wait for code building..."));
-    const { code } = getState();
+    const state = getState();
+    const code = state.code[state.tab.currentTab];
     codeService
       .buildCode(
         {
@@ -312,5 +344,19 @@ export const showEnvInfo = (version: string): AppThunk => {
           dispatch(setStatus(`An error occurred: ${e.message}`, "red", 10));
         }
       });
+  };
+};
+
+export const changeCurrentTab = (id: number): TabAction => {
+  return {
+    type: TabActionType.CHANGE_CURRENT_TAB,
+    payload: { currentTab: id },
+  };
+};
+
+export const deleteCode = (id: number): DeleteCodeAction => {
+  return {
+    type: ActionType.DELETE_CODE,
+    payload: id,
   };
 };

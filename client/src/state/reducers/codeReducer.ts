@@ -1,14 +1,28 @@
-import { ActionType, CodeAction } from "../../types";
+import { ActionType, CodeAction, DeleteCodeAction } from "../../types";
 import { defaultCode } from "../../config/codeTemplates";
 
-export const codeReducer = (state = defaultCode, action: CodeAction) => {
+const initialState = {
+  "0": defaultCode,
+};
+
+type StateType = {
+  [index: string]: string;
+};
+
+export const codeReducer = (
+  state: StateType = initialState,
+  action: CodeAction | DeleteCodeAction
+) => {
   switch (action.type) {
     case ActionType.NEW_CODE:
-      return action.payload;
+      return { ...state, ...action.payload };
     case ActionType.USE_DEFAULT_CODE:
-      return defaultCode;
+      return { ...state, ...action.payload };
     case ActionType.LOAD_FROM_TEMPLATE:
-      return action.payload;
+      return { ...state, ...action.payload };
+    case ActionType.DELETE_CODE:
+      delete state[action.payload];
+      return { ...state };
     default:
       return state;
   }

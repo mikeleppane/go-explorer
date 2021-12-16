@@ -8,11 +8,12 @@ import { useDispatch } from "react-redux";
 
 export default function LintCodeMenu() {
   const dispatch = useDispatch();
-  const code = useAppSelector((state) => state.code);
+  const state = useAppSelector((state) => state);
 
   const handleLintMenu = () => {
     dispatch(clearOutput());
     dispatch(setStatus("Wait for static code analysis.."));
+    const code = state.code[state.tab.currentTab];
     codeService
       .lintCode({ code })
       .then((response) => {

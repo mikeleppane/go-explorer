@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { LocalStorage } from "../services/localStorage";
 
 const CodeEditor = () => {
-  const code = useAppSelector((state) => state.code);
+  const state = useAppSelector((state) => state);
   const dispatch = useDispatch();
   const storage = new LocalStorage("", "golang-explorer-recent-code");
 
@@ -28,7 +28,7 @@ const CodeEditor = () => {
         onChange={onEditorChange}
         theme="vs-dark"
         defaultLanguage="go"
-        value={code}
+        value={state.code[state.tab.currentTab]}
         options={{
           minimap: { enabled: false },
           wordWrap: "on",
