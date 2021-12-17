@@ -1,4 +1,4 @@
-import { isValidVersion } from "../../docker/versions";
+import { isValidVersion } from "../../utils/versions";
 
 describe("available golang versions", () => {
   test("isValidVersion should return true if version is available", () => {

@@ -53,14 +53,14 @@ export const buildCode = (
   goarch: string,
   gogc: string,
   godebug: string,
-  buildOptions: string,
+  buildFlags: string,
   filePath: string,
   version: string
 ) => {
   const file = getFileName(filePath);
   const inputEnvs = { goos, goarch, gogc, godebug };
   const envs = createEnvs(inputEnvs);
-  const buildCommandWithTime = `TIMEFORMAT=%R;time go build -o x.exe ${buildOptions} ${file}`;
+  const buildCommandWithTime = `TIMEFORMAT=%R;time go build -o x.exe ${buildFlags} ${file}`;
   const getBinarySize = "ls -sh x.exe | cut -d ' ' -f1";
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
@@ -73,7 +73,7 @@ export const buildCode = (
 export const getObjDump = (
   goos: string,
   goarch: string,
-  buildOptions: string,
+  buildFlags: string,
   symregexp: string,
   filePath: string,
   version: string
@@ -86,7 +86,7 @@ export const getObjDump = (
   const file = getFileName(filePath);
   const inputEnvs = { goos, goarch };
   const envs = createEnvs(inputEnvs);
-  const buildCommand = `go build -o x.exe ${buildOptions} ${file}`;
+  const buildCommand = `go build -o x.exe ${buildFlags} ${file}`;
   const executeObjDumpTool = `go tool objdump ${symregexp} x.exe`;
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
@@ -99,14 +99,14 @@ export const getObjDump = (
 export const runCode = (
   gogc: string,
   godebug: string,
-  buildOptions: string,
+  buildFlags: string,
   filePath: string,
   version: string
 ) => {
   const file = getFileName(filePath);
   const inputEnvs = { gogc, godebug };
   const envs = createEnvs(inputEnvs);
-  const buildCommand = `go build -o x.exe ${buildOptions} ${file}`;
+  const buildCommand = `go build -o x.exe ${buildFlags} ${file}`;
   const executeProgramWithTime = "time ./x.exe";
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,

@@ -1,4 +1,4 @@
-import { fallBackVersion } from "../../docker/versions";
+import { fallBackVersion } from "../../utils/versions";
 import {
   getVersion,
   parseRequestEntries,

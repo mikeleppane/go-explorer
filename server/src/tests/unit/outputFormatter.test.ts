@@ -1,3 +1,4 @@
+2;
 import {
   handleCodeBuildOutput,
   handleCodeRunOutput,
@@ -10,19 +11,17 @@ describe("handleObjectDumpOutput", () => {
     const commandOutput = { stdout: "some output   ", stderr: "some error" };
     const expectedResultObject = {
       output: "some output",
-      binarySize: "",
-      buildTime: "",
+      error: "",
     };
     expect(handleObjectDumpOutput(commandOutput)).toMatchObject(
       expectedResultObject
     );
   });
   test("should return correct result if stdout is empty", () => {
-    const commandOutput = { stdout: "", stderr: "some error" };
+    const commandOutput = { stdout: "", stderr: "first error\nmore error" };
     const expectedResultObject = {
       output: "",
-      binarySize: "",
-      buildTime: "",
+      error: "more error",
     };
     expect(handleObjectDumpOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -51,9 +50,10 @@ describe("handleCodeBuildOutput", () => {
       stderr: "12.1",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput\neven more output\nsize",
+      output: "",
       binarySize: "",
-      buildTime: "12.1 s",
+      buildTime: "",
+      error: "some output\nmoreoutput\neven more output\nsize",
     };
     expect(handleCodeBuildOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -81,7 +81,8 @@ describe("handleCodeBuildOutput", () => {
     const expectedResultObject = {
       output: "",
       binarySize: "",
-      buildTime: "25.145 s",
+      buildTime: "",
+      error: "",
     };
     expect(handleCodeBuildOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -96,6 +97,7 @@ describe("handleCodeBuildOutput", () => {
       output: "",
       binarySize: "",
       buildTime: "",
+      error: "",
     };
     expect(handleCodeBuildOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -107,9 +109,10 @@ describe("handleCodeBuildOutput", () => {
       stderr: "0.555",
     };
     const expectedResultObject = {
-      output: "some code\n.12",
+      output: "",
       binarySize: "",
-      buildTime: "0.555 s",
+      buildTime: "",
+      error: "some code\n.12",
     };
     expect(handleCodeBuildOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -124,6 +127,7 @@ describe("handleCodeBuildOutput", () => {
       output: "",
       binarySize: "0.85K",
       buildTime: "0.555 s",
+      error: "",
     };
     expect(handleCodeBuildOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -135,9 +139,10 @@ describe("handleCodeBuildOutput", () => {
       stderr: "0.555",
     };
     const expectedResultObject = {
-      output: "build failed",
+      output: "",
       binarySize: "",
-      buildTime: "0.555 s",
+      buildTime: "",
+      error: "build failed",
     };
     expect(handleCodeBuildOutput(commandOutput)).toMatchObject(
       expectedResultObject
@@ -152,7 +157,7 @@ describe("handleCodeRunOutput", () => {
       stderr: "0.755",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput",
+      output: "some output\nmoreoutput\n",
       executionTime: "0.755 s",
       error: "",
     };
@@ -166,7 +171,7 @@ describe("handleCodeRunOutput", () => {
       stderr: "",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput\neven more output",
+      output: "some output\nmoreoutput\neven more output\n\n",
       executionTime: "",
       error: "",
     };
@@ -180,7 +185,7 @@ describe("handleCodeRunOutput", () => {
       stderr: "number",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput\neven more output",
+      output: "some output\nmoreoutput\neven more output\n\n",
       executionTime: "",
       error: "number",
     };
@@ -194,7 +199,7 @@ describe("handleCodeRunOutput", () => {
       stderr: "some error\n2.444",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput\neven more output",
+      output: "some output\nmoreoutput\neven more output\n\n",
       executionTime: "2.444 s",
       error: "some error",
     };

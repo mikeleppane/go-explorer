@@ -1,5 +1,6 @@
 import express = require("express");
 import cors = require("cors");
+import helmet = require("helmet");
 import infoRouter from "../routes/info";
 import formatRouter from "../routes/format";
 import { morganMiddleware } from "../middleware/httpLogging";
@@ -11,6 +12,7 @@ import testingRouter from "../routes/testing";
 import { registerUnexpectedErrorHandlers } from "../errors/processErrorHandlers";
 
 export const setupRoutes = (app: express.Express) => {
+  app.use(helmet());
   app.use(cors());
   app.use(express.json());
   app.use(morganMiddleware);

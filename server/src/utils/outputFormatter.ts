@@ -1,6 +1,6 @@
-import { CommandOutput } from "../types";
+import { CommandExecutorOutput } from "../types";
 
-export const handleObjectDumpOutput = (output: CommandOutput) => {
+export const handleObjectDumpOutput = (output: CommandExecutorOutput) => {
   const res = { output: "", error: "" };
   if (output && output.stdout) {
     res.output = output.stdout.trim();
@@ -12,7 +12,7 @@ export const handleObjectDumpOutput = (output: CommandOutput) => {
   return res;
 };
 
-export const handleCodeBuildOutput = (output: CommandOutput) => {
+export const handleCodeBuildOutput = (output: CommandExecutorOutput) => {
   const res = { output: "", binarySize: "", buildTime: "", error: "" };
   const sizeRegExp = new RegExp("^\\d+(.\\d+)?\\s?[KMG]?$", "i");
   const buildTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
@@ -51,7 +51,7 @@ export const handleCodeBuildOutput = (output: CommandOutput) => {
   return res;
 };
 
-export const handleCodeRunOutput = (output: CommandOutput) => {
+export const handleCodeRunOutput = (output: CommandExecutorOutput) => {
   const res = { output: "", executionTime: "", error: "" };
   const executionTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
   if (output && output.stdout) {
@@ -82,7 +82,7 @@ export const handleCodeRunOutput = (output: CommandOutput) => {
   return res;
 };
 
-export const handleCodeTestOutput = (output: CommandOutput) => {
+export const handleCodeTestOutput = (output: CommandExecutorOutput) => {
   const res = { output: "", error: "" };
   if (output && output.stdout) {
     res.output = output.stdout.trim();

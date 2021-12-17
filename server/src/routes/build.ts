@@ -5,7 +5,7 @@ import { run } from "../utils/commandExecutor";
 import { buildCode, getObjDump } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
-import { BuildEntry, CodeExecutionEntry } from "../types";
+import { BuildEntry, BuildTask } from "../types";
 import { parseRequestEntries, validateVersion } from "../utils/route_helpers";
 import { validateBuildRequest } from "../validators/buildValidator";
 import {
@@ -14,13 +14,9 @@ import {
 } from "../utils/outputFormatter";
 import { baseRouteExceptionHandler } from "../errors/routeExpectionHandler";
 
-const handleCodeBuildTask = async (
-  tempFile: string,
-  requestEntries: CodeExecutionEntry,
-  version: string,
-  res: express.Response,
-  isObjectDumpRequested: boolean
-) => {
+const handleCodeBuildTask = async (params: BuildTask) => {
+  const { tempFile, requestEntries, version, res, isObjectDumpRequested } =
+    params;
   const { code, goos, goarch, gogc, godebug, buildFlags, symregexp } =
     requestEntries;
   await writeFile(tempFile, code, { encoding: "utf-8" });
@@ -61,13 +57,13 @@ buildRouter.post("/", async (req, res) => {
   logger.info(`Code building started with GO version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await handleCodeBuildTask(
+    await handleCodeBuildTask({
       tempFile,
       requestEntries,
       version,
       res,
-      isObjectDumpRequested
-    );
+      isObjectDumpRequested,
+    });
   } catch (error) {
     await baseRouteExceptionHandler(tempFile, error, res);
   }

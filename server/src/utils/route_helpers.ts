@@ -1,9 +1,5 @@
-import {
-  availableVersions,
-  fallBackVersion,
-  isValidVersion,
-} from "../docker/versions";
-import { RequestEntries } from "../types";
+import { availableVersions, fallBackVersion, isValidVersion } from "./versions";
+import { RequestEntry } from "../types";
 import logger from "./logging";
 import express from "express";
 import { VersionQueryValidationError } from "../errors/errorTypes";
@@ -53,7 +49,7 @@ export const validateVersion = (qsVersion: unknown, res: express.Response) => {
   return version;
 };
 
-export const parseRequestEntries = (entry: RequestEntries) => {
+export const parseRequestEntries = (entry: RequestEntry) => {
   let goos = "";
   if ("goos" in entry && entry.goos) {
     goos = entry.goos;

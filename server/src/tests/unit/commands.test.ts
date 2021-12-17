@@ -105,7 +105,7 @@ describe("Commands executed inside Docker container", () => {
       version
     );
     expect(command).toMatch(
-      `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GO111MODULE=auto golang:${version} bash -c "go test ${buildFlags} ${testFlags} 2>&1;exit 0"`
+      `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GO111MODULE=auto golang:${version} bash -c "go build ${buildFlags} ${file} && go test ${buildFlags} ${testFlags};exit 0"`
     );
   });
 });
