@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { showEnvInfo } from "../state/actionCreators";
+import { showEnvInfo } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
 import {
   Box,
@@ -44,7 +44,7 @@ export default function ShowEnvInfoMenu() {
     <div>
       <Tooltip title="Show info about GO environment variables and used CPU architecture">
         <IconButton
-          style={{
+          sx={{
             marginLeft: "50px",
             marginRight: "10px",
             backgroundColor: "#64748B",
@@ -97,7 +97,7 @@ export default function ShowEnvInfoMenu() {
                 <Button
                   variant="contained"
                   size="small"
-                  style={{
+                  sx={{
                     margin: "2px",
                     paddingLeft: 0,
                     paddingRight: 0,

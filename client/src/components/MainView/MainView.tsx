@@ -5,7 +5,7 @@ import ResultView from "./ResultView";
 
 const defaultSplitSize = (window.innerHeight - 150).toString() + "px";
 
-const ExplorerView = () => {
+const MainView = () => {
   const [splitSizes, setSplitSizes] = useState([80, 20]);
 
   useEffect(() => {
@@ -29,4 +29,4 @@ const ExplorerView = () => {
   );
 };
 
-export default ExplorerView;
+export default MainView;

@@ -11,7 +11,7 @@ export default function About() {
     <div>
       <Tooltip title="About Go Explorer">
         <IconButton
-          style={{
+          sx={{
             marginLeft: "10px",
             marginRight: "10px",
             backgroundColor: "#64748B",

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useDispatch } from "react-redux";
-import { runCode } from "../state/actionCreators";
+import { runCode } from "../../state/actionCreators";
 
 const availableGoVersions = ["1.17", "1.16"];
 

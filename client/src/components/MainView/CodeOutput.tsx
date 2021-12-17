@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
 import { Box } from "@mui/material";
-import { useAppSelector } from "../hooks/useAppSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 const ResultInfo: FunctionComponent = () => {
   const { output, error, executionTime, buildTime, binarySize } =
@@ -13,7 +13,15 @@ const ResultInfo: FunctionComponent = () => {
   return (
     <Box>
       {isStatsAvailable && (
-        <Box className="ResultInfo">
+        <Box
+          sx={{
+            marginTop: "10px",
+            marginLeft: "5px",
+            fontFamily: "Source Sans Pro",
+            color: "white",
+            fontSize: "18px",
+          }}
+        >
           <p>
             <span style={{ color: "#2196f3" }}>
               ========== Stats ==========
@@ -25,14 +33,30 @@ const ResultInfo: FunctionComponent = () => {
         </Box>
       )}
       {output && (
-        <Box className="ResultInfo">
+        <Box
+          sx={{
+            marginTop: "10px",
+            marginLeft: "5px",
+            fontFamily: "Source Sans Pro",
+            color: "white",
+            fontSize: "18px",
+          }}
+        >
           <span style={{ color: "#4caf50" }}>========== Output ==========</span>
           <br />
           <div style={{ whiteSpace: "pre-line" }}>{output + "\n\n"}</div>
         </Box>
       )}
       {error && (
-        <Box className="ResultInfo">
+        <Box
+          sx={{
+            marginTop: "10px",
+            marginLeft: "5px",
+            fontFamily: "Source Sans Pro",
+            color: "white",
+            fontSize: "18px",
+          }}
+        >
           <span style={{ color: "#f44336" }}>========== Error ==========</span>
           <br />
           <div style={{ whiteSpace: "pre-line", overflow: "scroll" }}>

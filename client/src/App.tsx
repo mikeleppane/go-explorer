@@ -1,10 +1,11 @@
 import React from "react";
-import { createTheme, ThemeProvider } from "@mui/material";
-import NavBar from "./components/AppBar";
-import ExplorerView from "./components/ExplorerView";
+import { Box, createTheme, ThemeProvider } from "@mui/material";
+import AppHeader from "./components/AppBar/AppBar";
+import MainView from "./components/MainView/MainView";
 import "./styles.css";
-import StatusBar from "./components/StatusBar";
-import CodeTabs from "./components/CodeTabs";
+import StatusBar from "./components/StatusBar/StatusBar";
+import CodeTabs from "./components/Tabs/CodeTabs";
+import { ConfirmProvider } from "material-ui-confirm";
 
 const darkTheme = createTheme({
   palette: {
@@ -16,14 +17,23 @@ const darkTheme = createTheme({
 
 function App() {
   return (
-    <div className="App">
+    <Box
+      sx={{
+        margin: 0,
+        padding: 0,
+        top: 0,
+        left: 0,
+      }}
+    >
       <ThemeProvider theme={darkTheme}>
-        <NavBar />
-        <CodeTabs />
-        <ExplorerView />
+        <AppHeader />
+        <ConfirmProvider>
+          <CodeTabs />
+        </ConfirmProvider>
+        <MainView />
         <StatusBar />
       </ThemeProvider>
-    </div>
+    </Box>
   );
 }
 

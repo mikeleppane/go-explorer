@@ -20,10 +20,10 @@ import {
   loadFromTemplate,
   newTemplateCode,
   setStatus,
-} from "../state/actionCreators";
+} from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
-import { LocalStorage } from "../services/localStorage";
-import { useAppSelector } from "../hooks/useAppSelector";
+import { LocalStorage } from "../../services/localStorage";
+import { useAppSelector } from "../../hooks/useAppSelector";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 export default function FileLoadMenu() {
@@ -55,7 +55,7 @@ export default function FileLoadMenu() {
     }
   };
 
-  const CopySelectToClipboardHandler = () => {
+  const handleCopySelectToClipboard = () => {
     const code = state.code[state.tab.currentTab];
     window.navigator.clipboard
       .writeText(code)
@@ -115,7 +115,7 @@ export default function FileLoadMenu() {
     <div>
       <Button
         variant="contained"
-        style={{ marginLeft: "30px", backgroundColor: "#64748B" }}
+        sx={{ marginLeft: "30px", backgroundColor: "#64748B" }}
         endIcon={<ArrowDownwardIcon />}
         onClick={handleMenu}
       >
@@ -204,7 +204,7 @@ export default function FileLoadMenu() {
             </MenuItem>
           </label>
           <label htmlFor="copy">
-            <MenuItem onClick={CopySelectToClipboardHandler}>
+            <MenuItem onClick={handleCopySelectToClipboard}>
               <ListItemIcon>
                 <ContentCopyIcon fontSize="small" />
               </ListItemIcon>

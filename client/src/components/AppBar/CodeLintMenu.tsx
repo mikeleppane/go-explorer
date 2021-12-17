@@ -1,9 +1,9 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
-import { useAppSelector } from "../hooks/useAppSelector";
-import codeService from "../services/codeService";
-import { clearOutput, lintCode, setStatus } from "../state/actionCreators";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import codeService from "../../services/codeService";
+import { clearOutput, lintCode, setStatus } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
 
 export default function LintCodeMenu() {

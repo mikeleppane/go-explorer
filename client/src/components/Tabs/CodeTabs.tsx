@@ -7,16 +7,16 @@ import {
   changeCurrentTab,
   deleteCode,
   newTemplateCode,
-} from "../state/actionCreators";
-import { confirm } from "react-confirm-box";
+} from "../../state/actionCreators";
+import { useConfirm } from "material-ui-confirm";
 
 let maxTabIndex = 0;
-//let currentTabIndex = 0;
 
 export default function CodeTabs() {
   const [currentTabId, setTabId] = React.useState(0);
   const [tabs, setAddTab] = React.useState<{ codeTabId: number }[]>([]);
   const dispatch = useDispatch();
+  const confirm = useConfirm();
   const handleTabChange = (
     _event: React.SyntheticEvent,
     newTabId: number | string
@@ -34,29 +34,39 @@ export default function CodeTabs() {
     }
   };
 
-  const handleTabRemove = (id: number) => {
-    void confirm(`Are you sure you want to remove tab ${id}`).then((result) => {
-      if (result) {
+  const handleRemoveTab = (id: number) => {
+    confirm({
+      description:
+        "This will remove all the code from the current tab permanently!",
+    })
+      .then(() => {
         if (id !== currentTabId) {
           return;
         }
-        if (id === maxTabIndex && tabs.length > 1) {
+        const isLastTabWithTwoOrMoreTabs =
+          id === maxTabIndex && tabs.length > 1;
+        const hasOnlyOneTab = tabs.length === 1;
+        const isMiddleTabWithTwoOrMoreTabs =
+          id < maxTabIndex && tabs.length > 1;
+        if (isLastTabWithTwoOrMoreTabs) {
           maxTabIndex = tabs[tabs.length - 2].codeTabId;
           setTabId(maxTabIndex);
           dispatch(changeCurrentTab(maxTabIndex));
-        } else if (tabs.length === 1) {
+        } else if (hasOnlyOneTab) {
           setTabId(0);
           maxTabIndex = 0;
           dispatch(changeCurrentTab(0));
-        } else if (id < maxTabIndex && tabs.length > 1) {
+        } else if (isMiddleTabWithTwoOrMoreTabs) {
           maxTabIndex = tabs[tabs.length - 1].codeTabId;
           setTabId(maxTabIndex);
           dispatch(changeCurrentTab(maxTabIndex));
         }
         setAddTab(tabs.filter((tab) => tab.codeTabId !== id));
         dispatch(deleteCode(id));
-      }
-    });
+      })
+      .catch(() => {
+        return;
+      });
   };
 
   const handleAddTab = () => {
@@ -78,7 +88,7 @@ export default function CodeTabs() {
     <Box sx={{ bgcolor: "#505050", flexGrow: 1 }}>
       <AppBar
         position="static"
-        style={{
+        sx={{
           backgroundColor: "#505050",
         }}
       >
@@ -107,7 +117,7 @@ export default function CodeTabs() {
                         },
                       }}
                       onClick={() => {
-                        handleTabRemove(tab.codeTabId);
+                        handleRemoveTab(tab.codeTabId);
                       }}
                     />
                   }
@@ -122,11 +132,7 @@ export default function CodeTabs() {
                 />
               );
             })}
-          <Tab
-            icon={<PostAddIcon />}
-            value="newTab"
-            style={{ color: "white" }}
-          />
+          <Tab icon={<PostAddIcon />} value="newTab" sx={{ color: "white" }} />
         </Tabs>
       </AppBar>
     </Box>

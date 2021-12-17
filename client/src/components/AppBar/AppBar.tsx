@@ -12,17 +12,27 @@ import TestCodeMenu from "./TestCodeMenu";
 import ShowEnvInfoMenu from "./ShowEnvInfoMenu";
 import About from "./About";
 
-export default function NavBar() {
+export default function AppHeader() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar elevation={0} position="static" className="Appbar">
+      <AppBar
+        elevation={0}
+        position="static"
+        sx={{
+          position: "static",
+          margin: 0,
+          padding: 0,
+          top: 0,
+          left: 0,
+        }}
+      >
         <Toolbar variant="dense">
           <AppBarTitle />
           <FileLoadMenu />
           <Divider
             orientation="vertical"
             flexItem
-            style={{ marginLeft: "10px" }}
+            sx={{ marginLeft: "10px" }}
           />
           <RunCodeMenu />
           <BuildCodeMenu />
@@ -30,11 +40,11 @@ export default function NavBar() {
           <Divider
             orientation="vertical"
             flexItem
-            style={{ marginLeft: "10px" }}
+            sx={{ marginLeft: "10px" }}
           />
           <FormatCodeMenu />
           <LintCodeMenu />
-          <Divider orientation="vertical" flexItem style={{ flexGrow: 1 }} />
+          <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
           <ShowEnvInfoMenu />
           <About />
         </Toolbar>

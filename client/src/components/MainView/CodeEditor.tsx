@@ -1,11 +1,11 @@
 import React from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { Box } from "@mui/material";
-import { useAppSelector } from "../hooks/useAppSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
 import * as monaco from "monaco-editor";
-import { addNewCode } from "../state/actionCreators";
+import { addNewCode } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
-import { LocalStorage } from "../services/localStorage";
+import { LocalStorage } from "../../services/localStorage";
 
 const CodeEditor = () => {
   const state = useAppSelector((state) => state);
