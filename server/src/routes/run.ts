@@ -6,7 +6,7 @@ import { runCode } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
 import { validateRunRequest } from "../validators/runValidator";
-import { CodeExecutionEntry, RunEntry } from "../types";
+import { RunEntry, RunTask } from "../types";
 import {
   parseRequestEntries,
   removeFirstLineFromString,
@@ -17,18 +17,16 @@ import { baseRouteExceptionHandler } from "../errors/routeExpectionHandler";
 
 const runRouter = express.Router();
 
-const handleCodeRunTask = async (
-  tempFile: string,
-  requestEntries: CodeExecutionEntry,
-  version: string,
-  res: express.Response
-) => {
+const handleCodeRunTask = async (params: RunTask) => {
+  const { tempFile, requestEntries, version, res } = params;
   const { code, gogc, godebug, buildFlags } = requestEntries;
   await writeFile(tempFile, code, { encoding: "utf-8" });
   logger.info(`Code was successfully written to the file: ${tempFile}`);
   let output = { stdout: "", stderr: "" };
   try {
-    output = await run(runCode(gogc, godebug, buildFlags, tempFile, version));
+    output = await run(
+      runCode(tempFile, { gogc, godebug, buildFlags, version })
+    );
   } catch (e) {
     if (e instanceof Error) {
       output.stderr = removeFirstLineFromString(e.message);
@@ -56,9 +54,9 @@ runRouter.post("/", async (req, res) => {
   logger.info(`Code execution started with GO version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await handleCodeRunTask(tempFile, requestEntries, version, res);
+    await handleCodeRunTask({ tempFile, requestEntries, version, res });
   } catch (error) {
-    await baseRouteExceptionHandler(tempFile, error, res);
+    await baseRouteExceptionHandler({ tempFile, error, res });
   }
 });
 

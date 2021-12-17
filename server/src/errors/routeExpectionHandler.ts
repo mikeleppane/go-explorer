@@ -1,14 +1,11 @@
 import { rm } from "fs/promises";
 import path from "path";
 import logger from "../utils/logging";
-import express from "express";
 import { removeFirstLineFromString } from "../utils/route_helpers";
+import { RouteException } from "../types";
 
-export const baseRouteExceptionHandler = async (
-  tempFile: string,
-  error: unknown,
-  res: express.Response
-) => {
+export const baseRouteExceptionHandler = async (params: RouteException) => {
+  const { tempFile, error, res } = params;
   if (tempFile) {
     await rm(path.dirname(tempFile), { recursive: true, force: true });
   }
@@ -18,11 +15,8 @@ export const baseRouteExceptionHandler = async (
   }
 };
 
-export const testRouteExceptionHandler = async (
-  tempFile: string,
-  error: unknown,
-  res: express.Response
-) => {
+export const testRouteExceptionHandler = async (params: RouteException) => {
+  const { tempFile, error, res } = params;
   if (tempFile) {
     await rm(path.dirname(tempFile), { recursive: true, force: true });
   }

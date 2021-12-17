@@ -5,7 +5,7 @@ import { run } from "../utils/commandExecutor";
 import { testCode } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
-import { CodeExecutionEntry, TestingEntry } from "../types";
+import { TestingEntry, TestingTask } from "../types";
 import { parseRequestEntries, validateVersion } from "../utils/route_helpers";
 import { handleCodeTestOutput } from "../utils/outputFormatter";
 import { validateTestingRequest } from "../validators/testingValidator";
@@ -13,17 +13,13 @@ import { testRouteExceptionHandler } from "../errors/routeExpectionHandler";
 
 const testingRouter = express.Router();
 
-const handleCodeTestTask = async (
-  tempFile: string,
-  requestEntries: CodeExecutionEntry,
-  version: string,
-  res: express.Response
-) => {
+const handleCodeTestTask = async (params: TestingTask) => {
+  const { tempFile, requestEntries, version, res } = params;
   const { code, gogc, godebug, buildFlags, testFlags } = requestEntries;
   await writeFile(tempFile, code, { encoding: "utf-8" });
   logger.info(`Code was successfully written to the file: ${tempFile}`);
   const output = await run(
-    testCode(gogc, godebug, buildFlags, testFlags, tempFile, version)
+    testCode(tempFile, { gogc, godebug, buildFlags, testFlags, version })
   );
   const responseObj = handleCodeTestOutput(output);
   res.status(200).json(responseObj);
@@ -47,9 +43,9 @@ testingRouter.post("/", async (req, res) => {
   logger.info(`Code testing started with GO version ${version}.`);
   try {
     tempFile = await createTempFile("go-", "", "_test.go");
-    await handleCodeTestTask(tempFile, requestEntries, version, res);
+    await handleCodeTestTask({ tempFile, requestEntries, version, res });
   } catch (error) {
-    await testRouteExceptionHandler(tempFile, error, res);
+    await testRouteExceptionHandler({ tempFile, error, res });
   }
 });
 

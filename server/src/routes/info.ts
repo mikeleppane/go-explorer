@@ -1,5 +1,5 @@
 import express from "express";
-import { getEnvInfo } from "../docker/commands";
+import { envInfo } from "../docker/commands";
 import { run } from "../utils/commandExecutor";
 import {
   removeFirstLineFromString,
@@ -14,7 +14,7 @@ infoRouter.get("/", (req, res) => {
   if (!version) {
     return;
   }
-  const envInfoQuery = getEnvInfo(version);
+  const envInfoQuery = envInfo(version);
   run(envInfoQuery)
     .then((response) => {
       if (response && "stdout" in response) {

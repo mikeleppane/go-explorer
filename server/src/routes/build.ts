@@ -2,7 +2,7 @@ import express from "express";
 import { rm, writeFile } from "fs/promises";
 import logger from "../utils/logging";
 import { run } from "../utils/commandExecutor";
-import { buildCode, getObjDump } from "../docker/commands";
+import { buildCode, objDump } from "../docker/commands";
 import { createTempFile } from "../utils/tempfile";
 import path from "path";
 import { BuildEntry, BuildTask } from "../types";
@@ -24,12 +24,12 @@ const handleCodeBuildTask = async (params: BuildTask) => {
   let responseObj;
   if (isObjectDumpRequested) {
     const output = await run(
-      getObjDump(goos, goarch, buildFlags, symregexp, tempFile, version)
+      objDump(tempFile, { goos, goarch, buildFlags, symregexp, version })
     );
     responseObj = handleObjectDumpOutput(output);
   } else {
     const output = await run(
-      buildCode(goos, goarch, gogc, godebug, buildFlags, tempFile, version)
+      buildCode(tempFile, { goos, goarch, gogc, godebug, buildFlags, version })
     );
     responseObj = handleCodeBuildOutput(output);
   }
@@ -65,7 +65,7 @@ buildRouter.post("/", async (req, res) => {
       isObjectDumpRequested,
     });
   } catch (error) {
-    await baseRouteExceptionHandler(tempFile, error, res);
+    await baseRouteExceptionHandler({ tempFile, error, res });
   }
 });
 

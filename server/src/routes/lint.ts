@@ -1,5 +1,5 @@
 import express from "express";
-import { FormatEntry } from "../types";
+import { FormatEntry, LintTask } from "../types";
 import { validateFormatRequest } from "../validators/formatValidator";
 import { rm, writeFile } from "fs/promises";
 import logger from "../utils/logging";
@@ -16,12 +16,8 @@ import { handleCodeLintOutput } from "../utils/outputFormatter";
 
 const lintRouter = express.Router();
 
-const handleCodeLintTask = async (
-  tempFile: string,
-  code: string,
-  version: string,
-  res: express.Response
-) => {
+const handleCodeLintTask = async (params: LintTask) => {
+  const { tempFile, code, version, res } = params;
   await writeFile(tempFile, code, { encoding: "utf-8" });
   logger.info(`Code was successfully written to the file: ${tempFile}`);
   let output;
@@ -58,9 +54,9 @@ lintRouter.post("/", async (req, res) => {
   logger.info(`Linting operation started with GO version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await handleCodeLintTask(tempFile, body.code, version, res);
+    await handleCodeLintTask({ tempFile, code: body.code, version, res });
   } catch (error) {
-    await baseRouteExceptionHandler(tempFile, error, res);
+    await baseRouteExceptionHandler({ tempFile, error, res });
   }
 });
 

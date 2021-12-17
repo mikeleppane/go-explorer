@@ -1,5 +1,11 @@
 import path from "path";
-import { EnvEntry } from "../types";
+import {
+  BuildCommand,
+  EnvEntry,
+  objDumpCommand,
+  RunCommand,
+  TestCommand,
+} from "../types";
 
 const getFileName = (filePath: string): string => {
   const file_parts = path.parse(filePath);
@@ -16,7 +22,7 @@ const golangImage = (version: string) => {
   return `golang:${version}`;
 };
 
-export const getEnvInfo = (version: string) => {
+export const envInfo = (version: string) => {
   return `${dockerBaseCommand} ${golangImage(
     version
   )} bash -c "echo '====GO ENVS====';go env && echo '\n====CPU ARCH===='; lscpu"`;
@@ -48,15 +54,8 @@ const createEnvs = (envEntries: EnvEntry): string => {
   return envs.trim();
 };
 
-export const buildCode = (
-  goos: string,
-  goarch: string,
-  gogc: string,
-  godebug: string,
-  buildFlags: string,
-  filePath: string,
-  version: string
-) => {
+export const buildCode = (filePath: string, config: BuildCommand) => {
+  const { goos, goarch, gogc, godebug, buildFlags, version } = config;
   const file = getFileName(filePath);
   const inputEnvs = { goos, goarch, gogc, godebug };
   const envs = createEnvs(inputEnvs);
@@ -70,18 +69,11 @@ export const buildCode = (
   )} bash -c "${buildCommandWithTime} 2>&1;${getBinarySize}"`;
 };
 
-export const getObjDump = (
-  goos: string,
-  goarch: string,
-  buildFlags: string,
-  symregexp: string,
-  filePath: string,
-  version: string
-) => {
-  if (symregexp) {
-    symregexp = `-s ${symregexp}`;
-  } else {
-    symregexp = "";
+export const objDump = (filePath: string, config: objDumpCommand) => {
+  const { goos, goarch, buildFlags, symregexp: symRegex, version } = config;
+  let symregexp = "";
+  if (symRegex) {
+    symregexp = `-s ${symRegex}`;
   }
   const file = getFileName(filePath);
   const inputEnvs = { goos, goarch };
@@ -96,13 +88,8 @@ export const getObjDump = (
   )} bash -c "${buildCommand} && ${executeObjDumpTool}"`;
 };
 
-export const runCode = (
-  gogc: string,
-  godebug: string,
-  buildFlags: string,
-  filePath: string,
-  version: string
-) => {
+export const runCode = (filePath: string, config: RunCommand) => {
+  const { gogc, godebug, buildFlags, version } = config;
   const file = getFileName(filePath);
   const inputEnvs = { gogc, godebug };
   const envs = createEnvs(inputEnvs);
@@ -116,14 +103,8 @@ export const runCode = (
   )} bash -c "TIMEFORMAT=%R; ${buildCommand} && ${executeProgramWithTime}"`;
 };
 
-export const testCode = (
-  gogc: string,
-  godebug: string,
-  buildFlags: string,
-  testFlags: string,
-  filePath: string,
-  version: string
-) => {
+export const testCode = (filePath: string, config: TestCommand) => {
+  const { gogc, godebug, buildFlags, testFlags, version } = config;
   const file = getFileName(filePath);
   const inputEnvs = { gogc, godebug };
   let envs = createEnvs(inputEnvs);

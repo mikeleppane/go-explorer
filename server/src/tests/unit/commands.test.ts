@@ -1,9 +1,9 @@
 import {
   buildCode,
+  envInfo,
   formatCode,
-  getEnvInfo,
-  getObjDump,
   lintCode,
+  objDump,
   runCode,
   testCode,
 } from "../../docker/commands";
@@ -11,7 +11,7 @@ import {
 describe("Commands executed inside Docker container", () => {
   test("getEnvInfo should return correct command", () => {
     const version = "1.17";
-    const command = getEnvInfo(version);
+    const command = envInfo(version);
     expect(command).toBe(
       `docker run --rm golang:${version} bash -c "echo '====GO ENVS====';go env && echo '\n====CPU ARCH===='; lscpu"`
     );
@@ -43,15 +43,14 @@ describe("Commands executed inside Docker container", () => {
     const gogc = "";
     const godebug = "gctrace=1";
     const buildFlags = "-gcflags '-m -m'";
-    const command = buildCode(
+    const command = buildCode(filePath, {
       goos,
       goarch,
       gogc,
       godebug,
       buildFlags,
-      filePath,
-      version
-    );
+      version,
+    });
     expect(command).toMatch(
       `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOOS=${goos} --env GOARCH=${goarch} --env GODEBUG=gctrace=1 golang:${version} bash -c "TIMEFORMAT=%R;time go build -o x.exe ${buildFlags} ${file} 2>&1;ls -sh x.exe | cut -d ' ' -f1"`
     );
@@ -64,14 +63,13 @@ describe("Commands executed inside Docker container", () => {
     const goarch = "amd64";
     const buildFlags = "-gcflags '-S'";
     const symregexp = "";
-    const command = getObjDump(
+    const command = objDump(filePath, {
       goos,
       goarch,
       buildFlags,
       symregexp,
-      filePath,
-      version
-    );
+      version,
+    });
     expect(command).toMatch(
       `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOOS=${goos} --env GOARCH=${goarch} golang:${version} bash -c "go build -o x.exe ${buildFlags} ${file} && go tool objdump ${symregexp} x.exe"`
     );
@@ -83,7 +81,7 @@ describe("Commands executed inside Docker container", () => {
     const gogc = "off";
     const godebug = "trace=1";
     const buildFlags = "";
-    const command = runCode(gogc, godebug, buildFlags, filePath, version);
+    const command = runCode(filePath, { gogc, godebug, buildFlags, version });
     expect(command).toMatch(
       `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOGC=${gogc} --env GODEBUG=${godebug} golang:${version} bash -c "TIMEFORMAT=%R; go build -o x.exe ${buildFlags} ${file} && time ./x.exe"`
     );
@@ -96,14 +94,13 @@ describe("Commands executed inside Docker container", () => {
     const godebug = "";
     const buildFlags = "";
     const testFlags = "-v -bench=. -benchtime=3s";
-    const command = testCode(
+    const command = testCode(filePath, {
       gogc,
       godebug,
       buildFlags,
       testFlags,
-      filePath,
-      version
-    );
+      version,
+    });
     expect(command).toMatch(
       `docker run --rm -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GO111MODULE=auto golang:${version} bash -c "go build ${buildFlags} ${file} && go test ${buildFlags} ${testFlags};exit 0"`
     );
