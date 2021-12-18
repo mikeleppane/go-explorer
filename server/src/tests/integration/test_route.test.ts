@@ -174,7 +174,7 @@ describe("POST /api/testing", () => {
       .expect(200);
     expect(response.body.output).toContain("PASS");
     expect(response.body.error).toBeFalsy();
-  });
+  }, 10000);
 
   test("should return 400 error if request body is not valid", async () => {
     const requestBody = {

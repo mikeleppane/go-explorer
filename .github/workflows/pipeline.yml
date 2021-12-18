@@ -1,0 +1,55 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize ]
+
+jobs:
+  go-explorer-app-deployment-pipeline:
+    runs-on: ubuntu-20.04
+    env:
+      COMMIT_MESSAGES: ${{ join(github.event.commits.*.message) }}
+      PORT: 5000
+      GOLANG_VERSIONS: 1.17;1.16
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      - name: pull GO image
+        run: docker pull golang:1.17
+      - name: npm install
+        run: |
+          npm install --prefix server/
+          npm install --prefix client/
+      - name: code quality - formatting check
+        run: |
+          npm run --prefix server/ check-format
+          npm run --prefix client/ check-format
+      - name: code quality - linting
+        run: |
+          npm run --prefix server/ lint
+          npm run --prefix client/ lint
+      - name: build
+        run: |
+          npm run --prefix server/ build
+          npm run --prefix client/ build
+      - name: server - unit/integration tests
+        run: |
+          npm run --prefix server/ test
+      - name: start server and client
+        run: |
+          npm run --prefix server/ start-test &
+          npm run --prefix client/ start-prod &
+      - name: e2e tests
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          command: npm run --prefix client/ test:e2e
+          wait-on: http://localhost:3000
+          project: ./client
+          config: video=false
