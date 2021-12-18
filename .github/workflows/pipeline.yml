@@ -24,32 +24,32 @@ jobs:
         run: docker pull golang:1.17
       - name: npm install
         run: |
-          npm install --prefix server/
-          npm install --prefix client/
+          npm install --prefix /
+          npm install --prefix frontend/
       - name: code quality - formatting check
         run: |
-          npm run --prefix server/ check-format
-          npm run --prefix client/ check-format
+          npm run --prefix backend/ check-format
+          npm run --prefix frontend/ check-format
       - name: code quality - linting
         run: |
-          npm run --prefix server/ lint
-          npm run --prefix client/ lint
+          npm run --prefix backend/ lint
+          npm run --prefix frontend/ lint
       - name: build
         run: |
-          npm run --prefix server/ build
-          npm run --prefix client/ build
-      - name: server - unit/integration tests
+          npm run --prefix backend/ build
+          npm run --prefix frontend/ build
+      - name: backend - unit/integration tests
         run: |
-          npm run --prefix server/ test
-      - name: start server and client
+          npm run --prefix backend/ test
+      - name: start backend and frontend
         run: |
-          npm run --prefix server/ start-test &
-          npm run --prefix client/ start-prod &
+          npm run --prefix backend/ start-test &
+          npm run --prefix frontend/ start-prod &
       - name: e2e tests
         uses: cypress-io/github-action@v2
         with:
           install: false
-          command: npm run --prefix client/ test:e2e
+          command: npm run --prefix frontend/ test:e2e
           wait-on: http://localhost:3000
-          project: ./client
+          project: ./frontend
           config: video=false
