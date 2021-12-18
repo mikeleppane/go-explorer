@@ -1,0 +1,66 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize ]
+
+jobs:
+  go-explorer-app-deployment-pipeline:
+    runs-on: ubuntu-20.04
+    env:
+      COMMIT_MESSAGES: ${{ join(github.event.commits.*.message) }}
+      PORT: 5000
+      GOLANG_VERSIONS: 1.17
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      - name: npm install
+        run: |
+          npm install --prefix server/
+          npm install --prefix client/
+
+#      - name: code quality
+#        run: |
+#          npm run prettier
+#          npm run eslint
+#      - name: build
+#        run: |
+#          export API_BASE_URL=${{env.API_BASE_URL}}
+#          npm run build
+#      - name: unittests
+#        run: |
+#          export PORT=${{env.PORT}}
+#          export SECRET=${{env.API_SECRET}}
+#          export API_BASE_URL=${{env.API_BASE_URL}}
+#          export TEST_MONGODB_URI=${{env.TEST_MONGODB_URI}}
+#          npm run start-test &
+#          npm run test
+#      - name: component tests
+#        run: npm run test:client
+#      - name: e2e tests
+#        uses: cypress-io/github-action@v2
+#        with:
+#          command: npm run test:e2e
+#          wait-on: http://localhost:3003
+#      - name: Increase version and push tag
+#        if: ${{ github.event_name == 'push' && !contains(env.COMMIT_MESSAGES, '#skip') }}
+#        uses: anothrNick/github-tag-action@1.33.0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          DEFAULT_BUMP: patch
+#      - name: Deploy to Heroku
+#        if: ${{ github.event_name == 'push' && !contains(env.COMMIT_MESSAGES, '#skip') }}
+#        uses: akhileshns/heroku-deploy@v3.12.12
+#        with:
+#          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+#          heroku_app_name: "full-stack-cicd-blog-list-app"
+#          heroku_email: "mleppan23@gmail.com"
+#          healthcheck: "https://full-stack-cicd-blog-list-app.herokuapp.com/health"
+#          checkstring: "ok"
+#          rollbackonhealthcheckfailed: true
