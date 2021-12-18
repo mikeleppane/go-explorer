@@ -33,12 +33,12 @@ jobs:
       - name: code quality - linting
         run: |
           npm run --prefix server/ lint
-          npm run --prefix client/ lint     
+          npm run --prefix client/ lint
+      - name: build
+        run: |
+          npm run --prefix server/ build
+          npm run --prefix client/ build
 
-#      - name: build
-#        run: |
-#          export API_BASE_URL=${{env.API_BASE_URL}}
-#          npm run build
 #      - name: unittest
 #        run: |
 #          export PORT=${{env.PORT}}

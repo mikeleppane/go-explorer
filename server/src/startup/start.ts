@@ -6,6 +6,5 @@ const port = process.env.PORT || 5000;
 
 export const start = (app: express.Express) => {
   const server = http.createServer(app);
-  server.listen(port, () =>
-    logger.info(`Listening on port ${port}...`));
+  server.listen(port, () => logger.info(`Listening on port ${port}...`));
 };
