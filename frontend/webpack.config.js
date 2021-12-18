@@ -1,5 +1,5 @@
 const path = require("path");
-const webpack = require("webpack");
+const Dotenv = require("dotenv-webpack");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
@@ -44,8 +44,6 @@ module.exports = {
       favicon: "./public/favicon.ico",
       manifest: "./public/manifest.json",
     }),
-    new webpack.EnvironmentPlugin({
-      API_BASE_URL: `${process.env.API_BASE_URL}`,
-    }),
+    new Dotenv(),
   ],
 };

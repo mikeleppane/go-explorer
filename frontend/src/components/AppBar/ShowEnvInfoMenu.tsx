@@ -13,8 +13,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
-
-const availableGoVersions = ["1.17", "1.16"];
+import { availableVersions } from "../../config/versions";
 
 export default function ShowEnvInfoMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -22,6 +21,7 @@ export default function ShowEnvInfoMenu() {
   );
   const dispatch = useDispatch();
   const [version, setGoVersion] = React.useState("");
+  const versions = availableVersions();
 
   const handleEnvInfoMenu = () => {
     dispatch(showEnvInfo(version));
@@ -89,7 +89,7 @@ export default function ShowEnvInfoMenu() {
                   helperText="Select the GO version"
                   variant="standard"
                 >
-                  {availableGoVersions.map((version) => (
+                  {versions.map((version) => (
                     <option key={version} value={version}>
                       {version}
                     </option>

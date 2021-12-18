@@ -13,8 +13,7 @@ import {
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useDispatch } from "react-redux";
 import { runCode } from "../../state/actionCreators";
-
-const availableGoVersions = ["1.17", "1.16"];
+import { availableVersions } from "../../config/versions";
 
 export default function RunCodeMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -25,6 +24,7 @@ export default function RunCodeMenu() {
   const [godebug, setGodebug] = React.useState("");
   const [version, setGoVersion] = React.useState("");
   const dispatch = useDispatch();
+  const versions = availableVersions();
 
   const handleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -185,7 +185,7 @@ export default function RunCodeMenu() {
                   helperText="Select the GO version"
                   variant="standard"
                 >
-                  {availableGoVersions.map((version) => (
+                  {versions.map((version) => (
                     <option key={version} value={version}>
                       {version}
                     </option>
