@@ -14,6 +14,14 @@ describe("buildValidator", () => {
     const { error } = validateBuildRequest(buildData);
     expect(error).toBeUndefined();
   });
+  test("Validator should accept development version of GO", () => {
+    const buildData = {
+      code: "some code",
+      version: "1.18rc",
+    };
+    const { error } = validateBuildRequest(buildData);
+    expect(error).toBeUndefined();
+  });
   test("Build data with only source code specified should pass from validation", () => {
     const buildData = {
       code: "some code",
@@ -66,7 +74,7 @@ describe("buildValidator", () => {
   test("Invalid version number should not pass from validation", () => {
     const buildData = {
       code: "some code",
-      version: "0.1rc",
+      version: "t.1rc",
     };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
