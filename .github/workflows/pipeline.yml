@@ -33,7 +33,7 @@ jobs:
 #        run: |
 #          export API_BASE_URL=${{env.API_BASE_URL}}
 #          npm run build
-#      - name: unittests
+#      - name: unittest
 #        run: |
 #          export PORT=${{env.PORT}}
 #          export SECRET=${{env.API_SECRET}}
