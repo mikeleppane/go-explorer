@@ -52,3 +52,4 @@ jobs:
           command: npm run --prefix client/ test:e2e
           wait-on: http://localhost:3000
           project: ./client
+          video: false
