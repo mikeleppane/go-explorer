@@ -26,21 +26,21 @@ jobs:
         run: |
           npm install --prefix server/
           npm install --prefix client/
-      - name: code quality - formatting check
-        run: |
-          npm run --prefix server/ check-format
-          npm run --prefix client/ check-format
-      - name: code quality - linting
-        run: |
-          npm run --prefix server/ lint
-          npm run --prefix client/ lint
+      #      - name: code quality - formatting check
+      #        run: |
+      #          npm run --prefix server/ check-format
+      #          npm run --prefix client/ check-format
+      #      - name: code quality - linting
+      #        run: |
+      #          npm run --prefix server/ lint
+      #          npm run --prefix client/ lint
       - name: build
         run: |
           npm run --prefix server/ build
           npm run --prefix client/ build
-      - name: server - unit/integration tests
-        run: |
-          npm run --prefix server/ test
+      #      - name: server - unit/integration tests
+      #        run: |
+      #          npm run --prefix server/ test
       - name: start server and client
         run: |
           npm run --prefix server/ start-test &
@@ -50,3 +50,4 @@ jobs:
         with:
           command: npm run --prefix client/ test:e2e
           wait-on: http://localhost:3000
+          project: ./client
