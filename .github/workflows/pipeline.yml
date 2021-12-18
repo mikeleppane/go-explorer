@@ -43,8 +43,8 @@ jobs:
           npm run --prefix server/ test
       - name: start server and client
         run: |
-          npm run --prefix server/ start-test
-          npm run --prefix client/ start-prod
+          npm run --prefix server/ start-test &
+          npm run --prefix client/ start-prod &
       - name: e2e tests
         uses: cypress-io/github-action@v2
         with:
