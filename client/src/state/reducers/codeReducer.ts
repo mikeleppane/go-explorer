@@ -1,4 +1,4 @@
-import { ActionType, CodeAction, DeleteCodeAction } from "../../types";
+import { ActionType, CodeAction } from "../../types";
 import { defaultCode } from "../../config/codeTemplates";
 
 const initialState = {
@@ -11,7 +11,7 @@ type StateType = {
 
 export const codeReducer = (
   state: StateType = initialState,
-  action: CodeAction | DeleteCodeAction
+  action: CodeAction
 ) => {
   switch (action.type) {
     case ActionType.NEW_CODE:

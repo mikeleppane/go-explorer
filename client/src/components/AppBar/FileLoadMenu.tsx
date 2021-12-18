@@ -185,6 +185,13 @@ export default function FileLoadMenu() {
               >
                 <ListItemText primary="Concurrency" />
               </ListItemButton>
+              <ListItemButton
+                onClick={() => {
+                  handleLoadFromTemplate("generics");
+                }}
+              >
+                <ListItemText primary="Generics" />
+              </ListItemButton>
             </List>
           </Collapse>
           <Divider />

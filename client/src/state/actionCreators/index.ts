@@ -1,14 +1,10 @@
 import {
   ActionType,
   AppThunk,
-  DeleteCodeAction,
-  LoadTemplateAction,
-  NewCodeAction,
-  NewTemplateAction,
-  OutputAction,
+  CodeAction,
+  ResultAction,
   StatusAction,
   TabAction,
-  TabActionType,
 } from "../../types";
 import { Dispatch } from "react";
 import codeService from "../../services/codeService";
@@ -16,6 +12,7 @@ import {
   benchmarkCode,
   concurrencyCode,
   defaultCode,
+  genericsCode,
   testingCode,
 } from "../../config/codeTemplates";
 
@@ -30,7 +27,7 @@ const createCodePayload = (id: number, code: string): CodePayloadType => {
 };
 
 export const addNewCode = (code: string): AppThunk => {
-  return (dispatch: Dispatch<NewCodeAction>, getState) => {
+  return (dispatch: Dispatch<CodeAction>, getState) => {
     const { tab } = getState();
     dispatch({
       type: ActionType.NEW_CODE,
@@ -40,7 +37,7 @@ export const addNewCode = (code: string): AppThunk => {
 };
 
 export const newTemplateCode = (): AppThunk => {
-  return (dispatch: Dispatch<NewTemplateAction>, getState) => {
+  return (dispatch: Dispatch<CodeAction>, getState) => {
     const { tab } = getState();
     dispatch({
       type: ActionType.USE_DEFAULT_CODE,
@@ -50,7 +47,7 @@ export const newTemplateCode = (): AppThunk => {
 };
 
 export const loadFromTemplate = (template: string): AppThunk => {
-  return (dispatch: Dispatch<LoadTemplateAction>, getState) => {
+  return (dispatch: Dispatch<CodeAction>, getState) => {
     const { tab } = getState();
     switch (template) {
       case "default": {
@@ -81,6 +78,13 @@ export const loadFromTemplate = (template: string): AppThunk => {
         });
         break;
       }
+      case "generics": {
+        dispatch({
+          type: ActionType.LOAD_FROM_TEMPLATE,
+          payload: createCodePayload(tab.currentTab, genericsCode),
+        });
+        break;
+      }
       default:
         dispatch({
           type: ActionType.LOAD_FROM_TEMPLATE,
@@ -91,7 +95,7 @@ export const loadFromTemplate = (template: string): AppThunk => {
   };
 };
 
-export const lintCode = (output: string): OutputAction => {
+export const lintCode = (output: string): ResultAction => {
   return {
     type: ActionType.LINT_CODE,
     payload: {
@@ -104,7 +108,7 @@ export const lintCode = (output: string): OutputAction => {
   };
 };
 
-export const clearOutput = (): OutputAction => {
+export const clearOutput = (): ResultAction => {
   return {
     type: ActionType.CLEAR_OUTPUT,
     payload: {
@@ -254,7 +258,7 @@ export const buildCode = (
   returnObjDump: boolean
 ): AppThunk => {
   return (
-    dispatch: Dispatch<ReturnType<typeof setStatus> | OutputAction>,
+    dispatch: Dispatch<ReturnType<typeof setStatus> | ResultAction>,
     getState
   ) => {
     dispatch(clearOutput());
@@ -323,7 +327,6 @@ export const showEnvInfo = (version: string): AppThunk => {
     codeService
       .getInfo(version)
       .then((response) => {
-        console.log(response);
         if (response && "output" in response) {
           dispatch({
             type: ActionType.ENV_INFO,
@@ -349,12 +352,12 @@ export const showEnvInfo = (version: string): AppThunk => {
 
 export const changeCurrentTab = (id: number): TabAction => {
   return {
-    type: TabActionType.CHANGE_CURRENT_TAB,
+    type: ActionType.CHANGE_CURRENT_TAB,
     payload: { currentTab: id },
   };
 };
 
-export const deleteCode = (id: number): DeleteCodeAction => {
+export const deleteCode = (id: number): CodeAction => {
   return {
     type: ActionType.DELETE_CODE,
     payload: id,

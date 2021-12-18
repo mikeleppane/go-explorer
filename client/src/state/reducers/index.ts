@@ -1,12 +1,12 @@
 import { codeReducer } from "./codeReducer";
 import { combineReducers } from "redux";
 import statusReducer from "./statusReducer";
-import { outputReducer } from "./outputReducer";
+import { resultReducer } from "./resultReducer";
 import { tabReducer } from "./tabReducer";
 
 const reducers = combineReducers({
   code: codeReducer,
-  output: outputReducer,
+  output: resultReducer,
   status: statusReducer,
   tab: tabReducer,
 });

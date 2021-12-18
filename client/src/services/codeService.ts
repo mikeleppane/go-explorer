@@ -1,14 +1,15 @@
 import { create } from "apisauce";
 import { apiBaseUrl } from "../constants";
 import {
-  BuildCodeParams,
   BuildCodeResponse,
-  CodeParams,
+  BuildService,
   EnvInfoResponse,
-  RunCodeParams,
+  FormatService,
+  LintService,
   RunCodeResponse,
-  TestCodeParams,
+  RunService,
   TestCodeResponse,
+  TestService,
 } from "../types";
 
 const api = create({
@@ -33,20 +34,20 @@ const getInfo = async (version = "") => {
   }
 };
 
-const formatCode = async (formatCodeParams: CodeParams) => {
-  const response = await api.post("/format", formatCodeParams);
+const formatCode = async (data: FormatService) => {
+  const response = await api.post("/format", data);
   if (response.ok) {
     console.log("formatCode> ok");
     return response.data;
   }
   if (response.problem) {
     console.log("formatCode> problem: ", response.problem);
-    return response;
+    throw new Error(response.problem);
   }
 };
 
-const lintCode = async (lintCodeParams: CodeParams) => {
-  const response = await api.post("/lint", lintCodeParams);
+const lintCode = async (data: LintService) => {
+  const response = await api.post("/lint", data);
   if (response.ok) {
     console.log("lintCode> ok");
     return response.data;
@@ -57,13 +58,10 @@ const lintCode = async (lintCodeParams: CodeParams) => {
   }
 };
 
-const buildCode = async (
-  buildCodeParams: BuildCodeParams,
-  returnObjDump = false
-) => {
+const buildCode = async (data: BuildService, returnObjDump = false) => {
   const response = await api.post<BuildCodeResponse>(
     `${returnObjDump ? "/build?objdump=true" : "/build"}`,
-    buildCodeParams
+    data
   );
 
   if (response.ok) {
@@ -79,8 +77,8 @@ const buildCode = async (
   }
 };
 
-const runCode = async (runCodeParams: RunCodeParams) => {
-  const response = await api.post<RunCodeResponse>("/run", runCodeParams);
+const runCode = async (data: RunService) => {
+  const response = await api.post<RunCodeResponse>("/run", data);
 
   if (response.ok) {
     console.log("runCode> ok");
@@ -95,8 +93,8 @@ const runCode = async (runCodeParams: RunCodeParams) => {
   }
 };
 
-const testCode = async (testCodeParams: TestCodeParams) => {
-  const response = await api.post<TestCodeResponse>("/testing", testCodeParams);
+const testCode = async (data: TestService) => {
+  const response = await api.post<TestCodeResponse>("/testing", data);
 
   if (response.ok) {
     console.log("testCode> ok");

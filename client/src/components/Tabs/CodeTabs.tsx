@@ -36,13 +36,9 @@ export default function CodeTabs() {
 
   const handleRemoveTab = (id: number) => {
     confirm({
-      description:
-        "This will remove all the code from the current tab permanently!",
+      description: "You might lose all the code from the current tab!",
     })
       .then(() => {
-        if (id !== currentTabId) {
-          return;
-        }
         const isLastTabWithTwoOrMoreTabs =
           id === maxTabIndex && tabs.length > 1;
         const hasOnlyOneTab = tabs.length === 1;

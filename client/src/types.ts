@@ -1,44 +1,36 @@
-import * as React from "react";
 import { store } from "./state";
 import reducers from "./state/reducers";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 
-export interface ICodeOutputViewProps {
-  setSizes: React.Dispatch<React.SetStateAction<number[]>>;
+interface BaseService {
+  code: string;
+  version?: string;
 }
 
-export interface BuildCodeParams {
-  code: string;
+export type FormatService = BaseService;
+export type LintService = BaseService;
+
+export interface BuildService extends BaseService {
   goarch?: string;
   goos?: string;
   gogc?: string;
   godebug?: string;
   buildFlags?: string;
   symregexp?: string;
-  version?: string;
 }
 
-export interface RunCodeParams {
-  code: string;
+export interface RunService extends BaseService {
   gogc?: string;
   godebug?: string;
   buildFlags?: string;
-  version?: string;
 }
 
-export interface TestCodeParams {
-  code: string;
+export interface TestService extends BaseService {
   gogc?: string;
   godebug?: string;
   buildFlags?: string;
   testFlags?: string;
-  version?: string;
-}
-
-export interface CodeParams {
-  code: string;
-  version?: string;
 }
 
 export type RootState = ReturnType<typeof reducers>;
@@ -57,29 +49,19 @@ export enum ActionType {
   TEST_CODE = "TEST_CODE",
   ENV_INFO = "ENV_INFO",
   DELETE_CODE = "DELETE_CODE",
-}
-
-export enum TabActionType {
   CHANGE_CURRENT_TAB = "CHANGE_CURRENT_TAB",
 }
 
 export interface TabAction {
-  type: TabActionType.CHANGE_CURRENT_TAB;
+  type: ActionType.CHANGE_CURRENT_TAB;
   payload: { currentTab: number };
 }
 
-export interface NewCodeAction {
-  type: ActionType.NEW_CODE;
-  payload: { [key: string]: string };
-}
-
-export interface NewTemplateAction {
-  type: ActionType.USE_DEFAULT_CODE;
-  payload: { [key: string]: string };
-}
-
-export interface LoadTemplateAction {
-  type: ActionType.LOAD_FROM_TEMPLATE;
+interface BaseCodeAction {
+  type:
+    | ActionType.NEW_CODE
+    | ActionType.USE_DEFAULT_CODE
+    | ActionType.LOAD_FROM_TEMPLATE;
   payload: { [key: string]: string };
 }
 
@@ -88,7 +70,7 @@ export interface DeleteCodeAction {
   payload: number;
 }
 
-export interface OutputActionPayload {
+export interface ResultPayload {
   output: string;
   buildTime: string;
   binarySize: string;
@@ -96,38 +78,21 @@ export interface OutputActionPayload {
   error: string;
 }
 
-export interface LintCodeAction {
-  type: ActionType.LINT_CODE;
-  payload: OutputActionPayload;
+export interface ResultAction {
+  type:
+    | ActionType.LINT_CODE
+    | ActionType.RUN_CODE
+    | ActionType.TEST_CODE
+    | ActionType.BUILD_CODE
+    | ActionType.ENV_INFO
+    | ActionType.CLEAR_OUTPUT;
+  payload: ResultPayload;
 }
 
-export interface RunCodeAction {
-  type: ActionType.RUN_CODE;
-  payload: OutputActionPayload;
-}
-
-export interface TestCodeAction {
-  type: ActionType.TEST_CODE;
-  payload: OutputActionPayload;
-}
-
-export interface BuildCodeAction {
-  type: ActionType.BUILD_CODE;
-  payload: OutputActionPayload;
-}
-
-export interface EnvInfoAction {
-  type: ActionType.ENV_INFO;
-  payload: OutputActionPayload;
-}
-
-export type RunCodeResponse = Omit<
-  OutputActionPayload,
-  "buildTime" | "binarySize"
->;
+export type RunCodeResponse = Omit<ResultPayload, "buildTime" | "binarySize">;
 
 export type TestCodeResponse = Omit<
-  OutputActionPayload,
+  ResultPayload,
   "buildTime" | "binarySize" | "executionTime"
 >;
 
@@ -136,39 +101,20 @@ export interface EnvInfoResponse {
   error?: string;
 }
 
-export type BuildCodeResponse = Omit<OutputActionPayload, "executionTime">;
+export type BuildCodeResponse = Omit<ResultPayload, "executionTime">;
 
-export interface ClearOutputAction {
-  type: ActionType.CLEAR_OUTPUT;
-  payload: OutputActionPayload;
-}
-
-export interface StatusActionPayload {
+export interface StatusPayload {
   message: string;
   timeoutHandle: ReturnType<typeof setTimeout> | null;
   color: string;
 }
 
-interface SetStatusAction {
-  type: ActionType.SET_STATUS;
-  payload: StatusActionPayload;
+export interface StatusAction {
+  type: ActionType.SET_STATUS | ActionType.CLEAR_STATUS;
+  payload: StatusPayload;
 }
 
-interface ClearAction {
-  type: ActionType.CLEAR_STATUS;
-  payload: StatusActionPayload;
-}
-
-export type OutputAction =
-  | LintCodeAction
-  | ClearOutputAction
-  | RunCodeAction
-  | BuildCodeAction
-  | TestCodeAction
-  | EnvInfoAction;
-
-export type CodeAction = NewCodeAction | NewTemplateAction | LoadTemplateAction;
-export type StatusAction = SetStatusAction | ClearAction;
+export type CodeAction = BaseCodeAction | DeleteCodeAction;
 export type ThunkAction<
   R, // Return type of the thunk function
   S, // state type used by getState
@@ -183,5 +129,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  OutputAction | CodeAction | StatusAction
+  ResultAction | CodeAction | StatusAction
 >;

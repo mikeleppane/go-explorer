@@ -2,11 +2,14 @@ import * as React from "react";
 import { FunctionComponent } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { ICodeOutputViewProps } from "../../types";
 import { useDispatch } from "react-redux";
 import { clearOutput } from "../../state/actionCreators";
 import { Typography } from "@mui/material";
 import CodeOutput from "./CodeOutput";
+
+interface CodeOutputViewProps {
+  setSizes: React.Dispatch<React.SetStateAction<number[]>>;
+}
 
 const handleOnClick = (
   setSizes: React.Dispatch<React.SetStateAction<number[]>>
@@ -21,7 +24,7 @@ const handleOnClick = (
   }
 };
 
-const ResultView: FunctionComponent<ICodeOutputViewProps> = ({ setSizes }) => {
+const ResultView: FunctionComponent<CodeOutputViewProps> = ({ setSizes }) => {
   const dispatch = useDispatch();
   return (
     <Box
@@ -34,7 +37,16 @@ const ResultView: FunctionComponent<ICodeOutputViewProps> = ({ setSizes }) => {
       <Button
         variant="contained"
         size="small"
-        className="ResetButton"
+        sx={{
+          position: "relative",
+          top: "-5px",
+          right: "-5px",
+          float: "right",
+          maxWidth: "12px",
+          maxHeight: "18px",
+          fontSize: "12px",
+          zIndex: 5,
+        }}
         onClick={() => {
           dispatch(clearOutput());
           handleOnClick(setSizes);

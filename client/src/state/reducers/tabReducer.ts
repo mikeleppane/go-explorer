@@ -1,4 +1,4 @@
-import { TabAction, TabActionType } from "../../types";
+import { ActionType, TabAction } from "../../types";
 
 const initialState = {
   currentTab: 0,
@@ -6,7 +6,7 @@ const initialState = {
 
 export const tabReducer = (state = initialState, action: TabAction) => {
   switch (action.type) {
-    case TabActionType.CHANGE_CURRENT_TAB:
+    case ActionType.CHANGE_CURRENT_TAB:
       return { ...action.payload };
     default:
       return state;

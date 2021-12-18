@@ -1,4 +1,4 @@
-import { ActionType, OutputAction } from "../../types";
+import { ActionType, ResultAction } from "../../types";
 
 const initialState = {
   output: "",
@@ -8,7 +8,7 @@ const initialState = {
   error: "",
 };
 
-export const outputReducer = (state = initialState, action: OutputAction) => {
+export const resultReducer = (state = initialState, action: ResultAction) => {
   switch (action.type) {
     case ActionType.LINT_CODE:
       return { ...action.payload };

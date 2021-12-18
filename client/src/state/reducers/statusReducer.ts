@@ -1,11 +1,11 @@
-import { ActionType, StatusAction, StatusActionPayload } from "../../types";
+import { ActionType, StatusAction, StatusPayload } from "../../types";
 
 const initialState = { message: "", timeoutHandle: null, color: "" };
 
 const setTimeoutHandler = (
-  state: StatusActionPayload,
-  payload: StatusActionPayload
-): StatusActionPayload => {
+  state: StatusPayload,
+  payload: StatusPayload
+): StatusPayload => {
   const isPreviousTimeoutRunning =
     state.timeoutHandle && state.timeoutHandle !== payload.timeoutHandle;
   if (isPreviousTimeoutRunning && state.timeoutHandle !== null) {
