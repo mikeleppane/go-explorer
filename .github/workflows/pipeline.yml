@@ -24,7 +24,7 @@ jobs:
         run: docker pull golang:1.17
       - name: npm install
         run: |
-          npm install --prefix /
+          npm install --prefix backend/
           npm install --prefix frontend/
       - name: code quality - formatting check
         run: |
