@@ -26,11 +26,15 @@ jobs:
         run: |
           npm install --prefix server/
           npm install --prefix client/
+      - name: code quality - formatting check
+          run: |
+            npm run --prefix server/ check-format
+            npm run --prefix client/ check-format
+      - name: code quality - linting
+          run: |
+            npm run --prefix server/ lint
+            npm run --prefix client/ lint     
 
-#      - name: code quality
-#        run: |
-#          npm run prettier
-#          npm run eslint
 #      - name: build
 #        run: |
 #          export API_BASE_URL=${{env.API_BASE_URL}}
@@ -50,19 +54,3 @@ jobs:
 #        with:
 #          command: npm run test:e2e
 #          wait-on: http://localhost:3003
-#      - name: Increase version and push tag
-#        if: ${{ github.event_name == 'push' && !contains(env.COMMIT_MESSAGES, '#skip') }}
-#        uses: anothrNick/github-tag-action@1.33.0
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          DEFAULT_BUMP: patch
-#      - name: Deploy to Heroku
-#        if: ${{ github.event_name == 'push' && !contains(env.COMMIT_MESSAGES, '#skip') }}
-#        uses: akhileshns/heroku-deploy@v3.12.12
-#        with:
-#          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-#          heroku_app_name: "full-stack-cicd-blog-list-app"
-#          heroku_email: "mleppan23@gmail.com"
-#          healthcheck: "https://full-stack-cicd-blog-list-app.herokuapp.com/health"
-#          checkstring: "ok"
-#          rollbackonhealthcheckfailed: true
