@@ -46,6 +46,7 @@ export default function RunCodeMenu() {
   return (
     <div>
       <Button
+        id="run-code-button"
         variant="contained"
         style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
         endIcon={<PlayArrowIcon />}

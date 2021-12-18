@@ -8,6 +8,7 @@ const StatusBar: FunctionComponent = () => {
   const newColor = color ? color : "white";
   return (
     <Box
+      id="statusbar"
       sx={{
         textAlign: "left",
         margin: 0,

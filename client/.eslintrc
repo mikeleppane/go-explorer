@@ -8,11 +8,15 @@
   "plugins": [
     "@typescript-eslint",
     "react",
-    "react-hooks"
+    "react-hooks",
+    "jest",
+    "cypress"
   ],
   "env": {
     "browser": true,
-    "es2020": true
+    "es2020": true,
+    "jest/globals": true,
+    "cypress/globals": true
   },
   "rules": {
     "@typescript-eslint/semi": [

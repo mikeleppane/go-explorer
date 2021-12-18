@@ -11,7 +11,7 @@ const ResultInfo: FunctionComponent = () => {
     return null;
   }
   return (
-    <Box>
+    <Box id="result-view">
       {isStatsAvailable && (
         <Box
           sx={{

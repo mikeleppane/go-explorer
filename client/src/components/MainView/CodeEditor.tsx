@@ -23,7 +23,7 @@ const CodeEditor = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, height: "100%" }}>
+    <Box id="editor" sx={{ flexGrow: 1, height: "100%" }}>
       <MonacoEditor
         onChange={onEditorChange}
         theme="vs-dark"

@@ -1,9 +1,13 @@
 const path = require("path");
+const webpack = require("webpack");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: "./src/index.tsx",
   devtool: "eval-source-map",
+  optimization: {
+    splitChunks: { chunks: "all" },
+  },
   module: {
     rules: [
       {
@@ -21,11 +25,13 @@ module.exports = {
     extensions: [".tsx", ".ts", ".js", ".json"],
   },
   output: {
-    filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
+    filename: "[name].[contenthash].js",
+    clean: true,
+    publicPath: "/",
   },
   devServer: {
-    port: 4000,
+    port: 3000,
     open: true,
     compress: true,
     hot: true,
@@ -37,6 +43,9 @@ module.exports = {
       filename: "./index.html",
       favicon: "./public/favicon.ico",
       manifest: "./public/manifest.json",
+    }),
+    new webpack.EnvironmentPlugin({
+      API_BASE_URL: `${process.env.API_BASE_URL}`,
     }),
   ],
 };

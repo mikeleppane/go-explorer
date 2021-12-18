@@ -114,6 +114,7 @@ export default function FileLoadMenu() {
   return (
     <div>
       <Button
+        id="open-file-button"
         variant="contained"
         sx={{ marginLeft: "30px", backgroundColor: "#64748B" }}
         endIcon={<ArrowDownwardIcon />}
@@ -151,6 +152,7 @@ export default function FileLoadMenu() {
             onClick={() => {
               setTemplatesOpen(!templatesOpen);
             }}
+            id="open-templates-button"
           >
             <ListItemText primary="Load From Templates" />
             {templatesOpen ? <ExpandLess /> : <ExpandMore />}
@@ -172,6 +174,7 @@ export default function FileLoadMenu() {
                 <ListItemText primary="Testing" />
               </ListItemButton>
               <ListItemButton
+                id="load-benchmark-button"
                 onClick={() => {
                   handleLoadFromTemplate("benchmark");
                 }}

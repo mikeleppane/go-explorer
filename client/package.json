@@ -31,14 +31,15 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "webpack-dev-server --mode development",
-    "ss": "react-scripts start",
+    "start-dev": "webpack-dev-server --mode development",
+    "start-prod": "webpack-dev-server --mode production --no-client-overlay --no-hot",
+    "build": "webpack --mode production",
     "watch": "BROWSER='firefox' tsc -p . -w",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "tsc -p . --noEmit && eslint './src/**/*.{ts,tsx}'",
-    "check-format": "prettier --check './src/**/*.{ts,tsx}'"
+    "check-format": "prettier --check './src/**/*.{ts,tsx}'",
+    "cypress:open": "cypress open",
+    "test:e2e": "cypress run"
   },
   "eslintConfig": {
     "extends": [
@@ -63,6 +64,9 @@
     "@types/react-split-pane": "^0.1.67",
     "@types/redux": "^3.6.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "cypress": "^9.1.1",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-jest": "^24.7.0",
     "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.4.1",
     "redux-devtools-extension": "^2.13.9",

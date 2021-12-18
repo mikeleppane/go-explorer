@@ -11,6 +11,7 @@ export default function About() {
     <div>
       <Tooltip title="About Go Explorer">
         <IconButton
+          id="open-about"
           sx={{
             marginLeft: "10px",
             marginRight: "10px",
@@ -42,6 +43,7 @@ export default function About() {
             boxShadow: 24,
             padding: 5,
           }}
+          id="about"
         >
           <Typography
             id="modal-modal-title"

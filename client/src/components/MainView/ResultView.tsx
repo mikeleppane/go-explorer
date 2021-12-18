@@ -63,7 +63,7 @@ const ResultView: FunctionComponent<CodeOutputViewProps> = ({ setSizes }) => {
           position: "relative",
           top: "-5px",
           color: "white",
-          fontSize: "12px",
+          fontSize: "16px",
           fontFamily: "Source Sans Pro",
         }}
       >

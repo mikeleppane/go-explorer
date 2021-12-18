@@ -44,6 +44,7 @@ export default function ShowEnvInfoMenu() {
     <div>
       <Tooltip title="Show info about GO environment variables and used CPU architecture">
         <IconButton
+          id="open-env-info-button"
           sx={{
             marginLeft: "50px",
             marginRight: "10px",
@@ -95,6 +96,7 @@ export default function ShowEnvInfoMenu() {
                   ))}
                 </TextField>
                 <Button
+                  id="get-env-info-button"
                   variant="contained"
                   size="small"
                   sx={{
