@@ -27,13 +27,13 @@ jobs:
           npm install --prefix server/
           npm install --prefix client/
       - name: code quality - formatting check
-          run: |
-            npm run --prefix server/ check-format
-            npm run --prefix client/ check-format
+        run: |
+          npm run --prefix server/ check-format
+          npm run --prefix client/ check-format
       - name: code quality - linting
-          run: |
-            npm run --prefix server/ lint
-            npm run --prefix client/ lint     
+        run: |
+          npm run --prefix server/ lint
+          npm run --prefix client/ lint     
 
 #      - name: build
 #        run: |
