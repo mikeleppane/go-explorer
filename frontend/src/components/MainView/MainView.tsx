@@ -18,7 +18,7 @@ const MainView = () => {
       sizes={splitSizes}
       direction="vertical"
       minSize={10}
-      gutterSize={5}
+      gutterSize={2}
       gutterAlign="center"
       dragInterval={1}
       style={{ height: defaultSplitSize }}

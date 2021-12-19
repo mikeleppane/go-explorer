@@ -2,6 +2,8 @@ import {
   ActionType,
   AppThunk,
   CodeAction,
+  ErrorAction,
+  ErrorEntry,
   ResultAction,
   StatusAction,
   TabAction,
@@ -15,6 +17,7 @@ import {
   genericsCode,
   testingCode,
 } from "../../config/codeTemplates";
+import { parse } from "../../services/errorParser";
 
 type CodePayloadType = {
   [key: number]: string;
@@ -160,11 +163,14 @@ export const runCode = (
 ): AppThunk => {
   return (
     dispatch: Dispatch<
-      ReturnType<typeof setStatus> | ReturnType<typeof clearOutput>
+      | ReturnType<typeof setStatus>
+      | ReturnType<typeof clearOutput>
+      | ErrorAction
     >,
     getState
   ) => {
     dispatch(clearOutput());
+    dispatch(clearError());
     dispatch(setStatus("Wait for code execution..."));
     const state = getState();
     const code = state.code[state.tab.currentTab];
@@ -187,6 +193,7 @@ export const runCode = (
           }
           if (!response.executionTime && response.error) {
             dispatch(setStatus("Code execution failed", "red", 10));
+            dispatch(newError(parse(response.error)));
           }
         }
       })
@@ -208,11 +215,14 @@ export const testCode = (
 ): AppThunk => {
   return (
     dispatch: Dispatch<
-      ReturnType<typeof setStatus> | ReturnType<typeof clearOutput>
+      | ReturnType<typeof setStatus>
+      | ReturnType<typeof clearOutput>
+      | ErrorAction
     >,
     getState
   ) => {
     dispatch(clearOutput());
+    dispatch(clearError());
     dispatch(setStatus("Wait for code testing..."));
     const state = getState();
     const code = state.code[state.tab.currentTab];
@@ -235,6 +245,7 @@ export const testCode = (
           }
           if (response.error) {
             dispatch(setStatus("Code testing failed", "red", 10));
+            dispatch(newError(parse(response.error)));
           }
         }
       })
@@ -258,10 +269,13 @@ export const buildCode = (
   returnObjDump: boolean
 ): AppThunk => {
   return (
-    dispatch: Dispatch<ReturnType<typeof setStatus> | ResultAction>,
+    dispatch: Dispatch<
+      ReturnType<typeof setStatus> | ResultAction | ErrorAction
+    >,
     getState
   ) => {
     dispatch(clearOutput());
+    dispatch(clearError());
     dispatch(setStatus("Wait for code building..."));
     const state = getState();
     const code = state.code[state.tab.currentTab];
@@ -294,6 +308,7 @@ export const buildCode = (
           if (returnObjDump) {
             if (response.error && !response.output) {
               dispatch(setStatus("Code building failed", "red", 10));
+              dispatch(newError(parse(response.error)));
             } else {
               dispatch(setStatus("Code building successful."));
             }
@@ -303,6 +318,7 @@ export const buildCode = (
             }
             if (!response.binarySize) {
               dispatch(setStatus("Code building failed", "red", 10));
+              dispatch(newError(parse(response.error)));
             }
           }
         }
@@ -361,5 +377,19 @@ export const deleteCode = (id: number): CodeAction => {
   return {
     type: ActionType.DELETE_CODE,
     payload: id,
+  };
+};
+
+export const newError = (error: ErrorEntry[]): ErrorAction => {
+  return {
+    type: ActionType.NEW_ERROR,
+    payload: [...error],
+  };
+};
+
+export const clearError = (): ErrorAction => {
+  return {
+    type: ActionType.CLEAR_ERROR,
+    payload: [],
   };
 };

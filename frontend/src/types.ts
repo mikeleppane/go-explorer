@@ -50,11 +50,26 @@ export enum ActionType {
   ENV_INFO = "ENV_INFO",
   DELETE_CODE = "DELETE_CODE",
   CHANGE_CURRENT_TAB = "CHANGE_CURRENT_TAB",
+  NEW_ERROR = "NEW_ERROR",
+  CLEAR_ERROR = "CLEAR_ERROR",
 }
 
 export interface TabAction {
   type: ActionType.CHANGE_CURRENT_TAB;
   payload: { currentTab: number };
+}
+
+export interface ErrorEntry {
+  lineNumber: number;
+  columnNumber: number;
+  message: string;
+}
+
+export type ErrorPayload = ErrorEntry;
+
+export interface ErrorAction {
+  type: ActionType.NEW_ERROR | ActionType.CLEAR_ERROR;
+  payload: ErrorPayload[];
 }
 
 interface BaseCodeAction {
@@ -129,5 +144,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  ResultAction | CodeAction | StatusAction
+  ResultAction | CodeAction | StatusAction | ErrorAction
 >;

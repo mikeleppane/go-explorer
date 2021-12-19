@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { Box } from "@mui/material";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import * as monaco from "monaco-editor";
-import { addNewCode } from "../../state/actionCreators";
+import { addNewCode, clearError } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
 import { LocalStorage } from "../../services/localStorage";
 
@@ -11,14 +11,45 @@ const CodeEditor = () => {
   const state = useAppSelector((state) => state);
   const dispatch = useDispatch();
   const storage = new LocalStorage("", "golang-explorer-recent-code");
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const [oldDecorations, setOldDecorations] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (
+      editorRef.current &&
+      Array.isArray(state.error) &&
+      state.error.length > 0
+    ) {
+      const decorations: monaco.editor.IModelDeltaDecoration[] = [];
+      state.error.map((error) => {
+        decorations.push({
+          range: {
+            startLineNumber: error.lineNumber,
+            startColumn: error.columnNumber,
+            endColumn: error.columnNumber + 200,
+            endLineNumber: error.lineNumber,
+          },
+          options: {
+            inlineClassName: "errorHighlight",
+            hoverMessage: [{ value: error.message }],
+          },
+        });
+      });
+      setOldDecorations(editorRef.current?.deltaDecorations([], decorations));
+    } else {
+      editorRef.current?.deltaDecorations(oldDecorations, []);
+    }
+  }, [state.error]);
 
   const onEditorChange = (
     value: string | undefined,
     _ev: monaco.editor.IModelContentChangedEvent
   ) => {
     if (value) {
+      dispatch(clearError());
       dispatch(addNewCode(value));
       storage.state = value;
+      editorRef.current?.deltaDecorations([], []);
     }
   };
 
@@ -40,6 +71,9 @@ const CodeEditor = () => {
           automaticLayout: true,
         }}
         width="100%"
+        onMount={(editor, _monaco) => {
+          editorRef.current = editor;
+        }}
       />
     </Box>
   );
