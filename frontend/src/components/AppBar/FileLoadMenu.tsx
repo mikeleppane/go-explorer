@@ -17,6 +17,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CachedIcon from "@mui/icons-material/Cached";
 import {
   addNewCode,
+  clearError,
   loadFromTemplate,
   newTemplateCode,
   setStatus,
@@ -76,6 +77,7 @@ export default function FileLoadMenu() {
   };
 
   const handleNewTemplate = () => {
+    dispatch(clearError());
     dispatch(newTemplateCode());
     handleClose();
   };

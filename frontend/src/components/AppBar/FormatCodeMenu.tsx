@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import CodeIcon from "@mui/icons-material/Code";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import codeService from "../../services/codeService";
-import { addNewCode, setStatus } from "../../state/actionCreators";
+import { addNewCode, clearError, setStatus } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
 import { LocalStorage } from "../../services/localStorage";
 
@@ -15,6 +15,7 @@ export default function FormatCodeMenu() {
   const handleFormatMenu = () => {
     const code = state.code[state.tab.currentTab];
     dispatch(setStatus("Wait for code formatting..."));
+    dispatch(clearError());
     codeService
       .formatCode({ code })
       .then((response) => {

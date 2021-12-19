@@ -3,8 +3,15 @@ import Button from "@mui/material/Button";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import codeService from "../../services/codeService";
-import { clearOutput, lintCode, setStatus } from "../../state/actionCreators";
+import {
+  clearError,
+  clearOutput,
+  lintCode,
+  newError,
+  setStatus,
+} from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
+import { parse } from "../../services/errorParser";
 
 export default function LintCodeMenu() {
   const dispatch = useDispatch();
@@ -12,6 +19,7 @@ export default function LintCodeMenu() {
 
   const handleLintMenu = () => {
     dispatch(clearOutput());
+    dispatch(clearError());
     dispatch(setStatus("Wait for static code analysis.."));
     const code = state.code[state.tab.currentTab];
     codeService
@@ -26,6 +34,7 @@ export default function LintCodeMenu() {
             )
           );
           dispatch(lintCode(response));
+          dispatch(newError(parse(response)));
         } else {
           dispatch(setStatus("Analysis ok."));
         }
