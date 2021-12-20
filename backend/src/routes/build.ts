@@ -54,7 +54,7 @@ buildRouter.post("/", async (req, res) => {
   const isObjectDumpRequested = req.query.objdump === "true";
   const requestEntries = parseRequestEntries(body);
   let tempFile = "";
-  logger.info(`Code building started with GO version ${version}.`);
+  logger.info(`Code building started with Go version ${version}.`);
   try {
     tempFile = await createTempFile();
     await handleCodeBuildTask({

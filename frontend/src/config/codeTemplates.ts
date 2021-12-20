@@ -75,7 +75,7 @@ func main() {
 `;
 
 export const genericsCode = `
-// Remember to choose GO 1.18 version when trying this.
+// Remember to choose Go 1.18 version when trying this.
 package main
 
 import (

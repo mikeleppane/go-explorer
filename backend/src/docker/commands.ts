@@ -25,7 +25,7 @@ const golangImage = (version: string) => {
 export const envInfo = (version: string) => {
   return `${dockerBaseCommand} ${golangImage(
     version
-  )} bash -c "echo '====GO ENVS====';go env && echo '\n====CPU ARCH===='; lscpu"`;
+  )} bash -c "echo '====Go ENVS====';go env && echo '\n====CPU ARCH===='; lscpu"`;
 };
 
 export const formatCode = (filePath: string, version: string) => {

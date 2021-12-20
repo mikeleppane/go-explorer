@@ -13,7 +13,7 @@ describe("Go Explorer App ", function () {
   });
   it("user can open about", function () {
     cy.get("#open-about").click();
-    cy.get("#about").contains("GO Explorer");
+    cy.get("#about").contains("Go Explorer");
   });
   it("user can load new template to editor", function () {
     cy.get("#open-file-button").click();
@@ -44,7 +44,7 @@ describe("Go Explorer App ", function () {
         matchCase: false,
       }
     );
-    cy.get("#result-view").contains("GO ENVS", { timeout: 5000 });
+    cy.get("#result-view").contains("Go ENVS", { timeout: 5000 });
     cy.get("#result-view").contains("CPU ARCH", { timeout: 5000 });
   });
 });

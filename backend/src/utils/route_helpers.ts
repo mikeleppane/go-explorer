@@ -36,7 +36,7 @@ export const validateVersion = (qsVersion: unknown, res: express.Response) => {
     version = getVersion(validateQsVersion(qsVersion));
     if (!version) {
       res.status(400).send(
-        `No should GO version available: ${qsVersion}. 
+        `No such Go version available: ${qsVersion}. 
           Currently available version are: ${availableVersions}`
       );
     }

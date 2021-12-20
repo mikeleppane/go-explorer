@@ -13,7 +13,7 @@ describe("Commands executed inside Docker container", () => {
     const version = "1.17";
     const command = envInfo(version);
     expect(command).toBe(
-      `docker run --rm golang:${version} bash -c "echo '====GO ENVS====';go env && echo '\n====CPU ARCH===='; lscpu"`
+      `docker run --rm golang:${version} bash -c "echo '====Go ENVS====';go env && echo '\n====CPU ARCH===='; lscpu"`
     );
   });
   test("formatCode should return correct command", () => {

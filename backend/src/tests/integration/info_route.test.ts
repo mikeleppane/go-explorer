@@ -10,12 +10,12 @@ describe("GET /api/info", () => {
   test("should return used environment variables for default version", async () => {
     const response = await api.get("/api/info").expect(200);
     expect(response.text).toContain("go1.17");
-    expect(response.text).toContain("====GO ENVS====");
+    expect(response.text).toContain("====Go ENVS====");
     expect(response.text).toContain("====CPU ARCH====");
   });
   test("should return 400 error if given version is not valid", async () => {
     const response = await api.get("/api/info?version=0.12345").expect(400);
-    expect(response.text).toContain("No should GO version available");
+    expect(response.text).toContain("No such Go version available");
   });
   test("should return used environment variables for given version", async () => {
     const response = await api.get("/api/info?version=1.17").expect(200);

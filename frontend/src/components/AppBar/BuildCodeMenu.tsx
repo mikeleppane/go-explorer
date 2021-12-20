@@ -298,7 +298,7 @@ export default function BuildCodeMenu() {
                   SelectProps={{
                     native: true,
                   }}
-                  helperText="Select the GO version"
+                  helperText="Select the Go version"
                   variant="standard"
                 >
                   {versions.map((version) => (

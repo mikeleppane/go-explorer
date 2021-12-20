@@ -9,7 +9,7 @@ export default function About() {
 
   return (
     <div>
-      <Tooltip title="About GO Explorer">
+      <Tooltip title="About Go Explorer">
         <IconButton
           id="open-about"
           sx={{
@@ -50,7 +50,7 @@ export default function About() {
             variant="h3"
             sx={{ fontWeight: 500 }}
           >
-            GO Explorer
+            Go Explorer
           </Typography>
           <Typography
             id="modal-modal-description"
