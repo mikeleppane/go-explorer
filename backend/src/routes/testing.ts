@@ -40,7 +40,7 @@ testingRouter.post("/", async (req, res) => {
   }
   const requestEntries = parseRequestEntries(body);
   let tempFile = "";
-  logger.info(`Code testing started with GO version ${version}.`);
+  logger.info(`Code testing started with Go version ${version}.`);
   try {
     tempFile = await createTempFile("go-", "", "_test.go");
     await handleCodeTestTask({ tempFile, requestEntries, version, res });

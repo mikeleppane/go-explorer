@@ -51,7 +51,7 @@ runRouter.post("/", async (req, res) => {
   }
   const requestEntries = parseRequestEntries(body);
   let tempFile = "";
-  logger.info(`Code execution started with GO version ${version}.`);
+  logger.info(`Code execution started with Go version ${version}.`);
   try {
     tempFile = await createTempFile();
     await handleCodeRunTask({ tempFile, requestEntries, version, res });

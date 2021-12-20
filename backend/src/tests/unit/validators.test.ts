@@ -14,7 +14,7 @@ describe("buildValidator", () => {
     const { error } = validateBuildRequest(buildData);
     expect(error).toBeUndefined();
   });
-  test("Validator should accept development version of GO", () => {
+  test("Validator should accept development version of Go", () => {
     const buildData = {
       code: "some code",
       version: "1.18rc",

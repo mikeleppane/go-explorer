@@ -42,7 +42,7 @@ export default function ShowEnvInfoMenu() {
 
   return (
     <div>
-      <Tooltip title="Show info about GO environment variables and used CPU architecture">
+      <Tooltip title="Show info about Go environment variables and used CPU architecture">
         <IconButton
           id="open-env-info-button"
           sx={{
@@ -86,7 +86,7 @@ export default function ShowEnvInfoMenu() {
                   SelectProps={{
                     native: true,
                   }}
-                  helperText="Select the GO version"
+                  helperText="Select the Go version"
                   variant="standard"
                 >
                   {versions.map((version) => (
