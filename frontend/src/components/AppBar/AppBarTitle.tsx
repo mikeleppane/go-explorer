@@ -25,7 +25,7 @@ export default function AppTitle() {
           lineHeight: "22px",
         }}
       >
-        Go <br />
+        GO <br />
         Explorer
       </Typography>
     </Box>

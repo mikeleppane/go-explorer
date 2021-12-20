@@ -1,6 +1,8 @@
 const path = require("path");
 const Dotenv = require("dotenv-webpack");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -41,9 +43,16 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./public/index.html",
       filename: "./index.html",
-      favicon: "./public/favicon.ico",
-      manifest: "./public/manifest.json",
     }),
     new Dotenv(),
+    new CompressionPlugin({
+      test: /\.js(\?.*)?$/i,
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "./public/favicon.ico", to: "." },
+        { from: "./public/manifest.json", to: "." },
+      ],
+    }),
   ],
 };

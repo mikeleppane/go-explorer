@@ -59,9 +59,7 @@ const ResultInfo: FunctionComponent = () => {
         >
           <span style={{ color: "#f44336" }}>========== Error ==========</span>
           <br />
-          <div style={{ whiteSpace: "pre-line", overflow: "scroll" }}>
-            {error + "\n\n"}
-          </div>
+          <div style={{ whiteSpace: "pre-line" }}>{error + "\n\n"}</div>
         </Box>
       )}
     </Box>
