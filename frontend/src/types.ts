@@ -52,6 +52,8 @@ export enum ActionType {
   CHANGE_CURRENT_TAB = "CHANGE_CURRENT_TAB",
   NEW_ERROR = "NEW_ERROR",
   CLEAR_ERROR = "CLEAR_ERROR",
+  SET_NOTIFICATION = "SET_NOTIFICATION",
+  CLEAR_NOTIFICATION = "CLEAR_NOTIFICATION",
 }
 
 export interface TabAction {
@@ -124,9 +126,20 @@ export interface StatusPayload {
   color: string;
 }
 
+export interface NotificationPayload {
+  message: string;
+  timeoutHandle: ReturnType<typeof setTimeout> | null;
+  severity: string;
+}
+
 export interface StatusAction {
   type: ActionType.SET_STATUS | ActionType.CLEAR_STATUS;
   payload: StatusPayload;
+}
+
+export interface NotificationAction {
+  type: ActionType.SET_NOTIFICATION | ActionType.CLEAR_NOTIFICATION;
+  payload: NotificationPayload;
 }
 
 export type CodeAction = BaseCodeAction | DeleteCodeAction;
@@ -144,5 +157,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  ResultAction | CodeAction | StatusAction | ErrorAction
+  ResultAction | CodeAction | StatusAction | ErrorAction | NotificationAction
 >;

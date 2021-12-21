@@ -14,7 +14,7 @@ export default function About() {
           id="open-about"
           sx={{
             marginLeft: "10px",
-            marginRight: "10px",
+            marginRight: "0px",
             backgroundColor: "#64748B",
           }}
           onClick={handleOpen}

@@ -11,6 +11,7 @@ import BuildCodeMenu from "./BuildCodeMenu";
 import TestCodeMenu from "./TestCodeMenu";
 import ShowEnvInfoMenu from "./ShowEnvInfoMenu";
 import About from "./About";
+import Share from "./Share";
 
 export default function AppHeader() {
   return (
@@ -45,6 +46,7 @@ export default function AppHeader() {
           <FormatCodeMenu />
           <LintCodeMenu />
           <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
+          <Share />
           <ShowEnvInfoMenu />
           <About />
         </Toolbar>

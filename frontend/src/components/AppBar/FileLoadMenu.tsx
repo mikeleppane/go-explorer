@@ -20,6 +20,7 @@ import {
   clearError,
   loadFromTemplate,
   newTemplateCode,
+  setNotification,
   setStatus,
 } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
@@ -60,15 +61,14 @@ export default function FileLoadMenu() {
     const code = state.code[state.tab.currentTab];
     window.navigator.clipboard
       .writeText(code)
-      .then(() => dispatch(setStatus("Code block copied to clipboard")))
+      .then(() => dispatch(setNotification("Code block copied to clipboard")))
       .catch((e) => {
         console.error(e);
         if (e instanceof Error) {
           dispatch(
-            setStatus(
+            setNotification(
               "An error occurred while copying code block to the clipboard",
-              "red",
-              10
+              "error"
             )
           );
         }
