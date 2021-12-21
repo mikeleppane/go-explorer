@@ -4,6 +4,7 @@ import {
   CodeAction,
   ErrorAction,
   ErrorEntry,
+  NotificationAction,
   ResultAction,
   StatusAction,
   TabAction,
@@ -148,10 +149,45 @@ export const setStatus = (message: string, color = "", time = 5): AppThunk => {
   };
 };
 
+export const setNotification = (
+  message: string,
+  severity = "success",
+  time = 5
+): AppThunk => {
+  // eslint-disable-next-line @typescript-eslint/require-await
+  return async (dispatch: Dispatch<NotificationAction>) => {
+    const timeoutHandle = setTimeout(() => {
+      dispatch({
+        type: ActionType.CLEAR_NOTIFICATION,
+        payload: {
+          message: "",
+          timeoutHandle: null,
+          severity: "success",
+        },
+      });
+    }, time * 1000);
+    dispatch({
+      type: ActionType.SET_NOTIFICATION,
+      payload: {
+        message: message,
+        timeoutHandle: timeoutHandle,
+        severity,
+      },
+    });
+  };
+};
+
 export const clearStatus = (): StatusAction => {
   return {
     type: ActionType.CLEAR_STATUS,
     payload: { message: "", timeoutHandle: null, color: "" },
+  };
+};
+
+export const clearNotification = (): NotificationAction => {
+  return {
+    type: ActionType.CLEAR_NOTIFICATION,
+    payload: { message: "", timeoutHandle: null, severity: "success" },
   };
 };
 

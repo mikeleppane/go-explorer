@@ -46,7 +46,7 @@ export default function ShowEnvInfoMenu() {
         <IconButton
           id="open-env-info-button"
           sx={{
-            marginLeft: "50px",
+            marginLeft: "10px",
             marginRight: "10px",
             backgroundColor: "#64748B",
           }}

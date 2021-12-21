@@ -14,7 +14,7 @@ const setTimeoutHandler = (
   return { ...payload };
 };
 
-const statusReducer = (state = initialState, action: StatusAction) => {
+export const statusReducer = (state = initialState, action: StatusAction) => {
   switch (action.type) {
     case ActionType.SET_STATUS:
       return setTimeoutHandler(state, action.payload);
@@ -24,5 +24,3 @@ const statusReducer = (state = initialState, action: StatusAction) => {
       return state;
   }
 };
-
-export default statusReducer;
