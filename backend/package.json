@@ -1,17 +1,17 @@
 {
   "name": "server",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest --verbose --runInBand",
     "tsc": "tsc -p .",
     "build": "tsc",
-    "start": "NODE_ENV=production node ./build/index.js",
-    "start-test": "NODE_ENV=test node ./build/index.js",
-    "dev": "NODE_ENV=development ts-node-dev src/index.ts",
+    "start:prod": "NODE_ENV=production node ./build/index.js",
+    "start:test": "NODE_ENV=test node ./build/index.js",
+    "start:dev": "NODE_ENV=development ts-node-dev src/index.ts",
     "lint": "tsc --noEmit && eslint './src/**/*.ts'",
-    "check-format": "prettier --check './src/**/*.ts'"
+    "check:format": "prettier --check './src/**/*.ts'"
   },
   "author": "Mikko Leppänen",
   "license": "MIT",

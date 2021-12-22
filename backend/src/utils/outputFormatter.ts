@@ -1,5 +1,34 @@
 import { CommandExecutorOutput } from "../types";
 
+const cleanResultOutput = (res: { output: string; error?: string }) => {
+  const isCLIPrint = new RegExp("^\\s*# command-line-arguments\\s*$");
+  const extractFileNameRegex = new RegExp("[-a-z0-9]+.go", "g");
+  const isEmptyLine = new RegExp("^\\s*$");
+  if (res.output) {
+    res.output = res.output
+      .split("\n")
+      .map((line) => {
+        if (!isCLIPrint.test(line) && !isEmptyLine.test(line)) {
+          return line.replace(extractFileNameRegex, ".go");
+        }
+      })
+      .join("\n")
+      .trim();
+  }
+  if (res.error) {
+    res.error = res.error
+      .split("\n")
+      .map((line) => {
+        if (!isCLIPrint.test(line) && !isEmptyLine.test(line)) {
+          return line.replace(extractFileNameRegex, ".go");
+        }
+      })
+      .join("\n")
+      .trim();
+  }
+  return res;
+};
+
 export const handleObjectDumpOutput = (output: CommandExecutorOutput) => {
   const res = { output: "", error: "" };
   if (output && output.stdout) {
@@ -9,7 +38,7 @@ export const handleObjectDumpOutput = (output: CommandExecutorOutput) => {
     const error = output.stderr.trim().split("\n");
     res.error = error.slice(1, error.length).join("\n");
   }
-  return res;
+  return cleanResultOutput(res);
 };
 
 export const handleCodeBuildOutput = (output: CommandExecutorOutput) => {
@@ -39,7 +68,7 @@ export const handleCodeBuildOutput = (output: CommandExecutorOutput) => {
   if (!res.binarySize) {
     res.error = res.output;
     res.output = "";
-    return res;
+    return cleanResultOutput(res);
   }
   if (output && output.stderr) {
     const stderr = output.stderr.trim().split("\n");
@@ -48,7 +77,7 @@ export const handleCodeBuildOutput = (output: CommandExecutorOutput) => {
       res.buildTime = buildTime + " s";
     }
   }
-  return res;
+  return cleanResultOutput(res);
 };
 
 export const handleCodeRunOutput = (output: CommandExecutorOutput) => {
@@ -58,28 +87,18 @@ export const handleCodeRunOutput = (output: CommandExecutorOutput) => {
     res.output = output.stdout;
   }
   if (output && output.stderr) {
-    let stderr = output.stderr.trim().split("\n");
+    const stderr = output.stderr.trim().split("\n");
     const executionTime = stderr[stderr.length - 1];
     if (executionTimeRegExp.test(executionTime)) {
       res.executionTime = executionTime + " s";
     }
     if (res.executionTime) {
-      stderr = stderr.slice(0, stderr.length - 1);
+      res.error = stderr.slice(0, stderr.length - 1).join("\n");
+    } else {
+      res.error = stderr.join("\n");
     }
-    res.error = stderr
-      .map((line) => {
-        if (line.includes("command-line-arguments")) {
-          return "";
-        }
-        if (line.includes(".go")) {
-          return line.replace(/([\w\d-]+\.go)/gi, "go");
-        }
-        return line;
-      })
-      .join("\n")
-      .trim();
   }
-  return res;
+  return cleanResultOutput(res);
 };
 
 export const handleCodeTestOutput = (output: CommandExecutorOutput) => {
@@ -90,17 +109,10 @@ export const handleCodeTestOutput = (output: CommandExecutorOutput) => {
   if (output && output.stderr) {
     res.error = output.stderr.trim();
   }
-  return res;
+  return cleanResultOutput(res);
 };
 
 export const handleCodeLintOutput = (output: string) => {
-  return output
-    .split("\n")
-    .map((line) => {
-      if (line.includes(".go")) {
-        return line.replace(/([\w\d-]+\.go)/i, "go");
-      }
-    })
-    .join("\n")
-    .trim();
+  const res = { output: output };
+  return cleanResultOutput(res).output;
 };
