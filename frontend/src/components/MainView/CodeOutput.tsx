@@ -26,9 +26,24 @@ const ResultInfo: FunctionComponent = () => {
             <span style={{ color: "#2196f3" }}>
               ========== Stats ==========
             </span>
-            <br /> {executionTime ? `Execution time: ${executionTime} ` : null}
-            <br /> {buildTime ? `Build time: ${buildTime} ` : null}
-            <br /> {binarySize ? `Binary size: ${binarySize} ` : null}
+            {executionTime ? (
+              <span>
+                <br />
+                {`Execution time: ${executionTime} `}
+              </span>
+            ) : null}
+            {buildTime ? (
+              <span>
+                <br />
+                {`Build time: ${buildTime} `}
+              </span>
+            ) : null}
+            {binarySize ? (
+              <span>
+                <br />
+                {`Binary size: ${binarySize} `}
+              </span>
+            ) : null}
           </p>
         </Box>
       )}
@@ -43,8 +58,7 @@ const ResultInfo: FunctionComponent = () => {
           }}
         >
           <span style={{ color: "#4caf50" }}>========== Output ==========</span>
-          <br />
-          <div style={{ whiteSpace: "pre-line" }}>{output + "\n\n"}</div>
+          <div style={{ whiteSpace: "pre-line" }}>{output + "\n"}</div>
         </Box>
       )}
       {error && (
@@ -58,8 +72,7 @@ const ResultInfo: FunctionComponent = () => {
           }}
         >
           <span style={{ color: "#f44336" }}>========== Error ==========</span>
-          <br />
-          <div style={{ whiteSpace: "pre-line" }}>{error + "\n\n"}</div>
+          <div style={{ whiteSpace: "pre-line" }}>{error + "\n"}</div>
         </Box>
       )}
     </Box>

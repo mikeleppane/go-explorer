@@ -157,7 +157,7 @@ describe("handleCodeRunOutput", () => {
       stderr: "0.755",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput\n",
+      output: "some output\nmoreoutput",
       executionTime: "0.755 s",
       error: "",
     };
@@ -171,7 +171,7 @@ describe("handleCodeRunOutput", () => {
       stderr: "",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput\neven more output\n\n",
+      output: "some output\nmoreoutput\neven more output",
       executionTime: "",
       error: "",
     };
@@ -185,7 +185,7 @@ describe("handleCodeRunOutput", () => {
       stderr: "number",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput\neven more output\n\n",
+      output: "some output\nmoreoutput\neven more output",
       executionTime: "",
       error: "number",
     };
@@ -199,7 +199,7 @@ describe("handleCodeRunOutput", () => {
       stderr: "some error\n2.444",
     };
     const expectedResultObject = {
-      output: "some output\nmoreoutput\neven more output\n\n",
+      output: "some output\nmoreoutput\neven more output",
       executionTime: "2.444 s",
       error: "some error",
     };

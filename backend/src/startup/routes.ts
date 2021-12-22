@@ -9,14 +9,12 @@ import lintRouter from "../routes/lint";
 import buildRouter from "../routes/build";
 import runRouter from "../routes/run";
 import testingRouter from "../routes/testing";
-import { registerUnexpectedErrorHandlers } from "../errors/processErrorHandlers";
 
 export const setupRoutes = (app: express.Express) => {
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
   app.use(morganMiddleware);
-  registerUnexpectedErrorHandlers();
   app.use("/api/info", infoRouter);
   app.use("/api/format", formatRouter);
   app.use("/api/lint", lintRouter);

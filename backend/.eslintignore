@@ -2,3 +2,4 @@ node_modules
 build
 .eslintrc.js
 jest.config.js
+pm2-goexplorer.config.js
