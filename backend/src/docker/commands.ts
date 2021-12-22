@@ -12,12 +12,17 @@ const getFileName = (filePath: string): string => {
   return file_parts.name + file_parts.ext;
 };
 
-const dockerBaseCommand = "docker run --rm";
+let dockerBaseCommand = "docker run --rm";
 const dockerWorkDir = "-w /go/src/app";
 const volumeForSourceCode = (filePath: string, file: string) => {
   return `-v ${filePath}:/go/src/app/${file}`;
 };
 const volumeForGoModules = '-v "$PWD/go-modules":/go/pkg/mod';
+const preventNetworking = "--network none";
+const cpuLimit = `--cpus="1"`;
+const memoryLimit = "--memory=250m";
+const limits = `${preventNetworking} ${cpuLimit} ${memoryLimit}`;
+dockerBaseCommand += ` ${limits}`;
 const golangImage = (version: string) => {
   return `golang:${version}`;
 };
