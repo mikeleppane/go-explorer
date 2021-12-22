@@ -19,8 +19,7 @@ const volumeForSourceCode = (filePath: string, file: string) => {
 };
 const preventNetworking = "--network none";
 const cpuLimit = `--cpus="1"`;
-const memoryLimit = "--memory=250m";
-const limits = `${preventNetworking} ${cpuLimit} ${memoryLimit}`;
+const limits = `${preventNetworking} ${cpuLimit}`;
 dockerBaseCommand += ` ${limits}`;
 const volumeForGoModules = '-v "$PWD/go-modules":/go/pkg/mod';
 const golangImage = (version: string) => {
