@@ -6,10 +6,9 @@ import util = require("util");
 const execProm = util.promisify(exec);
 const bufferSize = 1024 * 1024 * 10;
 
-export const run = async (cmd: string, timeout = 60000) => {
+export const run = async (cmd: string) => {
   try {
     const { stdout, stderr } = await execProm(cmd, {
-      timeout,
       maxBuffer: bufferSize,
     });
     if (stderr) {

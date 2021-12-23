@@ -19,6 +19,7 @@ import {
   testingCode,
 } from "../../config/codeTemplates";
 import { parse } from "../../services/errorParser";
+import { appTimeout } from "../../constants";
 
 type CodePayloadType = {
   [key: number]: string;
@@ -207,7 +208,7 @@ export const runCode = (
   ) => {
     dispatch(clearOutput());
     dispatch(clearError());
-    dispatch(setStatus("Wait for code execution..."));
+    dispatch(setStatus("Wait for code execution...", "", appTimeout));
     const state = getState();
     const code = state.code[state.tab.currentTab];
     codeService
@@ -259,7 +260,7 @@ export const testCode = (
   ) => {
     dispatch(clearOutput());
     dispatch(clearError());
-    dispatch(setStatus("Wait for code testing..."));
+    dispatch(setStatus("Wait for code testing...", "", 65));
     const state = getState();
     const code = state.code[state.tab.currentTab];
     codeService
@@ -312,7 +313,7 @@ export const buildCode = (
   ) => {
     dispatch(clearOutput());
     dispatch(clearError());
-    dispatch(setStatus("Wait for code building..."));
+    dispatch(setStatus("Wait for code building...", "", appTimeout));
     const state = getState();
     const code = state.code[state.tab.currentTab];
     codeService
@@ -375,7 +376,7 @@ export const showEnvInfo = (version: string): AppThunk => {
     >
   ) => {
     dispatch(clearOutput());
-    dispatch(setStatus("Wait for env info..."));
+    dispatch(setStatus("Wait for env info...", "", appTimeout));
     codeService
       .getInfo(version)
       .then((response) => {

@@ -12,6 +12,7 @@ import {
 } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
 import { parse } from "../../services/errorParser";
+import { appTimeout } from "../../constants";
 
 export default function LintCodeMenu() {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ export default function LintCodeMenu() {
   const handleLintMenu = () => {
     dispatch(clearOutput());
     dispatch(clearError());
-    dispatch(setStatus("Wait for static code analysis.."));
+    dispatch(setStatus("Wait for static code analysis..", "", appTimeout));
     const code = state.code[state.tab.currentTab];
     codeService
       .lintCode({ code })

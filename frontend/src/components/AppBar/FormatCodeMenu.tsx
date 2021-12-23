@@ -6,6 +6,7 @@ import codeService from "../../services/codeService";
 import { addNewCode, clearError, setStatus } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
 import { LocalStorage } from "../../services/localStorage";
+import { appTimeout } from "../../constants";
 
 export default function FormatCodeMenu() {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ export default function FormatCodeMenu() {
 
   const handleFormatMenu = () => {
     const code = state.code[state.tab.currentTab];
-    dispatch(setStatus("Wait for code formatting..."));
+    dispatch(setStatus("Wait for code formatting...", "", appTimeout));
     dispatch(clearError());
     codeService
       .formatCode({ code })
