@@ -1,7 +1,5 @@
 # Go Explorer
 
----
-
 This is the home of the [Go Explorer][website].
 
 [website]: https://golangexplorer.org/
@@ -11,13 +9,10 @@ Go programming language.</i></div>
 
 ## What is Go Explorer?
 
----
-
 Go Explorer allows you to explore and experiment with the Go Programming language without needed the actual compiler.
 
 ## Features
 
----
 Below is listed all the currently available features:
 
 1. A clear and user-friendly UI with [VS Code] like experience including a syntax highlighting.
@@ -43,8 +38,6 @@ Below is listed all the currently available features:
 
 ## Architecture
 
----
-
 Language: Typescript
 
 The frontend is build using [React][react] and the backend server is build using [NodeJS][nodejs] and [Express][express]
@@ -66,8 +59,6 @@ The frontend is build using [React][react] and the backend server is build using
 [nginx]: https://www.nginx.com/
 
 ## Resource Limits
-
----
 
 ### Network
 
@@ -149,13 +140,9 @@ npm run test:e2e
 
 ## Deployment
 
----
-
 * [Digital Ocean (Ubuntu)](https://www.digitalocean.com/products/droplets/)
 
 ## TODO
-
----
 
 - [] investigate is there any need to create a custom image with some 3rd party modules installed?
 - [] more versions needed?
@@ -164,6 +151,6 @@ npm run test:e2e
 
 ## License
 
----
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
 [MIT](./LICENSE.md)
