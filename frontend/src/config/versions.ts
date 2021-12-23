@@ -3,5 +3,5 @@ export const availableVersions = () => {
   if (versions) {
     return versions.split(";");
   }
-  return ["1.17", "1.16"];
+  return ["1.17"];
 };
