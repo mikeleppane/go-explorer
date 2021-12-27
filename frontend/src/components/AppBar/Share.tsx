@@ -37,6 +37,7 @@ export default function Share() {
     <Box>
       <Tooltip title="Share a link to your code">
         <IconButton
+          id="share-button"
           sx={{
             marginLeft: "25px",
             marginRight: "10px",

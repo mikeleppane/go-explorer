@@ -4,7 +4,6 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import {
   Box,
   FormControl,
-  Link,
   Menu,
   MenuItem,
   MenuList,
@@ -47,6 +46,7 @@ export default function TestCodeMenu() {
   return (
     <div>
       <Button
+        id="test-button"
         variant="contained"
         style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
         endIcon={<PlayArrowIcon />}
@@ -55,6 +55,7 @@ export default function TestCodeMenu() {
         Testing
       </Button>
       <Button
+        id="test-option-button"
         variant="contained"
         style={{
           margin: "2px",
@@ -102,13 +103,14 @@ export default function TestCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/cmd/go#hdr-Compile_packages_and_dependencies"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
-                  Check GO build options from here.
-                </Link>
+                  Check Go build options from here.
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -116,7 +118,7 @@ export default function TestCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="test-flags-field"
                   label="Testing flags"
                   variant="standard"
                   size="small"
@@ -130,13 +132,14 @@ export default function TestCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/cmd/go#hdr-Testing_flags"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
-                  Check GO testing options from here.
-                </Link>
+                  Check Go testing options from here.
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -158,13 +161,14 @@ export default function TestCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
                   Check about GOGC environment variable from here.
-                </Link>
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -186,13 +190,14 @@ export default function TestCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
                   Check about GODEBUG environment variable from here.
-                </Link>
+                </a>
               </FormControl>
             </Box>
           </MenuItem>

@@ -4,11 +4,11 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import {
   Box,
   FormControl,
-  Link,
   Menu,
   MenuItem,
   MenuList,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useDispatch } from "react-redux";
@@ -45,28 +45,32 @@ export default function RunCodeMenu() {
 
   return (
     <div>
-      <Button
-        id="run-code-button"
-        variant="contained"
-        style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
-        endIcon={<PlayArrowIcon />}
-        onClick={handleCodeExecution}
-      >
-        Run
-      </Button>
-      <Button
-        variant="contained"
-        style={{
-          margin: "2px",
-          paddingLeft: 0,
-          paddingRight: 0,
-          backgroundColor: "#64748B",
-        }}
-        endIcon={<ArrowDownwardIcon />}
-        onClick={handleMenu}
-      >
-        ...
-      </Button>
+      <Tooltip title="Run your code">
+        <Button
+          id="run-code-button"
+          variant="contained"
+          style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
+          endIcon={<PlayArrowIcon />}
+          onClick={handleCodeExecution}
+        >
+          Run
+        </Button>
+      </Tooltip>
+      <Tooltip title="Open run options">
+        <Button
+          variant="contained"
+          style={{
+            margin: "2px",
+            paddingLeft: 0,
+            paddingRight: 0,
+            backgroundColor: "#64748B",
+          }}
+          endIcon={<ArrowDownwardIcon />}
+          onClick={handleMenu}
+        >
+          ...
+        </Button>
+      </Tooltip>
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
@@ -102,13 +106,14 @@ export default function RunCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/cmd/go#hdr-Compile_packages_and_dependencies"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
-                  Check GO build options from here.
-                </Link>
+                  Check Go build options from here.
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -130,13 +135,14 @@ export default function RunCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
                   Check about GOGC environment variable from here.
-                </Link>
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -158,13 +164,14 @@ export default function RunCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
                   Check about GODEBUG environment variable from here.
-                </Link>
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
