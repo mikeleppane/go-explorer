@@ -151,6 +151,10 @@ npm run test:e2e
 
 :pray:
 
+## User Guide
+
+[Guide](https://golangexplorer.org/help)
+
 ## Browser Support
 
 The application should work on a relatively modern browser. It has been tested with Firefox (95), Chrome (96), and
