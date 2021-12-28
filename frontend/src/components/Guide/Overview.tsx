@@ -42,17 +42,17 @@ const Overview = () => {
             few environment variables.
           </li>
           <li>
-            You can be format{" "}
+            You can format{" "}
             <a
               style={{
                 fontSize: "inherit",
               }}
               className="customlink"
-              href="https://pkg.go.dev/cmd/gofmt"
+              href="https://pkg.go.dev/golang.org/x/tools/cmd/goimports"
               target="_blank"
               rel="noreferrer"
             >
-              gofmt
+              goimports
             </a>{" "}
             and statically analyze{" "}
             <a

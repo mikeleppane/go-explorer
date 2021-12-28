@@ -10,6 +10,7 @@ import {
   MenuItem,
   MenuList,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -62,28 +63,32 @@ export default function BuildCodeMenu() {
 
   return (
     <div>
-      <Button
-        id="build-code-button"
-        variant="contained"
-        style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
-        endIcon={<PlayArrowIcon />}
-        onClick={handleCodeExecution}
-      >
-        Build
-      </Button>
-      <Button
-        variant="contained"
-        style={{
-          margin: "2px",
-          paddingLeft: 0,
-          paddingRight: 0,
-          backgroundColor: "#64748B",
-        }}
-        endIcon={<ArrowDownwardIcon />}
-        onClick={handleMenu}
-      >
-        ...
-      </Button>
+      <Tooltip title="Build your code">
+        <Button
+          id="build-code-button"
+          variant="contained"
+          style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
+          endIcon={<PlayArrowIcon />}
+          onClick={handleCodeExecution}
+        >
+          Build
+        </Button>
+      </Tooltip>
+      <Tooltip title="Open build options">
+        <Button
+          variant="contained"
+          style={{
+            margin: "2px",
+            paddingLeft: 0,
+            paddingRight: 0,
+            backgroundColor: "#64748B",
+          }}
+          endIcon={<ArrowDownwardIcon />}
+          onClick={handleMenu}
+        >
+          ...
+        </Button>
+      </Tooltip>
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}

@@ -17,7 +17,7 @@ Below is listed all the currently available features:
 
 1. A clear and user-friendly UI with [VS Code] like experience including a syntax highlighting.
 2. You can run, build or test your code with a chosen flags including a few environment variables.
-3. You can be format [gofmt] and statically analyze [go vet] your code.
+3. You can be format [goimports] and statically analyze [go vet] your code.
 4. Error highlighting is supported directly in the code in case your code fails to build or the static analyzer founds
    some error.
 5. You can share your code with your friends by a link.
@@ -32,7 +32,7 @@ Below is listed all the currently available features:
 
 [VS Code]: https://github.com/microsoft/vscode
 
-[gofmt]: https://pkg.go.dev/cmd/gofmt
+[goimports]: https://pkg.go.dev/golang.org/x/tools/cmd/goimports
 
 [go vet]: https://pkg.go.dev/cmd/vet
 
@@ -143,6 +143,13 @@ npm run test:e2e
 ## Deployment
 
 * [Digital Ocean (Ubuntu)](https://www.digitalocean.com/products/droplets/)
+
+## Community
+
+* Please share your ideas if the application is missing some feature or there's some issue.
+* Suggestions are also welcome if out environment is lacking some Go package.
+
+:pray:
 
 ## Browser Support
 

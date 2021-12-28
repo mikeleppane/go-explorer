@@ -20,8 +20,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '16'
-      - name: pull GO image
-        run: docker pull golang:1.17
+      - name: build GO image
+        run: docker build . -f ./backend/src/docker/Dockerfile.go117 -t golang:1.17
       - name: npm install
         run: |
           npm install --prefix backend/
