@@ -6,7 +6,6 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  Link,
   Menu,
   MenuItem,
   MenuList,
@@ -64,6 +63,7 @@ export default function BuildCodeMenu() {
   return (
     <div>
       <Button
+        id="build-code-button"
         variant="contained"
         style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
         endIcon={<PlayArrowIcon />}
@@ -119,13 +119,14 @@ export default function BuildCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/cmd/go#hdr-Compile_packages_and_dependencies"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
-                  Check GO build options from here.
-                </Link>
+                  Check Go build options from here.
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -147,13 +148,14 @@ export default function BuildCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
                   Check about GOGC environment variable from here.
-                </Link>
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -175,13 +177,14 @@ export default function BuildCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
                   Check about GODEBUG environment variable from here.
-                </Link>
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -203,13 +206,14 @@ export default function BuildCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://go.dev/doc/install/source#environment"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
                   Check about GOARCH environment variable from here.
-                </Link>
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -231,13 +235,14 @@ export default function BuildCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://go.dev/doc/install/source#environment"
                   target="_blank"
-                  style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
                   Check about GOOS environment variable from here.
-                </Link>
+                </a>
               </FormControl>
             </Box>
           </MenuItem>
@@ -274,13 +279,15 @@ export default function BuildCodeMenu() {
                     event.stopPropagation();
                   }}
                 />
-                <Link
+                <a
+                  className="customlink"
                   href="https://pkg.go.dev/cmd/objdump#pkg-overview"
                   target="_blank"
                   style={{ fontSize: "10px" }}
+                  rel="noreferrer"
                 >
                   Check more about objdump and symregexp from here.
-                </Link>
+                </a>
               </FormControl>
             </Box>
           </MenuItem>

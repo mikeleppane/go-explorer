@@ -10,8 +10,8 @@ import RunCodeMenu from "./RunCodeMenu";
 import BuildCodeMenu from "./BuildCodeMenu";
 import TestCodeMenu from "./TestCodeMenu";
 import ShowEnvInfoMenu from "./ShowEnvInfoMenu";
-import About from "./About";
 import Share from "./Share";
+import Help from "./Help";
 
 export default function AppHeader() {
   return (
@@ -48,7 +48,7 @@ export default function AppHeader() {
           <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
           <Share />
           <ShowEnvInfoMenu />
-          <About />
+          <Help />
         </Toolbar>
       </AppBar>
     </Box>

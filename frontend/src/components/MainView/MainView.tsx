@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Split from "react-split";
 import CodeEditor from "./CodeEditor";
 import ResultView from "./ResultView";
+import "../../styles.css";
 
 const defaultSplitSize = (window.innerHeight - 150).toString() + "px";
 

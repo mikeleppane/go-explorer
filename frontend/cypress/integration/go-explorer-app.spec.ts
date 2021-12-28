@@ -12,8 +12,9 @@ describe("Go Explorer App ", function () {
     cy.contains('fmt.Println("Hello,世界")');
   });
   it("user can open about", function () {
-    cy.get("#open-about").click();
-    cy.get("#about").contains("Go Explorer");
+    cy.get("#open-help").click();
+    cy.visit("http://localhost:3000/help");
+    cy.contains("Welcome to Go Explorer");
   });
   it("user can load new template to editor", function () {
     cy.get("#open-file-button").click();
@@ -33,6 +34,32 @@ describe("Go Explorer App ", function () {
     });
     cy.get("#result-view").contains("Execution time:", { timeout: 5000 });
     cy.get("#result-view").contains("Hello", { timeout: 5000 });
+  });
+  it("user can build code", function () {
+    cy.get("#build-code-button").click();
+    cy.get("#statusbar").contains("Wait for code building", {
+      matchCase: false,
+    });
+    cy.get("#statusbar").contains("Code building successful", {
+      timeout: 5000,
+      matchCase: false,
+    });
+    cy.get("#result-view").contains("Build time:", { timeout: 5000 });
+    cy.get("#result-view").contains("Binary size:", { timeout: 5000 });
+  });
+  it("user can test code", function () {
+    cy.get("#open-file-button").click();
+    cy.contains("Load From Templates");
+    cy.get("#open-templates-button").click();
+    cy.get("#load-testing-button").click();
+    cy.get("#editor").contains("TestIntMinBasic");
+    cy.get("#test-option-button").click({ force: true });
+    cy.get("#test-flags-field").type("-v -bench=.");
+    cy.get("#test-button").click({ force: true });
+    cy.get("#result-view").contains("PASS: TestIntMinBasic", {
+      matchCase: false,
+      timeout: 5000,
+    });
   });
   it("user can get environment info", function () {
     cy.get("#open-env-info-button").click();

@@ -1,23 +1,12 @@
-import React, { useEffect } from "react";
-import { Box, createTheme, ThemeProvider } from "@mui/material";
-import AppHeader from "./components/AppBar/AppBar";
-import MainView from "./components/MainView/MainView";
-import "./styles.css";
-import StatusBar from "./components/StatusBar/StatusBar";
-import CodeTabs from "./components/Tabs/CodeTabs";
-import { ConfirmProvider } from "material-ui-confirm";
+import React, { Suspense, useEffect } from "react";
+import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addNewCode } from "./state/actionCreators";
 import { fromBinary } from "./services/binaryHandler";
-import Notification from "./components/Notification/Notication";
+import { Route, Routes } from "react-router-dom";
+import Main from "./components/MainView";
 
-const darkTheme = createTheme({
-  palette: {
-    background: {
-      default: "#606060",
-    },
-  },
-});
+const AppGuide = React.lazy(() => import("./components/Guide"));
 
 function App() {
   const dispatch = useDispatch();
@@ -40,15 +29,17 @@ function App() {
         left: 0,
       }}
     >
-      <ThemeProvider theme={darkTheme}>
-        <AppHeader />
-        <ConfirmProvider>
-          <CodeTabs />
-        </ConfirmProvider>
-        <MainView />
-        <StatusBar />
-        <Notification />
-      </ThemeProvider>
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route
+          path="/help"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <AppGuide />
+            </Suspense>
+          }
+        />
+      </Routes>
     </Box>
   );
 }

@@ -38,13 +38,15 @@ Below is listed all the currently available features:
 
 ## Architecture
 
-Language: Typescript
+Language: [Typescript][typescript]
 
 The frontend is build using [React][react] and the backend server is build using [NodeJS][nodejs] and [Express][express]
 .(perhaps in the future backend will be migrated to Go??)
 
 [Go][go] source code is executed inside a [Docker][docker] container to properly isolate the execution.
 [Nginx][nginx] is used as a load balancer and a reverse proxy for the application.
+
+[typescript]: https://www.typescriptlang.org/
 
 [react]: https://reactjs.org/
 
@@ -142,12 +144,10 @@ npm run test:e2e
 
 * [Digital Ocean (Ubuntu)](https://www.digitalocean.com/products/droplets/)
 
-## TODO
+## Browser Support
 
-- [] investigate is there any need to create a custom image with some 3rd party modules installed?
-- [] more versions needed?
-- [] implement more e2e tests to get better coverage
-- [] enhance github pipeline to enable fully automatic deployment
+The application should work on a relatively modern browser. It has been tested with Firefox (95), Chrome (96), and
+Edge (96).
 
 ## License
 

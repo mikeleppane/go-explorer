@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   MenuList,
+  Tooltip,
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -115,15 +116,17 @@ export default function FileLoadMenu() {
 
   return (
     <div>
-      <Button
-        id="open-file-button"
-        variant="contained"
-        sx={{ marginLeft: "30px", backgroundColor: "#64748B" }}
-        endIcon={<ArrowDownwardIcon />}
-        onClick={handleMenu}
-      >
-        File
-      </Button>
+      <Tooltip title="Open file options">
+        <Button
+          id="open-file-button"
+          variant="contained"
+          sx={{ marginLeft: "30px", backgroundColor: "#64748B" }}
+          endIcon={<ArrowDownwardIcon />}
+          onClick={handleMenu}
+        >
+          File
+        </Button>
+      </Tooltip>
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
@@ -169,6 +172,7 @@ export default function FileLoadMenu() {
                 <ListItemText primary="Default" />
               </ListItemButton>
               <ListItemButton
+                id="load-testing-button"
                 onClick={() => {
                   handleLoadFromTemplate("testing");
                 }}

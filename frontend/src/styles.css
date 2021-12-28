@@ -20,3 +20,26 @@
 .myGlyphMarginClass {
     background: red;
 }
+
+a.customlink {
+    outline: none;
+    text-decoration: none;
+    font-size: 10px;
+}
+
+a:link.customlink {
+    color: rgb(16 121 195);
+    border-bottom: 1px dotted;
+}
+
+a:visited.customlink {
+    color: rgb(16 121 195)
+}
+
+a:focus.customlink, a:hover.customlink {
+    border-bottom: 1px solid;
+}
+
+a:active.customlink {
+    color: rgb(16 121 195);
+}

@@ -21,6 +21,10 @@ module.exports = {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        use: [{ loader: "file-loader" }],
+      },
     ],
   },
   resolve: {
@@ -31,6 +35,7 @@ module.exports = {
     filename: "[name].[contenthash].js",
     clean: true,
     publicPath: "/",
+    chunkFilename: "[name].[contenthash].js",
   },
   devServer: {
     port: 3000,
