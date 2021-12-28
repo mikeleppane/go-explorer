@@ -7,6 +7,7 @@ import { addNewCode, clearError, setStatus } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
 import { LocalStorage } from "../../services/localStorage";
 import { appTimeout } from "../../constants";
+import { Tooltip } from "@mui/material";
 
 export default function FormatCodeMenu() {
   const dispatch = useDispatch();
@@ -36,14 +37,16 @@ export default function FormatCodeMenu() {
 
   return (
     <div>
-      <Button
-        variant="contained"
-        style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
-        endIcon={<CodeIcon />}
-        onClick={handleFormatMenu}
-      >
-        Format
-      </Button>
+      <Tooltip title="Format your code">
+        <Button
+          variant="contained"
+          style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
+          endIcon={<CodeIcon />}
+          onClick={handleFormatMenu}
+        >
+          Format
+        </Button>
+      </Tooltip>
     </div>
   );
 }

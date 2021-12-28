@@ -8,6 +8,7 @@ import {
   MenuItem,
   MenuList,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useDispatch } from "react-redux";
@@ -45,29 +46,33 @@ export default function TestCodeMenu() {
 
   return (
     <div>
-      <Button
-        id="test-button"
-        variant="contained"
-        style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
-        endIcon={<PlayArrowIcon />}
-        onClick={handleCodeExecution}
-      >
-        Testing
-      </Button>
-      <Button
-        id="test-option-button"
-        variant="contained"
-        style={{
-          margin: "2px",
-          paddingLeft: 0,
-          paddingRight: 0,
-          backgroundColor: "#64748B",
-        }}
-        endIcon={<ArrowDownwardIcon />}
-        onClick={handleMenu}
-      >
-        ...
-      </Button>
+      <Tooltip title="Test your code">
+        <Button
+          id="test-button"
+          variant="contained"
+          style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
+          endIcon={<PlayArrowIcon />}
+          onClick={handleCodeExecution}
+        >
+          Testing
+        </Button>
+      </Tooltip>
+      <Tooltip title="Open testing options">
+        <Button
+          id="test-option-button"
+          variant="contained"
+          style={{
+            margin: "2px",
+            paddingLeft: 0,
+            paddingRight: 0,
+            backgroundColor: "#64748B",
+          }}
+          endIcon={<ArrowDownwardIcon />}
+          onClick={handleMenu}
+        >
+          ...
+        </Button>
+      </Tooltip>
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}

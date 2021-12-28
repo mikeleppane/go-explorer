@@ -13,6 +13,7 @@ import {
 import { useDispatch } from "react-redux";
 import { parse } from "../../services/errorParser";
 import { appTimeout } from "../../constants";
+import { Tooltip } from "@mui/material";
 
 export default function LintCodeMenu() {
   const dispatch = useDispatch();
@@ -50,14 +51,16 @@ export default function LintCodeMenu() {
 
   return (
     <div style={{ flexGrow: 1 }}>
-      <Button
-        variant="contained"
-        style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
-        endIcon={<FindInPageIcon />}
-        onClick={handleLintMenu}
-      >
-        Lint
-      </Button>
+      <Tooltip title="Lint your code">
+        <Button
+          variant="contained"
+          style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
+          endIcon={<FindInPageIcon />}
+          onClick={handleLintMenu}
+        >
+          Lint
+        </Button>
+      </Tooltip>
     </div>
   );
 }

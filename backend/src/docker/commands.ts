@@ -40,7 +40,7 @@ export const formatCode = (filePath: string, version: string) => {
     file
   )} ${dockerWorkDir} ${golangImage(
     version
-  )} ${timeoutCommand} gofmt -w ${file}`;
+  )} ${timeoutCommand} goimports -w ${file}`;
 };
 
 export const lintCode = (filePath: string, version: string) => {

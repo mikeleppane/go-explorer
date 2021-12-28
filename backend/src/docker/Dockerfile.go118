@@ -1,0 +1,5 @@
+FROM golang:1.18-rc
+
+RUN go install golang.org/x/tools/cmd/goimports@latest
+
+CMD ["go", "version"]

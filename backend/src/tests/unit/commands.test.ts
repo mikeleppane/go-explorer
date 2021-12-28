@@ -22,7 +22,7 @@ describe("Commands executed inside Docker container", () => {
     const file = "test.go";
     const command = formatCode(filePath, version);
     expect(command).toBe(
-      `docker run --rm --network none --cpus="1" -v ${filePath}:/go/src/app/${file} -w /go/src/app golang:${version} timeout 60 gofmt -w ${file}`
+      `docker run --rm --network none --cpus="1" -v ${filePath}:/go/src/app/${file} -w /go/src/app golang:${version} timeout 60 goimports -w ${file}`
     );
   });
   test("lintCode should return correct command", () => {

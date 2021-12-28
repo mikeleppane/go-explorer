@@ -28,24 +28,25 @@ describe("Go Explorer App ", function () {
     cy.get("#statusbar").contains("Wait for code execution", {
       matchCase: false,
     });
-    cy.get("#statusbar").contains("Code execution ok", {
-      timeout: 5000,
+    cy.get("#statusbar", { timeout: 5000 }).contains("Code execution ok", {
       matchCase: false,
     });
-    cy.get("#result-view").contains("Execution time:", { timeout: 5000 });
-    cy.get("#result-view").contains("Hello", { timeout: 5000 });
+    cy.get("#result-view", { timeout: 5000 }).contains("Execution time:");
+    cy.get("#result-view", { timeout: 5000 }).contains("Hello");
   });
   it("user can build code", function () {
     cy.get("#build-code-button").click();
     cy.get("#statusbar").contains("Wait for code building", {
       matchCase: false,
     });
-    cy.get("#statusbar").contains("Code building successful", {
-      timeout: 5000,
-      matchCase: false,
-    });
-    cy.get("#result-view").contains("Build time:", { timeout: 5000 });
-    cy.get("#result-view").contains("Binary size:", { timeout: 5000 });
+    cy.get("#statusbar", { timeout: 5000 }).contains(
+      "Code building successful",
+      {
+        matchCase: false,
+      }
+    );
+    cy.get("#result-view", { timeout: 5000 }).contains("Build time:");
+    cy.get("#result-view", { timeout: 5000 }).contains("Binary size:");
   });
   it("user can test code", function () {
     cy.get("#open-file-button").click();
@@ -56,10 +57,12 @@ describe("Go Explorer App ", function () {
     cy.get("#test-option-button").click({ force: true });
     cy.get("#test-flags-field").type("-v -bench=.");
     cy.get("#test-button").click({ force: true });
-    cy.get("#result-view").contains("PASS: TestIntMinBasic", {
-      matchCase: false,
-      timeout: 5000,
-    });
+    cy.get("#result-view", { timeout: 10000 }).contains(
+      "PASS: TestIntMinBasic",
+      {
+        matchCase: false,
+      }
+    );
   });
   it("user can get environment info", function () {
     cy.get("#open-env-info-button").click();
@@ -71,7 +74,7 @@ describe("Go Explorer App ", function () {
         matchCase: false,
       }
     );
-    cy.get("#result-view").contains("Go ENVS", { timeout: 5000 });
-    cy.get("#result-view").contains("CPU ARCH", { timeout: 5000 });
+    cy.get("#result-view", { timeout: 5000 }).contains("Go ENVS");
+    cy.get("#result-view", { timeout: 5000 }).contains("CPU ARCH");
   });
 });
