@@ -1,3 +1,5 @@
+![pipeline](https://github.com/mikeleppane/go-explorer/actions/workflows/pipeline.yml/badge.svg)
+
 # Go Explorer
 
 This is the home of the [Go Explorer][website].
@@ -9,7 +11,7 @@ Go programming language.</i></div>
 
 ## What is Go Explorer?
 
-Go Explorer allows you to explore and experiment with the Go Programming language without needed the actual compiler.
+Go Explorer allows you to learn, explore and experiment with the Go Programming language without no setups and needing to install the actual compiler.
 
 ## Features
 
