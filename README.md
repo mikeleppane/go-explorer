@@ -13,6 +13,8 @@ Go programming language.</i></div>
 
 Go Explorer allows you to learn, explore and experiment with the Go Programming language without no setups and needing to install the actual compiler.
 
+![image](https://drive.google.com/uc?export=view&id=1DgrftRIvyZILpNQ6T_Z39BTX0I_z0mVS)
+
 ## Features
 
 Below is listed all the currently available features:
