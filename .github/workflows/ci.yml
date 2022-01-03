@@ -28,6 +28,11 @@ jobs:
         run: |
           npm install --prefix backend/
           npm install --prefix frontend/
+      - name: create .env file
+        run: |
+          touch ./frontend/.env
+          echo GOLANG_VERSIONS=1.17;1.16;1.18-rc >> .env
+          cat .env
       - name: code quality - formatting check
         run: |
           npm run --prefix backend/ check:format
