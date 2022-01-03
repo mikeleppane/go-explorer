@@ -14,7 +14,7 @@ jobs:
     env:
       COMMIT_MESSAGES: ${{ join(github.event.commits.*.message) }}
       PORT: 5000
-      GOLANG_VERSIONS: 1.17;1.16
+      GOLANG_VERSIONS: 1.17;1.16;1.18-rc
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
