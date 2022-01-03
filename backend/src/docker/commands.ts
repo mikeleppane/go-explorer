@@ -30,7 +30,7 @@ const timeoutCommand = "timeout 60";
 export const envInfo = (version: string) => {
   return `${dockerBaseCommand} ${golangImage(
     version
-  )} ${timeoutCommand} bash -c "echo '====Go ENVS====';go env && echo '\n====CPU ARCH===='; lscpu"`;
+  )} ${timeoutCommand} bash -c "echo '====Go ENVS====';go env && echo '\n====CPU ARCH===='; lscpu | grep -iE 'Architecture:|CPU op-mode\\(s\\):|CPU\\(s\\):|Thread\\(s\\) per core:|Core\\(s\\) per socket:|NUMA node\\(s\\):|Vendor ID:|CPU family:|Model:|Model name:|CPU MHz:|L1d cache:|L1i cache:|L2 cache:'"`;
 };
 
 export const formatCode = (filePath: string, version: string) => {

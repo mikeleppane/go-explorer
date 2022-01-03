@@ -144,10 +144,10 @@ export default function FileLoadMenu() {
         sx={{ marginTop: "5px" }}
       >
         <MenuList>
-          <MenuItem onClick={handleNewTemplate}>
+          <MenuItem id="new-template" onClick={handleNewTemplate}>
             <ListItemText>New Template...</ListItemText>
           </MenuItem>
-          <MenuItem onClick={handleRecentChanges}>
+          <MenuItem id="recent-changes" onClick={handleRecentChanges}>
             <ListItemIcon>
               <CachedIcon fontSize="small" />
             </ListItemIcon>
@@ -165,6 +165,7 @@ export default function FileLoadMenu() {
           <Collapse in={templatesOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton
+                id="load-default-button"
                 onClick={() => {
                   handleLoadFromTemplate("default");
                 }}
@@ -188,6 +189,7 @@ export default function FileLoadMenu() {
                 <ListItemText primary="Benchmark" />
               </ListItemButton>
               <ListItemButton
+                id="load-concurrency-button"
                 onClick={() => {
                   handleLoadFromTemplate("concurrency");
                 }}
@@ -195,6 +197,7 @@ export default function FileLoadMenu() {
                 <ListItemText primary="Concurrency" />
               </ListItemButton>
               <ListItemButton
+                id="load-generics-button"
                 onClick={() => {
                   handleLoadFromTemplate("generics");
                 }}
