@@ -58,6 +58,7 @@ export default function RunCodeMenu() {
       </Tooltip>
       <Tooltip title="Open run options">
         <Button
+          id="run-option-button"
           variant="contained"
           style={{
             margin: "2px",
@@ -179,7 +180,7 @@ export default function RunCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id="standard-select-currency-native"
+                  id="select-version-for-code"
                   select
                   label="Go version"
                   value={version}

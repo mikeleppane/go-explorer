@@ -1,4 +1,4 @@
-name: Deployment pipeline
+name: ci
 
 on:
   push:
@@ -14,18 +14,28 @@ jobs:
     env:
       COMMIT_MESSAGES: ${{ join(github.event.commits.*.message) }}
       PORT: 5000
-      GOLANG_VERSIONS: 1.17;1.16
+      GOLANG_VERSIONS: 1.17;1.16;1.18-rc
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: '16'
       - name: build GO image
-        run: docker build . -f ./backend/src/docker/Dockerfile.go117 -t golang:1.17
+        run: |
+          docker build . -f ./backend/src/docker/Dockerfile.go117 -t golang:1.17
+          docker build . -f ./backend/src/docker/Dockerfile.go118 -t golang:1.18-rc
       - name: npm install
         run: |
           npm install --prefix backend/
           npm install --prefix frontend/
+      - name: create .env file
+        run: |
+          touch ./frontend/.env
+          touch ./backend/.env
+          echo GOLANG_VERSIONS="1.17;1.16;1.18-rc" >> ./frontend/.env
+          echo GOLANG_VERSIONS="1.17;1.16;1.18-rc" >> ./backend/.env
+          cat ./frontend/.env
+          cat ./backend/.env
       - name: code quality - formatting check
         run: |
           npm run --prefix backend/ check:format

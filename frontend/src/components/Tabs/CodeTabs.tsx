@@ -94,16 +94,23 @@ export default function CodeTabs() {
           variant="scrollable"
           scrollButtons={true}
         >
-          <Tab label="Main" value={0} sx={{ color: "white", fontSize: 16 }} />
+          <Tab
+            id="main-tab"
+            label="Main"
+            value={0}
+            sx={{ color: "white", fontSize: 16 }}
+          />
           {tabs.length > 0 &&
             tabs.map((tab) => {
               return (
                 <Tab
+                  id={`code-tab-${tab.codeTabId}`}
                   key={tab.codeTabId}
                   label={`Code ${tab.codeTabId}`}
                   value={tab.codeTabId}
                   icon={
                     <ClearIcon
+                      id={`clear-tab-${tab.codeTabId}`}
                       fontSize="small"
                       sx={{
                         marginLeft: "10px",
@@ -128,7 +135,12 @@ export default function CodeTabs() {
                 />
               );
             })}
-          <Tab icon={<PostAddIcon />} value="newTab" sx={{ color: "white" }} />
+          <Tab
+            id="new-tab"
+            icon={<PostAddIcon />}
+            value="newTab"
+            sx={{ color: "white" }}
+          />
         </Tabs>
       </AppBar>
     </Box>
