@@ -111,11 +111,11 @@ describe("Run Code", function () {
     cy.get("#statusbar").contains("Wait for code execution", {
       matchCase: false,
     });
-    cy.get("#statusbar", { timeout: 5000 }).contains("Code execution ok", {
+    cy.get("#statusbar", { timeout: 10000 }).contains("Code execution ok", {
       matchCase: false,
     });
-    cy.get("#result-view", { timeout: 5000 }).contains("Execution time:");
-    cy.get("#result-view", { timeout: 5000 }).contains("Generic Sums");
+    cy.get("#result-view", { timeout: 10000 }).contains("Execution time:");
+    cy.get("#result-view", { timeout: 10000 }).contains("Generic Sums");
   });
 });
 
