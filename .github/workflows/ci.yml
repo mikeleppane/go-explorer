@@ -21,7 +21,9 @@ jobs:
         with:
           node-version: '16'
       - name: build GO image
-        run: docker build . -f ./backend/src/docker/Dockerfile.go117 -t golang:1.17
+        run: |
+          docker build . -f ./backend/src/docker/Dockerfile.go117 -t golang:1.17
+          docker build . -f ./backend/src/docker/Dockerfile.go118 -t golang:1.18-rc
       - name: npm install
         run: |
           npm install --prefix backend/
