@@ -31,8 +31,11 @@ jobs:
       - name: create .env file
         run: |
           touch ./frontend/.env
-          echo GOLANG_VERSIONS="1.17;1.16;1.18-rc" >> .env
-          cat .env
+          touch ./backend/.env
+          echo GOLANG_VERSIONS="1.17;1.16;1.18-rc" >> ./frontend/.env
+          echo GOLANG_VERSIONS="1.17;1.16;1.18-rc" >> ./backend/.env
+          cat ./frontend/.env
+          cat ./backend/.env
       - name: code quality - formatting check
         run: |
           npm run --prefix backend/ check:format
