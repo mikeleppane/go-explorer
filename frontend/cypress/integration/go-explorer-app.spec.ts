@@ -161,6 +161,56 @@ describe("Test Code", function () {
   });
 });
 
+describe("Format Code", function () {
+  beforeEach(function () {
+    cy.visit("http://localhost:3000");
+  });
+  it("should reformat code", function () {
+    for (let i = 0; i < 6; i++) {
+      cy.get("#editor textarea").type("\n");
+    }
+    cy.get("#editor").should("contain", "15");
+    cy.get("#format-code-button").click();
+    cy.get("#statusbar").contains("Wait for code formatting", {
+      matchCase: false,
+    });
+    cy.get("#statusbar", { timeout: 5000 }).contains("Code formatting ok", {
+      matchCase: false,
+    });
+    cy.get("#editor").should("not.contain", "15");
+  });
+});
+
+describe("Lint Code", function () {
+  beforeEach(function () {
+    cy.visit("http://localhost:3000");
+  });
+  it("should statically analyze code", function () {
+    cy.get("#lint-code-button").click();
+    cy.get("#statusbar").contains("Wait for static code analysis", {
+      matchCase: false,
+    });
+    cy.get("#statusbar", { timeout: 10000 }).contains("Analysis ok", {
+      matchCase: false,
+    });
+  });
+  it("should report an error if static code analysis fails", function () {
+    cy.get("#editor textarea").type("package tmp");
+    cy.get("#lint-code-button").click();
+    cy.get("#statusbar").contains("Wait for static code analysis", {
+      matchCase: false,
+    });
+    cy.get("#statusbar", { timeout: 10000 }).contains(
+      "Analyzer found some issues",
+      {
+        matchCase: false,
+      }
+    );
+    cy.get(".errorHighlight").should("have.css", "color", "rgb(255, 0, 0)");
+    cy.get("#result-view").contains("Error");
+  });
+});
+
 describe("Go Explorer App Info", function () {
   beforeEach(function () {
     cy.visit("http://localhost:3000");

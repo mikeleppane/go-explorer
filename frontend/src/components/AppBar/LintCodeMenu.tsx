@@ -53,6 +53,7 @@ export default function LintCodeMenu() {
     <div style={{ flexGrow: 1 }}>
       <Tooltip title="Lint your code">
         <Button
+          id="lint-code-button"
           variant="contained"
           style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
           endIcon={<FindInPageIcon />}
