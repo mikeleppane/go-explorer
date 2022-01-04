@@ -39,6 +39,7 @@ export default function FormatCodeMenu() {
     <div>
       <Tooltip title="Format your code">
         <Button
+          id="format-code-button"
           variant="contained"
           style={{ marginLeft: "10px", backgroundColor: "#64748B" }}
           endIcon={<CodeIcon />}
