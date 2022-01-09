@@ -18,8 +18,8 @@ import {
   genericsCode,
   testingCode,
 } from "../../config/codeTemplates";
-import { parse } from "../../services/errorParser";
 import { appTimeout } from "../../constants";
+import { createErrorPayloadFromMessage } from "../../services/errorExtractor";
 
 type CodePayloadType = {
   [key: number]: string;
@@ -230,7 +230,7 @@ export const runCode = (
           }
           if (!response.executionTime && response.error) {
             dispatch(setStatus("Code execution failed", "red", 10));
-            dispatch(newError(parse(response.error)));
+            dispatch(newError(createErrorPayloadFromMessage(response.error)));
           }
         }
       })
@@ -282,7 +282,7 @@ export const testCode = (
           }
           if (response.error) {
             dispatch(setStatus("Code testing failed", "red", 10));
-            dispatch(newError(parse(response.error)));
+            dispatch(newError(createErrorPayloadFromMessage(response.error)));
           }
         }
       })
@@ -345,7 +345,7 @@ export const buildCode = (
           if (returnObjDump) {
             if (response.error && !response.output) {
               dispatch(setStatus("Code building failed", "red", 10));
-              dispatch(newError(parse(response.error)));
+              dispatch(newError(createErrorPayloadFromMessage(response.error)));
             } else {
               dispatch(setStatus("Code building successful."));
             }
@@ -355,7 +355,7 @@ export const buildCode = (
             }
             if (!response.binarySize) {
               dispatch(setStatus("Code building failed", "red", 10));
-              dispatch(newError(parse(response.error)));
+              dispatch(newError(createErrorPayloadFromMessage(response.error)));
             }
           }
         }

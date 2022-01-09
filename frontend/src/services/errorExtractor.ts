@@ -1,6 +1,9 @@
 import { ErrorPayload } from "../types";
 
-export const parse = (errorMessage: string): ErrorPayload[] => {
+// extract line and column numbers and error message from an error output
+export const createErrorPayloadFromMessage = (
+  errorMessage: string
+): ErrorPayload[] => {
   const validLineRegexp = new RegExp(".?go:\\d+:\\d+", "i");
   const extractContentRegexp = new RegExp(/.?go:(\d+):(\d+):\s*(.+)/i);
   const errors: ErrorPayload[] = [];
