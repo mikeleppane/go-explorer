@@ -11,7 +11,7 @@ import {
   setStatus,
 } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
-import { parse } from "../../services/errorParser";
+import { createErrorPayloadFromMessage } from "../../services/errorExtractor";
 import { appTimeout } from "../../constants";
 import { Tooltip } from "@mui/material";
 
@@ -36,7 +36,7 @@ export default function LintCodeMenu() {
             )
           );
           dispatch(lintCode(response));
-          dispatch(newError(parse(response)));
+          dispatch(newError(createErrorPayloadFromMessage(response)));
         } else {
           dispatch(setStatus("Analysis ok."));
         }

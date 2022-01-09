@@ -6,9 +6,6 @@
       "dom.iterable",
       "es2020"
     ],
-    "types": [
-      "cypress"
-    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -30,7 +27,6 @@
     "sourceMap": true
   },
   "include": [
-    "src",
-    "cypress"
+    "src"
   ]
 }

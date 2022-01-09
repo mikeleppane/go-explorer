@@ -51,6 +51,8 @@ jobs:
       - name: backend - unit/integration tests
         run: |
           npm run --prefix backend/ test
+      - name: frontend - unit tests
+        run: npm run --prefix frontend/ test:unit
       - name: start backend and frontend
         run: |
           npm run --prefix backend/ start:test &

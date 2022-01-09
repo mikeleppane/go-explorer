@@ -1,9 +1,8 @@
 import * as React from "react";
-import { FunctionComponent } from "react";
 import { Box } from "@mui/material";
 import { useAppSelector } from "../../hooks/useAppSelector";
 
-const StatusBar: FunctionComponent = () => {
+const StatusBar = () => {
   const { message, color } = useAppSelector((state) => state.status);
   const newColor = color ? color : "white";
   return (
