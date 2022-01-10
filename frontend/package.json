@@ -50,14 +50,14 @@
   },
   "browserslist": {
     "production": [
-      "last 3 chrome version",
-      "last 3 firefox version",
-      "last 3 safari version"
+      "last 3 Chrome versions",
+      "last 3 Firefox versions",
+      "last 3 Edge versions"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 Chrome versions",
+      "last 1 Firefox versions",
+      "last 1 Edge versions"
     ]
   },
   "devDependencies": {

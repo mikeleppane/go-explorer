@@ -24,15 +24,15 @@ describe("Show Info", function () {
     cy.get("#result-view", { timeout: 5000 }).contains("CPU ARCH");
   });
 
-  it("should send correct API request", function () {
-    cy.intercept("GET", "/api/info?version=1.16").as("env-info");
+  it.only("should send correct API request", function () {
+    cy.intercept("GET", "/api/info?version=1.18-rc").as("env-info");
     cy.get("#open-env-info-button").click();
-    cy.get("#select-version-for-get-info").select("1.16");
+    cy.get("#select-version-for-get-info").select("1.18-rc");
     cy.get("#get-env-info-button").click();
     cy.get("@env-info").its("request.method").should("equal", "GET");
     cy.get("@env-info")
       .its("response.body.output", { timeout: 5000 })
-      .should("include", "go1.16");
+      .should("include", "go1.18");
     cy.get("@env-info")
       .its("response.statusCode", { timeout: 5000 })
       .should("equal", 200);
