@@ -21,8 +21,6 @@ export default function TestCodeMenu() {
   );
   const [buildFlags, setBuildFlags] = React.useState("");
   const [testFlags, setTestFlags] = React.useState("");
-  const [gogc, setGoGC] = React.useState("");
-  const [godebug, setGoDebug] = React.useState("");
   const [version, setGoVersion] = React.useState("");
   const dispatch = useDispatch();
   const versions = availableVersions();
@@ -40,7 +38,7 @@ export default function TestCodeMenu() {
   };
 
   const handleCodeExecution = () => {
-    dispatch(testCode(buildFlags, testFlags, gogc, godebug, version));
+    dispatch(testCode(buildFlags, testFlags, version));
     handleClose();
   };
 
@@ -94,7 +92,7 @@ export default function TestCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="test-code-build-flags"
                   label="Build flags"
                   variant="standard"
                   size="small"
@@ -109,6 +107,7 @@ export default function TestCodeMenu() {
                   }}
                 />
                 <a
+                  id="test-code-build-option-link"
                   className="customlink"
                   href="https://pkg.go.dev/cmd/go#hdr-Compile_packages_and_dependencies"
                   target="_blank"
@@ -123,7 +122,7 @@ export default function TestCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id="test-flags-field"
+                  id="test-code-testing-flags"
                   label="Testing flags"
                   variant="standard"
                   size="small"
@@ -138,6 +137,7 @@ export default function TestCodeMenu() {
                   }}
                 />
                 <a
+                  id="test-code-testing-option-link"
                   className="customlink"
                   href="https://pkg.go.dev/cmd/go#hdr-Testing_flags"
                   target="_blank"
@@ -152,65 +152,7 @@ export default function TestCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id='margin="dense"'
-                  label="GOGC"
-                  variant="standard"
-                  size="small"
-                  value={gogc}
-                  inputProps={{ style: { fontSize: "12px" } }}
-                  onChange={(event) => {
-                    setGoGC(event.target.value);
-                  }}
-                  helperText="Enter value for GOGC environment variable"
-                  onKeyDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                />
-                <a
-                  className="customlink"
-                  href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Check about GOGC environment variable from here.
-                </a>
-              </FormControl>
-            </Box>
-          </MenuItem>
-          <MenuItem>
-            <Box>
-              <FormControl>
-                <TextField
-                  id='margin="dense"'
-                  label="GODEBUG"
-                  variant="standard"
-                  size="small"
-                  value={godebug}
-                  inputProps={{ style: { fontSize: "12px" } }}
-                  onChange={(event) => {
-                    setGoDebug(event.target.value);
-                  }}
-                  helperText="Enter value for GODEBUG environment variable"
-                  onKeyDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                />
-                <a
-                  className="customlink"
-                  href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Check about GODEBUG environment variable from here.
-                </a>
-              </FormControl>
-            </Box>
-          </MenuItem>
-          <MenuItem>
-            <Box component="form" noValidate autoComplete="off">
-              <FormControl>
-                <TextField
-                  id="standard-select-currency-native"
+                  id="select-version-for-test-code"
                   select
                   label="Go version"
                   value={version}

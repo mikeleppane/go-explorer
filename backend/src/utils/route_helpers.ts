@@ -59,11 +59,11 @@ export const parseRequestEntries = (entry: RequestEntry) => {
     goarch = entry.goarch;
   }
   let gogc = "";
-  if (entry.gogc) {
+  if ("gogc" in entry && entry.gogc) {
     gogc = entry.gogc;
   }
   let godebug = "";
-  if (entry.godebug) {
+  if ("godebug" in entry && entry.godebug) {
     godebug = entry.godebug;
   }
   let buildFlags = "";

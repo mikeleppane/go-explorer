@@ -15,11 +15,11 @@ const testingRouter = express.Router();
 
 const handleCodeTestTask = async (params: TestingTask) => {
   const { tempFile, requestEntries, version, res } = params;
-  const { code, gogc, godebug, buildFlags, testFlags } = requestEntries;
+  const { code, buildFlags, testFlags } = requestEntries;
   await writeFile(tempFile, code, { encoding: "utf-8" });
   logger.info(`Code was successfully written to the file: ${tempFile}`);
   const output = await run(
-    testCode(tempFile, { gogc, godebug, buildFlags, testFlags, version })
+    testCode(tempFile, { buildFlags, testFlags, version })
   );
   const responseObj = handleCodeTestOutput(output);
   res.status(200).json(responseObj);

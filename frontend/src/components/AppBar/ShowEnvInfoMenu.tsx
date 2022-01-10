@@ -76,7 +76,7 @@ export default function ShowEnvInfoMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id="standard-select-currency-native"
+                  id="select-version-for-get-info"
                   select
                   label="Go version"
                   value={version}

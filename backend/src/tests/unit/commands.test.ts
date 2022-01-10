@@ -90,13 +90,9 @@ describe("Commands executed inside Docker container", () => {
     const version = "1.17";
     const filePath = "/tmp/go-main_test.go";
     const file = "go-main_test.go";
-    const gogc = "";
-    const godebug = "";
     const buildFlags = "";
     const testFlags = "-v -bench=. -benchtime=3s";
     const command = testCode(filePath, {
-      gogc,
-      godebug,
       buildFlags,
       testFlags,
       version,

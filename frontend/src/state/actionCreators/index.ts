@@ -246,8 +246,6 @@ export const runCode = (
 export const testCode = (
   buildFlags: string,
   testFlags: string,
-  gogc: string,
-  godebug: string,
   version: string
 ): AppThunk => {
   return (
@@ -264,7 +262,7 @@ export const testCode = (
     const state = getState();
     const code = state.code[state.tab.currentTab];
     codeService
-      .testCode({ code, buildFlags, testFlags, gogc, godebug, version })
+      .testCode({ code, buildFlags, testFlags, version })
       .then((response) => {
         if (response) {
           dispatch({
