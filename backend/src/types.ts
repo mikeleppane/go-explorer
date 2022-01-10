@@ -26,7 +26,8 @@ export interface BuildEntry extends RunEntry {
   symregexp?: string;
 }
 
-export interface TestingEntry extends RunEntry {
+export interface TestingEntry extends BaseEntry {
+  buildFlags?: string;
   testFlags?: string;
 }
 
@@ -87,7 +88,10 @@ export type RunCommand = Omit<
   "testFlags" | "goos" | "goarch" | "symregexp"
 >;
 
-export type TestCommand = Omit<Command, "goos" | "goarch" | "symregexp">;
+export type TestCommand = Omit<
+  Command,
+  "goos" | "goarch" | "symregexp" | "gogc" | "godebug"
+>;
 
 export interface RouteException {
   tempFile: string;

@@ -27,8 +27,6 @@ export interface RunService extends BaseService {
 }
 
 export interface TestService extends BaseService {
-  gogc?: string;
-  godebug?: string;
   buildFlags?: string;
   testFlags?: string;
 }

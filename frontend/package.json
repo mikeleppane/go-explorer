@@ -39,7 +39,7 @@
     "lint": "tsc -p . --noEmit && eslint './src/**/*.{ts,tsx}'",
     "check:format": "prettier --check './src/**/*.{ts,tsx}'",
     "cypress:open": "cypress open",
-    "test:e2e": "cypress run",
+    "test:e2e": "cypress run --browser electron",
     "test:unit": "NODE_ENV=test GOLANG_VERSIONS='1.17;1.16;1.18-rc' jest --verbose --runInBand"
   },
   "eslintConfig": {
@@ -50,14 +50,14 @@
   },
   "browserslist": {
     "production": [
-      "last 3 chrome version",
-      "last 3 firefox version",
-      "last 3 safari version"
+      "last 3 Chrome versions",
+      "last 3 Firefox versions",
+      "last 3 Edge versions"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 Chrome versions",
+      "last 1 Firefox versions",
+      "last 1 Edge versions"
     ]
   },
   "devDependencies": {
@@ -71,6 +71,7 @@
     "copy-webpack-plugin": "^10.2.0",
     "cypress": "^9.1.1",
     "dotenv-webpack": "^7.0.3",
+    "electron": "^16.0.6",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-jest": "^24.7.0",
     "html-webpack-plugin": "^5.5.0",

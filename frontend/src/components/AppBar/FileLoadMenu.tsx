@@ -223,7 +223,10 @@ export default function FileLoadMenu() {
             </MenuItem>
           </label>
           <label htmlFor="copy">
-            <MenuItem onClick={handleCopySelectToClipboard}>
+            <MenuItem
+              id="copy-to-clipboard-button"
+              onClick={handleCopySelectToClipboard}
+            >
               <ListItemIcon>
                 <ContentCopyIcon fontSize="small" />
               </ListItemIcon>

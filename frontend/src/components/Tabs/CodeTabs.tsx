@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Box, Tab, Tabs } from "@mui/material";
+import { AppBar, Box, Tab, Tabs, Tooltip } from "@mui/material";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDispatch } from "react-redux";
@@ -109,20 +109,22 @@ export default function CodeTabs() {
                   label={`Code ${tab.codeTabId}`}
                   value={tab.codeTabId}
                   icon={
-                    <ClearIcon
-                      id={`clear-tab-${tab.codeTabId}`}
-                      fontSize="small"
-                      sx={{
-                        marginLeft: "10px",
-                        "&:hover": {
-                          color: "red",
-                          backgroundColor: "#797D7F",
-                        },
-                      }}
-                      onClick={() => {
-                        handleRemoveTab(tab.codeTabId);
-                      }}
-                    />
+                    <Tooltip title="Close tab">
+                      <ClearIcon
+                        id={`clear-tab-${tab.codeTabId}`}
+                        fontSize="small"
+                        sx={{
+                          marginLeft: "10px",
+                          "&:hover": {
+                            color: "red",
+                            backgroundColor: "#797D7F",
+                          },
+                        }}
+                        onClick={() => {
+                          handleRemoveTab(tab.codeTabId);
+                        }}
+                      />
+                    </Tooltip>
                   }
                   iconPosition="end"
                   sx={{
@@ -135,12 +137,14 @@ export default function CodeTabs() {
                 />
               );
             })}
-          <Tab
-            id="new-tab"
-            icon={<PostAddIcon />}
-            value="newTab"
-            sx={{ color: "white" }}
-          />
+          <Tooltip title="Open new tab">
+            <Tab
+              id="new-tab"
+              icon={<PostAddIcon />}
+              value="newTab"
+              sx={{ color: "white" }}
+            />
+          </Tooltip>
         </Tabs>
       </AppBar>
     </Box>

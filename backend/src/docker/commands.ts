@@ -111,9 +111,9 @@ export const runCode = (filePath: string, config: RunCommand) => {
 };
 
 export const testCode = (filePath: string, config: TestCommand) => {
-  const { gogc, godebug, buildFlags, testFlags, version } = config;
+  const { buildFlags, testFlags, version } = config;
   const file = getFileName(filePath);
-  const inputEnvs = { gogc, godebug };
+  const inputEnvs = {};
   let envs = createEnvs(inputEnvs);
   envs += "--env GO111MODULE=auto";
   const testingCommand = `go test ${buildFlags} ${testFlags}`;

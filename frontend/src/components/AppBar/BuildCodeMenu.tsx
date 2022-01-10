@@ -76,6 +76,7 @@ export default function BuildCodeMenu() {
       </Tooltip>
       <Tooltip title="Open build options">
         <Button
+          id="build-code-option-button"
           variant="contained"
           style={{
             margin: "2px",
@@ -110,7 +111,7 @@ export default function BuildCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="build-code-build-flags"
                   label="Build flags"
                   variant="standard"
                   size="small"
@@ -125,6 +126,7 @@ export default function BuildCodeMenu() {
                   }}
                 />
                 <a
+                  id="build-code-build-flags-link"
                   className="customlink"
                   href="https://pkg.go.dev/cmd/go#hdr-Compile_packages_and_dependencies"
                   target="_blank"
@@ -139,7 +141,7 @@ export default function BuildCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="build-code-gogc-option"
                   label="GOGC"
                   variant="standard"
                   size="small"
@@ -154,6 +156,7 @@ export default function BuildCodeMenu() {
                   }}
                 />
                 <a
+                  id="build-code-gogc-option-link"
                   className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"
@@ -168,7 +171,7 @@ export default function BuildCodeMenu() {
             <Box>
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="build-code-godebug-option"
                   label="GODEBUG"
                   variant="standard"
                   size="small"
@@ -183,6 +186,7 @@ export default function BuildCodeMenu() {
                   }}
                 />
                 <a
+                  id="build-code-godebug-option-link"
                   className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"
@@ -197,7 +201,7 @@ export default function BuildCodeMenu() {
             <Box>
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="build-code-goarch-option"
                   label="GOARCH"
                   variant="standard"
                   size="small"
@@ -212,6 +216,7 @@ export default function BuildCodeMenu() {
                   }}
                 />
                 <a
+                  id="build-code-goarch-option-link"
                   className="customlink"
                   href="https://go.dev/doc/install/source#environment"
                   target="_blank"
@@ -226,7 +231,7 @@ export default function BuildCodeMenu() {
             <Box>
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="build-code-goos-option"
                   label="GOOS"
                   variant="standard"
                   size="small"
@@ -241,6 +246,7 @@ export default function BuildCodeMenu() {
                   }}
                 />
                 <a
+                  id="build-code-goos-option-link"
                   className="customlink"
                   href="https://go.dev/doc/install/source#environment"
                   target="_blank"
@@ -257,6 +263,7 @@ export default function BuildCodeMenu() {
                 <FormControlLabel
                   control={
                     <Checkbox
+                      id="objDump-checkbox"
                       checked={objDumpEnabled}
                       onChange={(event) => {
                         setObjDumpEnabled(event.target.checked);
@@ -270,7 +277,7 @@ export default function BuildCodeMenu() {
                   }
                 />
                 <TextField
-                  id='margin="dense"'
+                  id="symregexp-field"
                   label="symregexp"
                   variant="standard"
                   size="small"
@@ -285,6 +292,7 @@ export default function BuildCodeMenu() {
                   }}
                 />
                 <a
+                  id="objDump-option-link"
                   className="customlink"
                   href="https://pkg.go.dev/cmd/objdump#pkg-overview"
                   target="_blank"
@@ -300,7 +308,7 @@ export default function BuildCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id="standard-select-currency-native"
+                  id="select-version-for-code-build"
                   select
                   label="Go version"
                   value={version}

@@ -93,7 +93,7 @@ export default function RunCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="run-code-build-flags"
                   label="Build flags"
                   variant="standard"
                   size="small"
@@ -108,6 +108,7 @@ export default function RunCodeMenu() {
                   }}
                 />
                 <a
+                  id="run-code-build-option-link"
                   className="customlink"
                   href="https://pkg.go.dev/cmd/go#hdr-Compile_packages_and_dependencies"
                   target="_blank"
@@ -122,7 +123,7 @@ export default function RunCodeMenu() {
             <Box component="form" noValidate autoComplete="off">
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="run-code-gogc-option"
                   label="GOGC"
                   variant="standard"
                   size="small"
@@ -137,6 +138,7 @@ export default function RunCodeMenu() {
                   }}
                 />
                 <a
+                  id="run-code-gogc-option-link"
                   className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"
@@ -151,7 +153,7 @@ export default function RunCodeMenu() {
             <Box>
               <FormControl>
                 <TextField
-                  id='margin="dense"'
+                  id="run-code-godebug-option"
                   label="GODEBUG"
                   variant="standard"
                   size="small"
@@ -166,6 +168,7 @@ export default function RunCodeMenu() {
                   }}
                 />
                 <a
+                  id="run-code-godebug-option-link"
                   className="customlink"
                   href="https://pkg.go.dev/runtime#hdr-Environment_Variables"
                   target="_blank"

@@ -4,8 +4,6 @@ import { baseSchema } from "./baseValidator";
 
 export function validateTestingRequest(format: TestingEntry) {
   const schema = baseSchema.append({
-    gogc: Joi.string().allow("").optional(),
-    godebug: Joi.string().allow("").optional(),
     buildFlags: Joi.string().allow("").optional(),
     testFlags: Joi.string().allow("").optional(),
   });

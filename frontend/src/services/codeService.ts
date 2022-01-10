@@ -18,7 +18,7 @@ const api = create({
 });
 
 const getInfo = async (version = "") => {
-  const url = version ? `/info?${version}` : "/info";
+  const url = version ? `/info?version=${version}` : "/info";
 
   const response = await api.get<EnvInfoResponse>(url);
   if (response.ok) {
