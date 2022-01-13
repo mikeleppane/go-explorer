@@ -44,6 +44,8 @@ Below is listed all the currently available features:
 
 ## Architecture
 
+![go-explorer-arch](https://drive.google.com/uc?export=view&id=1ZFnlYImwjnn4zXk0xW8KfEQkwDyeDWKN)
+
 Language: [Typescript][typescript]
 
 The frontend is build using [React][react] and the backend server is build using [NodeJS][nodejs] and [Express][express]
