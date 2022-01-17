@@ -12,16 +12,14 @@ const getFileName = (filePath: string): string => {
   return file_parts.name + file_parts.ext;
 };
 
-let dockerBaseCommand = "docker run --rm";
-const dockerWorkDir = "-w /go/src/app";
+let dockerBaseCommand = "docker run --rm --security-opt=no-new-privileges";
 const volumeForSourceCode = (filePath: string, file: string) => {
   return `-v ${filePath}:/go/src/app/${file}`;
 };
 const preventNetworking = "--network none";
-const cpuLimit = `--cpus="1"`;
+const cpuLimit = `--cpus="0.5"`;
 const limits = `${preventNetworking} ${cpuLimit}`;
 dockerBaseCommand += ` ${limits}`;
-const volumeForGoModules = '-v "$PWD/go-modules":/go/pkg/mod';
 const golangImage = (version: string) => {
   return `golang:${version}`;
 };
@@ -38,9 +36,7 @@ export const formatCode = (filePath: string, version: string) => {
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
     file
-  )} ${dockerWorkDir} ${golangImage(
-    version
-  )} ${timeoutCommand} goimports -w ${file}`;
+  )} ${golangImage(version)} ${timeoutCommand} goimports ${file}`;
 };
 
 export const lintCode = (filePath: string, version: string) => {
@@ -48,7 +44,7 @@ export const lintCode = (filePath: string, version: string) => {
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
     file
-  )} ${dockerWorkDir} ${golangImage(version)} ${timeoutCommand} go vet ${file}`;
+  )} ${golangImage(version)} ${timeoutCommand} go vet ${file}`;
 };
 
 const createEnvs = (envEntries: EnvEntry): string => {
@@ -71,7 +67,7 @@ export const buildCode = (filePath: string, config: BuildCommand) => {
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
     file
-  )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
+  )} ${envs} ${golangImage(
     version
   )} ${timeoutCommand} bash -c "${buildCommandWithTime} 2>&1;${getBinarySize}"`;
 };
@@ -90,7 +86,7 @@ export const objDump = (filePath: string, config: objDumpCommand) => {
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
     file
-  )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
+  )} ${envs} ${golangImage(
     version
   )} ${timeoutCommand} bash -c "${buildCommand} && ${executeObjDumpTool}"`;
 };
@@ -105,7 +101,7 @@ export const runCode = (filePath: string, config: RunCommand) => {
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
     file
-  )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
+  )} ${envs} ${golangImage(
     version
   )} ${timeoutCommand} bash -c "TIMEFORMAT=%R; ${buildCommand} && ${executeProgramWithTime}"`;
 };
@@ -120,7 +116,7 @@ export const testCode = (filePath: string, config: TestCommand) => {
   return `${dockerBaseCommand} ${volumeForSourceCode(
     filePath,
     file
-  )} ${dockerWorkDir} ${volumeForGoModules} ${envs} ${golangImage(
+  )} ${envs} ${golangImage(
     version
   )} ${timeoutCommand} bash -c "go build ${buildFlags} ${file} && ${testingCommand};exit 0"`;
 };

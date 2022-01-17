@@ -21,10 +21,10 @@ export default function FormatCodeMenu() {
     codeService
       .formatCode({ code })
       .then((response) => {
-        if (response && typeof response === "string") {
-          dispatch(addNewCode(response));
+        if (response && response.output) {
+          dispatch(addNewCode(response.output));
           dispatch(setStatus("Code formatting ok."));
-          storage.state = response;
+          storage.state = response.output;
         }
       })
       .catch((e) => {

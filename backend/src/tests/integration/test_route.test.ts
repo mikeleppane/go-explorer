@@ -123,7 +123,7 @@ describe("POST /api/testing", () => {
       .expect(200);
     expect(response.body.output).toContain("PASS");
     expect(response.body.error).toBeFalsy();
-  });
+  }, 10000);
 
   test("should raise error due to build time failure", async () => {
     const requestBody = {
@@ -135,7 +135,7 @@ describe("POST /api/testing", () => {
       .expect(200);
     expect(response.body.output).toContain("build failed");
     expect(response.body.error).not.toBeFalsy();
-  });
+  }, 10000);
 
   test("should report failure when test case fails", async () => {
     const requestBody = {
@@ -147,7 +147,7 @@ describe("POST /api/testing", () => {
       .expect(200);
     expect(response.body.output).toContain("FAIL");
     expect(response.body.error).toBeFalsy();
-  });
+  }, 10000);
 
   test("should report two successful test case runs", async () => {
     const requestBody = {
@@ -161,7 +161,7 @@ describe("POST /api/testing", () => {
     expect(response.body.output).toContain("PASS: TestIntMinBasic");
     expect(response.body.output).toContain("PASS: TestIntMinZero");
     expect(response.body.error).toBeFalsy();
-  });
+  }, 10000);
 
   test("should execute code benchmark successfully", async () => {
     const requestBody = {

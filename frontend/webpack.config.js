@@ -55,7 +55,7 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: "./public/favicon.ico", to: "." },
+        { from: "./public/android-chrome-192x192.png", to: "." },
         { from: "./public/manifest.json", to: "." },
       ],
     }),

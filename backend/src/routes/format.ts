@@ -1,7 +1,7 @@
 import express from "express";
 import { FormatEntry, FormatTask } from "../types";
 import { validateFormatRequest } from "../validators/formatValidator";
-import { readFile, rm, writeFile } from "fs/promises";
+import { rm, writeFile } from "fs/promises";
 import logger from "../utils/logging";
 import { run } from "../utils/commandExecutor";
 import { formatCode } from "../docker/commands";
@@ -9,6 +9,7 @@ import { createTempFile } from "../utils/tempfile";
 import path from "path";
 import { validateVersion } from "../utils/route_helpers";
 import { baseRouteExceptionHandler } from "../errors/routeExpectionHandler";
+import { handleCodeFormatOutput } from "../utils/outputFormatter";
 
 const formatRouter = express.Router();
 
@@ -16,10 +17,9 @@ const handleCodeFormatTask = async (params: FormatTask) => {
   const { tempFile, code, version, res } = params;
   await writeFile(tempFile, code, { encoding: "utf-8" });
   logger.info(`Code was successfully written to the file: ${tempFile}`);
-  await run(formatCode(tempFile, version));
-  const content = await readFile(tempFile);
+  const output = await run(formatCode(tempFile, version));
   logger.info("Code was successfully reformatted.");
-  res.status(200).send(content.toString("utf-8"));
+  res.status(200).send(handleCodeFormatOutput(output));
   await rm(path.dirname(tempFile), { recursive: true, force: true });
   logger.info(`Temporary file was removed successfully.`);
 };

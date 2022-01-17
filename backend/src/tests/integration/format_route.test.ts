@@ -28,8 +28,8 @@ describe("POST /api/format", () => {
       .post("/api/format")
       .send(requestBody)
       .expect(200);
-    expect(response.text).toContain("return x + y");
-    expect(response.text).toContain("fmt.Println(add(150, 5))");
+    expect(response.body.output).toContain("return x + y");
+    expect(response.body.output).toContain("fmt.Println(add(150, 5))");
   });
   test("should return 400 error if source code is not given", async () => {
     const requestBody = {
