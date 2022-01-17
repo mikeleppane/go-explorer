@@ -116,3 +116,14 @@ export const handleCodeLintOutput = (output: string) => {
   const res = { output: output };
   return cleanResultOutput(res).output;
 };
+
+export const handleCodeFormatOutput = (output: CommandExecutorOutput) => {
+  const res = { output: "", error: "" };
+  if (output && output.stdout) {
+    res.output = output.stdout;
+  }
+  if (output && output.stderr) {
+    res.error = output.stderr;
+  }
+  return res;
+};

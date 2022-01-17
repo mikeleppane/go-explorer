@@ -116,6 +116,11 @@ export interface EnvInfoResponse {
   error?: string;
 }
 
+export interface FormatCodeResponse {
+  output?: string;
+  error?: string;
+}
+
 export type BuildCodeResponse = Omit<ResultPayload, "executionTime">;
 
 export interface StatusPayload {

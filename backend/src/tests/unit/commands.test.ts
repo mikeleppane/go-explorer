@@ -13,7 +13,7 @@ describe("Commands executed inside Docker container", () => {
     const version = "1.17";
     const command = envInfo(version);
     expect(command).toBe(
-      `docker run --rm --network none --cpus="1" golang:${version} timeout 60 bash -c "echo '====Go ENVS====';go env && echo '\n====CPU ARCH===='; lscpu | grep -iE 'Architecture:|CPU op-mode\\(s\\):|CPU\\(s\\):|Thread\\(s\\) per core:|Core\\(s\\) per socket:|NUMA node\\(s\\):|Vendor ID:|CPU family:|Model:|Model name:|CPU MHz:|L1d cache:|L1i cache:|L2 cache:'"`
+      `docker run --rm --security-opt=no-new-privileges --network none --cpus="0.5" golang:${version} timeout 60 bash -c "echo '====Go ENVS====';go env && echo '\n====CPU ARCH===='; lscpu | grep -iE 'Architecture:|CPU op-mode\\(s\\):|CPU\\(s\\):|Thread\\(s\\) per core:|Core\\(s\\) per socket:|NUMA node\\(s\\):|Vendor ID:|CPU family:|Model:|Model name:|CPU MHz:|L1d cache:|L1i cache:|L2 cache:'"`
     );
   });
   test("formatCode should return correct command", () => {
@@ -22,7 +22,7 @@ describe("Commands executed inside Docker container", () => {
     const file = "test.go";
     const command = formatCode(filePath, version);
     expect(command).toBe(
-      `docker run --rm --network none --cpus="1" -v ${filePath}:/go/src/app/${file} -w /go/src/app golang:${version} timeout 60 goimports -w ${file}`
+      `docker run --rm --security-opt=no-new-privileges --network none --cpus="0.5" -v ${filePath}:/go/src/app/${file} golang:${version} timeout 60 goimports ${file}`
     );
   });
   test("lintCode should return correct command", () => {
@@ -31,7 +31,7 @@ describe("Commands executed inside Docker container", () => {
     const file = "test.go";
     const command = lintCode(filePath, version);
     expect(command).toBe(
-      `docker run --rm --network none --cpus="1" -v ${filePath}:/go/src/app/${file} -w /go/src/app golang:${version} timeout 60 go vet ${file}`
+      `docker run --rm --security-opt=no-new-privileges --network none --cpus="0.5" -v ${filePath}:/go/src/app/${file} golang:${version} timeout 60 go vet ${file}`
     );
   });
   test("buildCode should return correct command", () => {
@@ -52,7 +52,7 @@ describe("Commands executed inside Docker container", () => {
       version,
     });
     expect(command).toMatch(
-      `docker run --rm --network none --cpus="1" -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOOS=${goos} --env GOARCH=${goarch} --env GODEBUG=gctrace=1 golang:${version} timeout 60 bash -c "TIMEFORMAT=%R;time go build -o x.exe ${buildFlags} ${file} 2>&1;ls -sh x.exe | cut -d ' ' -f1"`
+      `docker run --rm --security-opt=no-new-privileges --network none --cpus="0.5" -v ${filePath}:/go/src/app/${file} --env GOOS=${goos} --env GOARCH=${goarch} --env GODEBUG=gctrace=1 golang:${version} timeout 60 bash -c "TIMEFORMAT=%R;time go build -o x.exe ${buildFlags} ${file} 2>&1;ls -sh x.exe | cut -d ' ' -f1"`
     );
   });
   test("getObjDump should return correct command", () => {
@@ -71,7 +71,7 @@ describe("Commands executed inside Docker container", () => {
       version,
     });
     expect(command).toMatch(
-      `docker run --rm --network none --cpus="1" -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOOS=${goos} --env GOARCH=${goarch} golang:${version} timeout 60 bash -c "go build -o x.exe ${buildFlags} ${file} && go tool objdump ${symregexp} x.exe"`
+      `docker run --rm --security-opt=no-new-privileges --network none --cpus="0.5" -v ${filePath}:/go/src/app/${file} --env GOOS=${goos} --env GOARCH=${goarch} golang:${version} timeout 60 bash -c "go build -o x.exe ${buildFlags} ${file} && go tool objdump ${symregexp} x.exe"`
     );
   });
   test("runCode should return correct command", () => {
@@ -83,7 +83,7 @@ describe("Commands executed inside Docker container", () => {
     const buildFlags = "";
     const command = runCode(filePath, { gogc, godebug, buildFlags, version });
     expect(command).toMatch(
-      `docker run --rm --network none --cpus="1" -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GOGC=${gogc} --env GODEBUG=${godebug} golang:${version} timeout 60 bash -c "TIMEFORMAT=%R; go build -o x.exe ${buildFlags} ${file} && time ./x.exe"`
+      `docker run --rm --security-opt=no-new-privileges --network none --cpus="0.5" -v ${filePath}:/go/src/app/${file} --env GOGC=${gogc} --env GODEBUG=${godebug} golang:${version} timeout 60 bash -c "TIMEFORMAT=%R; go build -o x.exe ${buildFlags} ${file} && time ./x.exe"`
     );
   });
   test("testCode should return correct command", () => {
@@ -98,7 +98,7 @@ describe("Commands executed inside Docker container", () => {
       version,
     });
     expect(command).toMatch(
-      `docker run --rm --network none --cpus="1" -v ${filePath}:/go/src/app/${file} -w /go/src/app -v "$PWD/go-modules":/go/pkg/mod --env GO111MODULE=auto golang:${version} timeout 60 bash -c "go build ${buildFlags} ${file} && go test ${buildFlags} ${testFlags};exit 0"`
+      `docker run --rm --security-opt=no-new-privileges --network none --cpus="0.5" -v ${filePath}:/go/src/app/${file} --env GO111MODULE=auto golang:${version} timeout 60 bash -c "go build ${buildFlags} ${file} && go test ${buildFlags} ${testFlags};exit 0"`
     );
   });
 });

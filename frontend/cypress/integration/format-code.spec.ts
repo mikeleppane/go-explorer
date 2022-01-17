@@ -30,7 +30,7 @@ describe("Format Code", function () {
     cy.get("#format-code-button").click();
     cy.get("@format-code").its("request.method").should("equal", "POST");
     cy.get("@format-code")
-      .its("response.body", { timeout: 5000 })
+      .its("response.body.output", { timeout: 5000 })
       .should("contain", "Hello");
     cy.get("@format-code")
       .its("response.statusCode", { timeout: 5000 })

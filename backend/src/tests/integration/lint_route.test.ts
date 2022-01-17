@@ -59,28 +59,28 @@ describe("POST /api/lint", () => {
     };
     const response = await api.post("/api/lint").send(requestBody).expect(200);
     expect(response.text).toBe("");
-  });
+  }, 10000);
   test("should report invalid structures if source code is not valid", async () => {
     const requestBody = {
       code: invalidCode,
     };
     const response = await api.post("/api/lint").send(requestBody).expect(200);
     expect(response.text).toContain("unreachable code");
-  });
+  }, 10000);
   test("should report invalid import if source code import statement is not valid", async () => {
     const requestBody = {
       code: invalidImportCode,
     };
     const response = await api.post("/api/lint").send(requestBody).expect(200);
     expect(response.text).toContain("fmtt123 is not in GOROOT");
-  });
+  }, 10000);
   test("should report error if package statement is missing", async () => {
     const requestBody = {
       code: mainPackageMissingCode,
     };
     const response = await api.post("/api/lint").send(requestBody).expect(200);
     expect(response.text).toContain("expected 'package'");
-  });
+  }, 10000);
   test("should return 400 error if source code is not provided", async () => {
     const requestBody = {};
     await api.post("/api/lint").send(requestBody).expect(400);

@@ -4,6 +4,7 @@ import {
   BuildCodeResponse,
   BuildService,
   EnvInfoResponse,
+  FormatCodeResponse,
   FormatService,
   LintService,
   RunCodeResponse,
@@ -35,7 +36,7 @@ const getInfo = async (version = "") => {
 };
 
 const formatCode = async (data: FormatService) => {
-  const response = await api.post("/format", data);
+  const response = await api.post<FormatCodeResponse>("/format", data);
   if (response.ok) {
     console.log("formatCode> ok");
     return response.data;

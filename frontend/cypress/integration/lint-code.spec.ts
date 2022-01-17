@@ -11,13 +11,14 @@ describe("Lint Code", function () {
     cy.contains("Lint your code");
   });
 
-  it("should statically analyze code", function () {
+  it.only("should statically analyze code", function () {
     cy.get("#lint-code-button").click();
     cy.get("#statusbar").contains("Wait for static code analysis", {
       matchCase: false,
     });
-    cy.get("#statusbar", { timeout: 10000 }).contains("Analysis ok", {
+    cy.get("#statusbar").contains("Analysis ok", {
       matchCase: false,
+      timeout: 10000,
     });
   });
 
@@ -27,12 +28,10 @@ describe("Lint Code", function () {
     cy.get("#statusbar").contains("Wait for static code analysis", {
       matchCase: false,
     });
-    cy.get("#statusbar", { timeout: 10000 }).contains(
-      "Analyzer found some issues",
-      {
-        matchCase: false,
-      }
-    );
+    cy.get("#statusbar").contains("Analyzer found some issues", {
+      matchCase: false,
+      timeout: 10000,
+    });
     cy.get(".errorHighlight").should("have.css", "color", "rgb(255, 0, 0)");
     cy.get("#result-view").contains("Error");
   });
