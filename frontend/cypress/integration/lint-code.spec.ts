@@ -11,8 +11,19 @@ describe("Lint Code", function () {
     cy.contains("Lint your code");
   });
 
-  it.only("should statically analyze code", function () {
+  it("should statically analyze code", function () {
     cy.get("#lint-code-button").click();
+    cy.get("#statusbar").contains("Wait for static code analysis", {
+      matchCase: false,
+    });
+    cy.get("#statusbar").contains("Analysis ok", {
+      matchCase: false,
+      timeout: 10000,
+    });
+  });
+
+  it("should statically analyze code using keyboard shortcut", function () {
+    cy.get("body").type("{ctrl}{alt}{l}");
     cy.get("#statusbar").contains("Wait for static code analysis", {
       matchCase: false,
     });

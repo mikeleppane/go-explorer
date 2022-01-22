@@ -24,6 +24,19 @@ describe("Format Code", function () {
     cy.get("#editor").should("not.contain", "15");
   });
 
+  it("should reformat code using keyboard shortcut", function () {
+    cy.get("#editor textarea").type("\n\n\n\n\n\n");
+    cy.get("#editor").should("contain", "15");
+    cy.get("body").type("{ctrl}{alt}{f}");
+    cy.get("#statusbar").contains("Wait for code formatting", {
+      matchCase: false,
+    });
+    cy.get("#statusbar", { timeout: 5000 }).contains("Code formatting ok", {
+      matchCase: false,
+    });
+    cy.get("#editor").should("not.contain", "15");
+  });
+
   it("should send correct API request", function () {
     cy.get("#editor textarea").type("\n\n\n\n\n\n");
     cy.intercept("POST", "/api/format").as("format-code");

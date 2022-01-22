@@ -18,20 +18,20 @@ const ExecuteCode = () => {
       </Typography>
       <HorizontalLine />
       <Typography variant="h5" sx={{ fontWeight: "bold", marginTop: "10px" }}>
-        Running Code
+        Running Code (Ctrl+Alt+Enter)
       </Typography>
       <img src={RunMenuImg} alt="run-menu" style={{ marginTop: "5px" }} />
       <Typography paragraph sx={{ marginTop: "10px", fontSize: "18px" }}>
         <i>
           <strong>RUN</strong>
         </i>{" "}
-        simply builds and executes your code. If the run is successful, it will
-        provide the execution time and possible code output (some output might
-        be seen under error depending on how you configured the execution e.g.
-        escape analysis). In case there&apos;s some error, the Code Output View
-        will indicate an error as well as the status bar. In addition, erroneous
-        code will the highlighted in the editor. Note: check the status bar to
-        see the current situation.
+        simply builds and executes your code (or use shortcut: Ctrl+Alt+Enter).
+        If the run is successful, it will provide the execution time and
+        possible code output (some output might be seen under error depending on
+        how you configured the execution e.g. escape analysis). In case
+        there&apos;s some error, the Code Output View will indicate an error as
+        well as the status bar. In addition, erroneous code will the highlighted
+        in the editor. Note: check the status bar to see the current situation.
       </Typography>
       <img src={RunOutputImg} alt="run-output" style={{ marginTop: "5px" }} />
       <Typography paragraph sx={{ marginTop: "10px", fontSize: "18px" }}>
@@ -117,12 +117,13 @@ const ExecuteCode = () => {
         <i>
           <strong>BUILD</strong>
         </i>{" "}
-        simply builds your code. If the build is successful, it will provide a
-        build time and a binary size as statistics for the build and, in
-        addition, possible output depending on the build flags. In case
-        there&apos;s some error, the Code Output View will indicate an error as
-        well as the Status Bar. In addition, erroneous code will the highlighted
-        in the editor. Note: check the status bar to see the current situation.
+        simply builds your code (or use shortcut: Ctrl+Alt+B). If the build is
+        successful, it will provide a build time and a binary size as statistics
+        for the build and, in addition, possible output depending on the build
+        flags. In case there&apos;s some error, the Code Output View will
+        indicate an error as well as the Status Bar. In addition, erroneous code
+        will the highlighted in the editor. Note: check the status bar to see
+        the current situation.
       </Typography>
       <img
         src={BuildOutputImg}
@@ -243,8 +244,9 @@ const ExecuteCode = () => {
         <i>
           <strong>TESTING</strong>
         </i>{" "}
-        allows you to unit test and benchmark your code. Check the following
-        links how to get started with unit testing and benchmarking in Go:{" "}
+        allows you to unit test and benchmark your code (or use shortcut:
+        Ctrl+Alt+T). Check the following links how to get started with unit
+        testing and benchmarking in Go:{" "}
         <a
           className="customlink"
           style={{

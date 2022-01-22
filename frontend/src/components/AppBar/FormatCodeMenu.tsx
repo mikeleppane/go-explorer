@@ -8,11 +8,13 @@ import { useDispatch } from "react-redux";
 import { LocalStorage } from "../../services/localStorage";
 import { appTimeout } from "../../constants";
 import { Tooltip } from "@mui/material";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export default function FormatCodeMenu() {
   const dispatch = useDispatch();
   const state = useAppSelector((state) => state);
   const storage = new LocalStorage("", "golang-explorer-recent-code");
+  useHotkeys("ctrl+alt+f", () => handleFormatMenu());
 
   const handleFormatMenu = () => {
     const code = state.code[state.tab.currentTab];
@@ -37,7 +39,7 @@ export default function FormatCodeMenu() {
 
   return (
     <div>
-      <Tooltip title="Format your code">
+      <Tooltip title="Format your code (Ctrl+Alt+F)">
         <Button
           id="format-code-button"
           variant="contained"

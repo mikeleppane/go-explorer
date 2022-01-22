@@ -13,9 +13,9 @@ const ShareCode = () => {
       <HorizontalLine />
       <img src={ShareMenuImg} alt="test-menu" style={{ marginTop: "5px" }} />
       <Typography paragraph sx={{ marginTop: "10px", fontSize: "18px" }}>
-        You can share your code with your friends by a link. This allows you to
-        quickly and easily send your code snippet to someone and they just need
-        to open it in a browser.
+        You can share your code with your friends by a link (or use shortcut:
+        Ctrl+Alt+S). This allows you to quickly and easily send your code
+        snippet to someone and they just need to open it in a browser.
       </Typography>
     </Box>
   );

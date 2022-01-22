@@ -14,6 +14,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useDispatch } from "react-redux";
 import { testCode } from "../../state/actionCreators";
 import { availableVersions } from "../../config/versions";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export default function TestCodeMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -24,6 +25,7 @@ export default function TestCodeMenu() {
   const [version, setGoVersion] = React.useState("");
   const dispatch = useDispatch();
   const versions = availableVersions();
+  useHotkeys("ctrl+alt+t", () => handleCodeExecution());
 
   const handleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -44,7 +46,7 @@ export default function TestCodeMenu() {
 
   return (
     <div>
-      <Tooltip title="Test your code">
+      <Tooltip title="Test your code (Ctrl+Alt+T)">
         <Button
           id="test-button"
           variant="contained"

@@ -12,28 +12,29 @@ const getFileName = (filePath: string): string => {
   return file_parts.name + file_parts.ext;
 };
 
-let dockerBaseCommand = "docker run --rm --security-opt=no-new-privileges";
+const dockerBaseCommand = "docker run --rm --security-opt=no-new-privileges";
 const volumeForSourceCode = (filePath: string, file: string) => {
   return `-v ${filePath}:/go/src/app/${file}`;
 };
-const preventNetworking = "--network none";
-const cpuLimit = `--cpus="0.5"`;
-const limits = `${preventNetworking} ${cpuLimit}`;
-dockerBaseCommand += ` ${limits}`;
+
+const applyLimits = (cpuLimit = 1, network = "none") => {
+  return `--cpus="${cpuLimit}" --network ${network}`;
+};
+
 const golangImage = (version: string) => {
   return `golang:${version}`;
 };
 const timeoutCommand = "timeout 60";
 
 export const envInfo = (version: string) => {
-  return `${dockerBaseCommand} ${golangImage(
+  return `${dockerBaseCommand} ${applyLimits()} ${golangImage(
     version
   )} ${timeoutCommand} bash -c "echo '====Go ENVS====';go env && echo '\n====CPU ARCH===='; lscpu | grep -iE 'Architecture:|CPU op-mode\\(s\\):|CPU\\(s\\):|Thread\\(s\\) per core:|Core\\(s\\) per socket:|NUMA node\\(s\\):|Vendor ID:|CPU family:|Model:|Model name:|CPU MHz:|L1d cache:|L1i cache:|L2 cache:'"`;
 };
 
 export const formatCode = (filePath: string, version: string) => {
   const file = getFileName(filePath);
-  return `${dockerBaseCommand} ${volumeForSourceCode(
+  return `${dockerBaseCommand} ${applyLimits()} ${volumeForSourceCode(
     filePath,
     file
   )} ${golangImage(version)} ${timeoutCommand} goimports ${file}`;
@@ -41,7 +42,7 @@ export const formatCode = (filePath: string, version: string) => {
 
 export const lintCode = (filePath: string, version: string) => {
   const file = getFileName(filePath);
-  return `${dockerBaseCommand} ${volumeForSourceCode(
+  return `${dockerBaseCommand} ${applyLimits()} ${volumeForSourceCode(
     filePath,
     file
   )} ${golangImage(version)} ${timeoutCommand} go vet ${file}`;
@@ -64,7 +65,7 @@ export const buildCode = (filePath: string, config: BuildCommand) => {
   const envs = createEnvs(inputEnvs);
   const buildCommandWithTime = `TIMEFORMAT=%R;time go build -o x.exe ${buildFlags} ${file}`;
   const getBinarySize = "ls -sh x.exe | cut -d ' ' -f1";
-  return `${dockerBaseCommand} ${volumeForSourceCode(
+  return `${dockerBaseCommand} ${applyLimits()} ${volumeForSourceCode(
     filePath,
     file
   )} ${envs} ${golangImage(
@@ -83,7 +84,7 @@ export const objDump = (filePath: string, config: objDumpCommand) => {
   const envs = createEnvs(inputEnvs);
   const buildCommand = `go build -o x.exe ${buildFlags} ${file}`;
   const executeObjDumpTool = `go tool objdump ${symregexp} x.exe`;
-  return `${dockerBaseCommand} ${volumeForSourceCode(
+  return `${dockerBaseCommand} ${applyLimits()} ${volumeForSourceCode(
     filePath,
     file
   )} ${envs} ${golangImage(
@@ -98,7 +99,7 @@ export const runCode = (filePath: string, config: RunCommand) => {
   const envs = createEnvs(inputEnvs);
   const buildCommand = `go build -o x.exe ${buildFlags} ${file}`;
   const executeProgramWithTime = "time ./x.exe";
-  return `${dockerBaseCommand} ${volumeForSourceCode(
+  return `${dockerBaseCommand} ${applyLimits(0.5)} ${volumeForSourceCode(
     filePath,
     file
   )} ${envs} ${golangImage(
@@ -113,7 +114,7 @@ export const testCode = (filePath: string, config: TestCommand) => {
   let envs = createEnvs(inputEnvs);
   envs += "--env GO111MODULE=auto";
   const testingCommand = `go test ${buildFlags} ${testFlags}`;
-  return `${dockerBaseCommand} ${volumeForSourceCode(
+  return `${dockerBaseCommand} ${applyLimits(0.5)} ${volumeForSourceCode(
     filePath,
     file
   )} ${envs} ${golangImage(

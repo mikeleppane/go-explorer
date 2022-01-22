@@ -14,6 +14,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useDispatch } from "react-redux";
 import { runCode } from "../../state/actionCreators";
 import { availableVersions } from "../../config/versions";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export default function RunCodeMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -25,6 +26,7 @@ export default function RunCodeMenu() {
   const [version, setGoVersion] = React.useState("");
   const dispatch = useDispatch();
   const versions = availableVersions();
+  useHotkeys("ctrl+alt+Enter", () => handleCodeExecution());
 
   const handleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -45,7 +47,7 @@ export default function RunCodeMenu() {
 
   return (
     <div>
-      <Tooltip title="Run your code">
+      <Tooltip title="Run your code (Ctrl+Alt+Enter)">
         <Button
           id="run-code-button"
           variant="contained"
