@@ -6,6 +6,7 @@ import * as monaco from "monaco-editor";
 import { addNewCode, clearError } from "../../state/actionCreators";
 import { useDispatch } from "react-redux";
 import { LocalStorage } from "../../services/localStorage";
+import { dispatchKeyboardEvent } from "../../services/keyboardEventDispatcher";
 
 const CodeEditor = () => {
   const state = useAppSelector((state) => state);
@@ -54,7 +55,13 @@ const CodeEditor = () => {
   };
 
   return (
-    <Box id="editor" sx={{ flexGrow: 1, height: "100%" }}>
+    <Box
+      id="editor"
+      sx={{ flexGrow: 1, height: "100%" }}
+      onKeyDown={(e) => {
+        dispatchKeyboardEvent(e);
+      }}
+    >
       <MonacoEditor
         onChange={onEditorChange}
         theme="vs-dark"

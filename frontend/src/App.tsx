@@ -2,9 +2,9 @@ import React, { Suspense, useEffect } from "react";
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addNewCode } from "./state/actionCreators";
-import { fromBinary } from "./services/binaryHandler";
 import { Route, Routes } from "react-router-dom";
 import Main from "./components/MainView";
+import LZString from "lz-string";
 
 const AppGuide = React.lazy(() => import("./components/Guide"));
 
@@ -15,8 +15,11 @@ function App() {
     const query = new URLSearchParams(window.location.search);
     const share = query.get("share");
     if (share) {
-      const decodedCode = fromBinary(window.atob(share));
-      dispatch(addNewCode(decodedCode));
+      const decodedCode: string | null =
+        LZString.decompressFromEncodedURIComponent(share);
+      if (decodedCode) {
+        dispatch(addNewCode(decodedCode));
+      }
     }
   }, []);
 

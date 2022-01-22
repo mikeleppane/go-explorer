@@ -14,10 +14,12 @@ import { useDispatch } from "react-redux";
 import { createErrorPayloadFromMessage } from "../../services/errorExtractor";
 import { appTimeout } from "../../constants";
 import { Tooltip } from "@mui/material";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export default function LintCodeMenu() {
   const dispatch = useDispatch();
   const state = useAppSelector((state) => state);
+  useHotkeys("ctrl+alt+l", () => handleLintMenu());
 
   const handleLintMenu = () => {
     dispatch(clearOutput());
@@ -51,7 +53,7 @@ export default function LintCodeMenu() {
 
   return (
     <div style={{ flexGrow: 1 }}>
-      <Tooltip title="Lint your code">
+      <Tooltip title="Lint your code (Ctrl+Alt+L)">
         <Button
           id="lint-code-button"
           variant="contained"

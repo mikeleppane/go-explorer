@@ -1,19 +1,21 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { toBinary } from "../../services/binaryHandler";
 import { setNotification } from "../../state/actionCreators";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import { BASE_URL } from "../../constants";
+import { useHotkeys } from "react-hotkeys-hook";
+import LZString from "lz-string";
 
 export default function Share() {
   const dispatch = useDispatch();
   const state = useAppSelector((state) => state);
+  useHotkeys("ctrl+alt+s", () => handleShare());
 
   const handleShare = () => {
     const code = state.code[state.tab.currentTab];
-    const encodedCode = window.btoa(toBinary(code));
+    const encodedCode: string = LZString.compressToEncodedURIComponent(code);
     const link = `${BASE_URL}?share=${encodedCode}`;
     window.navigator.clipboard
       .writeText(link)
@@ -35,7 +37,7 @@ export default function Share() {
 
   return (
     <Box>
-      <Tooltip title="Share a link to your code">
+      <Tooltip title="Share a link to your code (Ctrl+Alt+S)">
         <IconButton
           id="share-button"
           sx={{

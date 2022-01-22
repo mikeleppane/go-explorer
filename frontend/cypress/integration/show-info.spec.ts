@@ -24,7 +24,7 @@ describe("Show Info", function () {
     cy.get("#result-view", { timeout: 5000 }).contains("CPU ARCH");
   });
 
-  it.only("should send correct API request", function () {
+  it("should send correct API request", function () {
     cy.intercept("GET", "/api/info?version=1.18-rc").as("env-info");
     cy.get("#open-env-info-button").click();
     cy.get("#select-version-for-get-info").select("1.18-rc");

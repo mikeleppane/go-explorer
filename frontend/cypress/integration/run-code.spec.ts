@@ -23,6 +23,18 @@ describe("Run Code", function () {
     cy.get("#result-view", { timeout: 5000 }).contains("Hello");
   });
 
+  it("should run code using keyboard shortcut", function () {
+    cy.get("body").type("{ctrl}{alt}{Enter}");
+    cy.get("#statusbar").contains("Wait for code execution", {
+      matchCase: false,
+    });
+    cy.get("#statusbar", { timeout: 5000 }).contains("Code execution ok", {
+      matchCase: false,
+    });
+    cy.get("#result-view", { timeout: 5000 }).contains("Execution time:");
+    cy.get("#result-view", { timeout: 5000 }).contains("Hello");
+  });
+
   it("generic code should execute", function () {
     cy.get("#open-file-button").click();
     cy.get("#open-templates-button").click();

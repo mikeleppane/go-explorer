@@ -17,6 +17,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useDispatch } from "react-redux";
 import { buildCode } from "../../state/actionCreators";
 import { availableVersions } from "../../config/versions";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export default function BuildCodeMenu() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -32,6 +33,7 @@ export default function BuildCodeMenu() {
   const [version, setGoVersion] = React.useState("");
   const dispatch = useDispatch();
   const versions = availableVersions();
+  useHotkeys("ctrl+alt+b", () => handleCodeExecution());
 
   const handleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -63,7 +65,7 @@ export default function BuildCodeMenu() {
 
   return (
     <div>
-      <Tooltip title="Build your code">
+      <Tooltip title="Build your code (Ctrl+Alt+B)">
         <Button
           id="build-code-button"
           variant="contained"

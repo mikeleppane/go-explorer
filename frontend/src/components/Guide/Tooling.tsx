@@ -17,7 +17,8 @@ const Tooling = () => {
       </Typography>
       <img src={FormatMenuImg} alt="test-menu" style={{ marginTop: "5px" }} />
       <Typography paragraph sx={{ marginTop: "10px", fontSize: "18px" }}>
-        This allows you to format your code and your imports. We use{" "}
+        This allows you to format your code and your imports (or use shortcut:
+        Ctrl+Alt+F). We use{" "}
         <a
           className="customlink"
           style={{
@@ -36,7 +37,8 @@ const Tooling = () => {
       </Typography>
       <img src={LintMenuImg} alt="test-menu" style={{ marginTop: "5px" }} />
       <Typography paragraph sx={{ marginTop: "10px", fontSize: "18px" }}>
-        You can perform static analysis for your code. This is done by the{" "}
+        You can perform static analysis for your code (or use shortcut:
+        Ctrl+Alt+L). This is done by the{" "}
         <a
           className="customlink"
           style={{

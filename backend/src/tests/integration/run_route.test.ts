@@ -103,6 +103,24 @@ const mainPackageMissingCode = `
   }
 `;
 
+const cannotAccessOutsideWorld = `
+  package main
+  
+  import (
+    "fmt"
+    "os/exec"
+  )
+  
+  func main() {
+    Command := fmt.Sprintf("curl www.google.com")
+    output, err := exec.Command("/bin/bash", "-c", Command).Output()
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(output)
+  }
+`;
+
 describe("POST /api/run", () => {
   test("should return correct code output and execution time", async () => {
     const requestBody = {
@@ -197,5 +215,15 @@ describe("POST /api/run", () => {
     expect(response.body.executionTime).toBeFalsy();
     expect(response.body.error).not.toBeFalsy();
     expect(response.body.error).toContain("expected 'package'");
+  });
+
+  test("should not allow network access", async () => {
+    const requestBody = {
+      code: cannotAccessOutsideWorld,
+    };
+    const response = await api.post("/api/run").send(requestBody);
+    expect(response.body.output).toBeFalsy();
+    expect(response.body.executionTime).not.toBeFalsy();
+    expect(response.body.error).not.toBeFalsy();
   });
 });

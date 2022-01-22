@@ -26,6 +26,21 @@ describe("Build Code", function () {
     cy.get("#result-view", { timeout: 5000 }).contains("Binary size:");
   });
 
+  it("should build code using keyboard shortcut", function () {
+    cy.get("body").type("{ctrl}{alt}{b}");
+    cy.get("#statusbar").contains("Wait for code building", {
+      matchCase: false,
+    });
+    cy.get("#statusbar", { timeout: 5000 }).contains(
+      "Code building successful",
+      {
+        matchCase: false,
+      }
+    );
+    cy.get("#result-view", { timeout: 5000 }).contains("Build time:");
+    cy.get("#result-view", { timeout: 5000 }).contains("Binary size:");
+  });
+
   it("should have correct links for build options", function () {
     cy.get("#build-code-option-button").click();
     cy.get("#build-code-build-flags-link").should(
