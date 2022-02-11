@@ -36,6 +36,11 @@ export default function ShowEnvInfoMenu() {
     }
   };
 
+  const getLinkToReleaseNotes = () => {
+    if (version) return `https://go.dev/doc/go${version}`;
+    return `https://go.dev/doc/go${versions[0]}`;
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -95,6 +100,19 @@ export default function ShowEnvInfoMenu() {
                     </option>
                   ))}
                 </TextField>
+                <a
+                  id="build-code-build-flags-link"
+                  className="customlink"
+                  href={`https://go.dev/doc/go${versions[0]}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: "16px", marginBottom: "10px" }}
+                  onClick={(event) => {
+                    event.currentTarget.href = getLinkToReleaseNotes();
+                  }}
+                >
+                  What&apos;s new
+                </a>
                 <Button
                   id="get-env-info-button"
                   variant="contained"

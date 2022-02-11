@@ -57,7 +57,7 @@ buildRouter.post("/", async (req, res) => {
   logger.info(`Code building started with Go version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await handleCodeBuildTask({
+    return await handleCodeBuildTask({
       tempFile,
       requestEntries,
       version,

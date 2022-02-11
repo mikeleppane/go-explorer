@@ -24,4 +24,5 @@ export const testRouteExceptionHandler = async (params: RouteException) => {
     logger.error(error.message);
     return res.status(500).send(error.message.trim());
   }
+  return res.status(500).json({ error: `Unknown error occured: ${error}` });
 };

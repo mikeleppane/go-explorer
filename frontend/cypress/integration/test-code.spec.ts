@@ -55,7 +55,7 @@ describe("Test Code", function () {
       .its("request.url")
       .should("match", /\/testing$/);
     cy.get("@test-code")
-      .its("response.statusCode", { timeout: 5000 })
+      .its("response.statusCode", { timeout: 10000 })
       .should("equal", 200);
     cy.get("@test-code") // yields the same interception object
       .its("request.body")
@@ -67,7 +67,7 @@ describe("Test Code", function () {
       .its("request.body.code")
       .should("contain", "Hello");
     cy.get("@test-code") // yields the same interception object
-      .its("response.body.output", { timeout: 5000 })
+      .its("response.body.output", { timeout: 10000 })
       .should("contain", "PASS");
   });
 });

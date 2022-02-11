@@ -54,7 +54,7 @@ runRouter.post("/", async (req, res) => {
   logger.info(`Code execution started with Go version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await handleCodeRunTask({ tempFile, requestEntries, version, res });
+    return await handleCodeRunTask({ tempFile, requestEntries, version, res });
   } catch (error) {
     await baseRouteExceptionHandler({ tempFile, error, res });
   }

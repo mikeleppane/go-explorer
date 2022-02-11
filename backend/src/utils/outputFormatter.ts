@@ -11,6 +11,7 @@ const cleanResultOutput = (res: { output: string; error?: string }) => {
         if (!isCLIPrint.test(line) && !isEmptyLine.test(line)) {
           return line.replace(extractFileNameRegex, ".go");
         }
+        return;
       })
       .join("\n")
       .trim();
@@ -22,6 +23,7 @@ const cleanResultOutput = (res: { output: string; error?: string }) => {
         if (!isCLIPrint.test(line) && !isEmptyLine.test(line)) {
           return line.replace(extractFileNameRegex, ".go");
         }
+        return;
       })
       .join("\n")
       .trim();
@@ -47,7 +49,7 @@ export const handleCodeBuildOutput = (output: CommandExecutorOutput) => {
   const buildTimeRegExp = new RegExp("^\\d+(.\\d+)?$", "i");
   if (output && output.stdout) {
     const content = output.stdout.trim().split("\n");
-    if (content.length === 1 && sizeRegExp.test(content[0])) {
+    if (content.length === 1 && content[0] && sizeRegExp.test(content[0])) {
       res.binarySize = content[0];
     }
     if (content.length === 1 && !sizeRegExp.test(content[0])) {
