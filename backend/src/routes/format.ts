@@ -39,7 +39,12 @@ formatRouter.post("/", async (req, res) => {
   logger.info(`Code formatting started with Go version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await handleCodeFormatTask({ tempFile, code: body.code, version, res });
+    return await handleCodeFormatTask({
+      tempFile,
+      code: body.code,
+      version,
+      res,
+    });
   } catch (error) {
     await baseRouteExceptionHandler({ tempFile, error, res });
   }

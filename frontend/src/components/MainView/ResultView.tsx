@@ -31,7 +31,7 @@ const ResultView: FunctionComponent<CodeOutputViewProps> = ({ setSizes }) => {
       sx={{
         margin: "10px",
         backgroundColor: "#171421",
-        height: "100px",
+        height: "calc(100vh - 125px)",
       }}
     >
       <Button

@@ -18,7 +18,6 @@ export const run = async (cmd: string) => {
     return { stdout, stderr };
   } catch (e) {
     if (e instanceof Error) {
-      console.log(e);
       throw new CommandExecutionError(`${e.message.trim()}`);
     }
     throw new CommandExecutionError(

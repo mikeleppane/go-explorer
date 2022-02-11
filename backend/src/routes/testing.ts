@@ -43,7 +43,7 @@ testingRouter.post("/", async (req, res) => {
   logger.info(`Code testing started with Go version ${version}.`);
   try {
     tempFile = await createTempFile("go-", "", "_test.go");
-    await handleCodeTestTask({ tempFile, requestEntries, version, res });
+    return await handleCodeTestTask({ tempFile, requestEntries, version, res });
   } catch (error) {
     await testRouteExceptionHandler({ tempFile, error, res });
   }

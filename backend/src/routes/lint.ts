@@ -54,7 +54,12 @@ lintRouter.post("/", async (req, res) => {
   logger.info(`Linting operation started with Go version ${version}.`);
   try {
     tempFile = await createTempFile();
-    await handleCodeLintTask({ tempFile, code: body.code, version, res });
+    return await handleCodeLintTask({
+      tempFile,
+      code: body.code,
+      version,
+      res,
+    });
   } catch (error) {
     await baseRouteExceptionHandler({ tempFile, error, res });
   }

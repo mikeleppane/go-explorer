@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Split from "react-split";
 import CodeEditor from "./CodeEditor";
-import ResultView from "./ResultView";
 import "../../styles.css";
-
-const defaultSplitSize = (window.innerHeight - 150).toString() + "px";
+import ResultView from "./ResultView";
 
 const MainView = () => {
   const [splitSizes, setSplitSizes] = useState([80, 20]);
@@ -17,12 +15,17 @@ const MainView = () => {
     <Split
       className="split"
       sizes={splitSizes}
-      direction="vertical"
+      direction="horizontal"
       minSize={10}
-      gutterSize={2}
+      gutterSize={4}
       gutterAlign="center"
       dragInterval={1}
-      style={{ height: defaultSplitSize }}
+      style={{
+        height: "calc(100vh - 100px)",
+        overflow: "clip",
+        display: "flex",
+        flexDirection: "row",
+      }}
     >
       <CodeEditor />
       <ResultView setSizes={setSplitSizes} />
