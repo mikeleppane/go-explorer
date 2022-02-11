@@ -13,7 +13,7 @@ const ResultInfo: FunctionComponent = () => {
   return (
     <Box
       id="result-view"
-      style={{ overflow: "scroll", height: "calc(100% - 25px)" }}
+      style={{ overflow: "auto", height: "calc(100% - 30px)" }}
     >
       {isStatsAvailable && (
         <Box
@@ -58,7 +58,6 @@ const ResultInfo: FunctionComponent = () => {
             fontFamily: "Source Sans Pro",
             color: "white",
             fontSize: "18px",
-            overflow: "scroll",
           }}
         >
           <span style={{ color: "#4caf50" }}>========== Output ==========</span>
@@ -73,7 +72,6 @@ const ResultInfo: FunctionComponent = () => {
             fontFamily: "Source Sans Pro",
             color: "white",
             fontSize: "18px",
-            overflow: "scroll",
           }}
         >
           <span style={{ color: "#f44336" }}>========== Error ==========</span>
