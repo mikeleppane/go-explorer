@@ -3,12 +3,16 @@ const Dotenv = require("dotenv-webpack");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
+  mode: "production",
   entry: "./src/index.tsx",
-  devtool: "eval-source-map",
+  devtool: "source-map",
   optimization: {
     splitChunks: { chunks: "all" },
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   module: {
     rules: [
@@ -36,13 +40,6 @@ module.exports = {
     clean: true,
     publicPath: "/",
     chunkFilename: "[name].[contenthash].js",
-  },
-  devServer: {
-    port: 3000,
-    open: true,
-    compress: true,
-    hot: true,
-    historyApiFallback: true,
   },
   plugins: [
     new HtmlWebPackPlugin({
