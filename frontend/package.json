@@ -33,8 +33,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start:dev": "webpack-dev-server --mode development",
-    "build": "webpack --mode production",
+    "start:dev": "webpack-dev-server --config=webpack.config.dev.js",
+    "build": "webpack --config=webpack.config.prod.js",
     "watch": "BROWSER='firefox' tsc -p . -w",
     "eject": "react-scripts eject",
     "lint": "tsc -p . --noEmit && eslint './src/**/*.{ts,tsx}'",
